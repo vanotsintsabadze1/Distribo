@@ -19,8 +19,20 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      type={type}
-      className={`${className} rounded-md p-2 px-4 bg-${color} text-${textColor} w-${width}`}
+      type={type ? type : "button"}
+      style={{
+        backgroundColor:
+          color === "primary"
+            ? "var(--primary"
+            : color === "secondary"
+              ? "var(--secondary"
+              : color
+                ? color
+                : "var(--primary)", // One must venture to the depths of hell to read this, but basically it's just a ternary operator that checks if the color is primary, secondary, or neither, and sets the background color accordingly
+        color: textColor ? textColor : "white",
+        width: width ? width : "auto",
+      }}
+      className={`${className} rounded-md p-2`}
     >
       {children}
     </button>
