@@ -28,7 +28,9 @@ export default function LoginForm() {
         </label>
       </div>
       <div className="flex justify-between">
-        <Button type="submit" color='secondary' textColor="white" width="full">Login</Button>
+        <Button type="submit" color="secondary" textColor="white" width="100%">
+          Login
+        </Button>
       </div>
     </form>
   );

@@ -15,8 +15,11 @@ export default function SignupPage() {
           </p>
         </div>
         <SignupForm />
-        <Link href="/auth/login" className="text-center text-secondary">
-          Login
+        <Link
+          href="/auth/login"
+          className="text-center text-sm text-blue-600 underline"
+        >
+          Already have an account?
         </Link>
       </div>
     </AuthLayout>

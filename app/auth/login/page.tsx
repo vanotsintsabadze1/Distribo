@@ -22,25 +22,12 @@ export default function LoginPage() {
             </p>
           </div>
           <LoginForm />
-          <p className="text-muted-foreground px-8 text-center text-sm">
-            By clicking continue, you agree to our{" "}
-            <Link
-              href="/terms"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/privacy"
-              className="underline underline-offset-4 hover:text-primary"
-            >
-              Privacy Policy
-            </Link>
-            .
-          </p>
-          <Link href="/auth/signup" className="text-center text-secondary">
-            Sign up
+
+          <Link
+            href="/auth/signup"
+            className="text-center text-sm text-blue-600 underline"
+          >
+            Don't have an account?
           </Link>
         </div>
       </div>
