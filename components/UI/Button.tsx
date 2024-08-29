@@ -7,6 +7,7 @@ interface ButtonProps {
   color?: string;
   textColor?: string;
   width?: string;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function Button({
@@ -16,10 +17,12 @@ export default function Button({
   color,
   textColor,
   width,
+  onClick,
 }: ButtonProps) {
   return (
     <button
       type={type ? type : "button"}
+      onClick={onClick}
       style={{
         backgroundColor:
           color === "primary"
