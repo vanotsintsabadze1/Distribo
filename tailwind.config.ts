@@ -9,9 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#F8F8FF",
-        secondary: "#44362F",
-        tertiary: '#EDEAE8'
+        primary: "var(--primary)",
+        secondary: "var(--secondary)",
+        tertiary: "#EDEAE8",
       },
       screens: {
         xs: { min: "320px", max: "399px" },

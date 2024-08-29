@@ -28,7 +28,7 @@ export default function LoginForm() {
         </label>
       </div>
       <div className="flex justify-between">
-        <Button type="submit" color="secondary" textColor="white" width="100%">
+        <Button type="submit" className="w-full bg-secondary text-white">
           Login
         </Button>
       </div>
