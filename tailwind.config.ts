@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         primary: "#F8F8FF",
         secondary: "#44362F",
+        tertiary: '#EDEAE8'
       },
       screens: {
         xs: { min: "320px", max: "399px" },
