@@ -41,13 +41,7 @@ export default function SignupForm() {
         </label>
       </div>
       <div className="mt-1 flex items-center justify-center">
-        <Button
-          type="submit"
-          color="secondary"
-          textColor="white"
-          width="100%"
-          className="rounded-md px-4"
-        >
+        <Button type="submit" className="w-full bg-secondary text-white">
           Sign up
         </Button>
       </div>
