@@ -16,7 +16,6 @@ export default function Button({
   className,
   onClick,
 }: ButtonProps) {
-  console.log("color");
   return (
     <button
       type={type ? type : "button"}
