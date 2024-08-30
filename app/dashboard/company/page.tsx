@@ -1,4 +1,4 @@
-// import CompanyCreationButton from "@/components/company/CompanyCreationButton";
+import CompanyCreationButton from "@/components/company/CompanyCreationButton";
 
 export default function CompanyPage() {
   return (
@@ -9,8 +9,8 @@ export default function CompanyPage() {
           All the created companies are listed below
         </p>
       </div>
-      <div className="flex w-full justify-end">
-        {/* <CompanyCreationButton /> */}
+      <div className="mt-4 flex w-full justify-end">
+        <CompanyCreationButton />
       </div>
     </div>
   );
