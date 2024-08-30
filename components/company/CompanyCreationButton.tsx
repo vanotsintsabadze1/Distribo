@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Button from "../ui/Button";
+import Button from "../UI/Button";
 import { Plus } from "lucide-react";
 
 export default function CompanyCreationButton() {
