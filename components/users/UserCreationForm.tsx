@@ -6,7 +6,6 @@ import Button from "../ui/Button";
 import { validateFormData } from "@/lib/utils/validation";
 import { createUserSchema } from "@/lib/schema/schema";
 import { CreateUserError } from "@/types/schema-types";
-import ErrorMessage from "../ui/ErrorMessage";
 
 export default function UserCreationForm() {
   const [userForm, setUserForm] = useState({
@@ -29,10 +28,8 @@ export default function UserCreationForm() {
   function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    const { errors, data } = validateFormData(createUserSchema, userForm);
+    const { errors } = validateFormData(createUserSchema, userForm);
 
-    console.log(errors);
-    console.log(data);
     errors ? setErrors(errors) : setErrors({});
   }
 

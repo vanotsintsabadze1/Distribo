@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const DistriboFont = localFont({
   src: [
@@ -36,7 +37,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={DistriboFont.className}>{children}</body>
+      <body className={DistriboFont.className}>
+        <Toaster position="top-center" />
+        {children}
+      </body>
     </html>
   );
 }

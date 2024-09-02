@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, LayoutDashboard, User } from "lucide-react";
+import { Building2, LayoutDashboard, LogOut, User } from "lucide-react";
+import { logoutAction } from "@/lib/actions/auth/authActions";
 
 interface NavigationProps {
   isMinimized?: boolean;
@@ -35,6 +36,10 @@ export default function Navigation({ isMinimized }: NavigationProps) {
           <User />
           {!isMinimized && "Users"}
         </Link>
+        <button type="button" className="flex w-full gap-2 rounded-lg p-2 px-4" onClick={() => logoutAction()}>
+          <LogOut />
+          <span>Logout</span>
+        </button>
       </div>
     </div>
   );
