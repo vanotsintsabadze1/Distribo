@@ -4,8 +4,8 @@ export type LoginData = {
 };
 
 export type LoginErrors = {
-  email?: string;
-  password?: string;
+  email?: string[];
+  password?: string[];
 };
 
 export type SignUpData = {
@@ -15,9 +15,9 @@ export type SignUpData = {
 };
 
 export type SignUpErrors = {
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+  email?: string[];
+  password?: string[];
+  confirmPassword?: string[];
 };
 
 export type CreateCompanyData = {
@@ -29,9 +29,23 @@ export type CreateCompanyData = {
 };
 
 export type CreateCompanyErrors = {
-  companyId?: string;
-  companyName?: string;
-  companyPassword?: string;
-  companyDescription?: string;
+  companyId?: string[];
+  companyName?: string[];
+  companyPassword?: string[];
+  companyDescription?: string[];
   companyDocuments?: File[];
+};
+
+export type CreateUser = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  role: string;
+};
+
+export type CreateUserError = {
+  email?: string[];
+  password?: string[];
+  confirmPassword?: string[];
+  role?: string[];
 };

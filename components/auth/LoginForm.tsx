@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Button from "../UI/Button";
+import Button from "../ui/Button";
 import { validateFormData } from "@/lib/utils/validation";
 import { loginFormSchema } from "@/lib/schema/schema";
 import { LoginData, LoginErrors } from "@/types/schema-types";
