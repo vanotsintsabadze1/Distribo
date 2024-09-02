@@ -29,8 +29,8 @@ export default function Navigation({ isMinimized }: NavigationProps) {
           {!isMinimized && "Companies"}
         </Link>
         <Link
-          href="/dashboard/user"
-          className={`${pathname === "/dashboard/user" && "bg-tertiary"} flex w-full gap-2 rounded-lg p-2 px-4`}
+          href="/dashboard/users"
+          className={`${pathname === "/dashboard/users" && "bg-tertiary"} flex w-full gap-2 rounded-lg p-2 px-4`}
         >
           <User />
           {!isMinimized && "Users"}

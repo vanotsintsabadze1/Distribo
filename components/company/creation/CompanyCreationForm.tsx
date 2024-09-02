@@ -1,7 +1,7 @@
 "use client";
-import Button from "@/components/UI/Button";
-import TextArea from "@/components/UI/TextArea";
-import TextInput from "@/components/UI/TextInput";
+import Button from "@/components/ui/Button";
+import TextArea from "@/components/ui/TextArea";
+import TextInput from "@/components/ui/TextInput";
 import { createCompanyFormSchema } from "@/lib/schema/schema";
 import { validateFormData } from "@/lib/utils/validation";
 import { CreateCompanyData, CreateCompanyErrors } from "@/types/schema-types";
@@ -11,7 +11,7 @@ import { useRef, useState } from "react";
 export default function CompanyCreationForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [documents, setDocuments] = useState<File[]>([]);
-  const [companyFormData, setcompanyFormData] = useState<CreateCompanyData>({
+  const [companyFormData, setCompanyFormData] = useState<CreateCompanyData>({
     companyId: "",
     companyName: "",
     companyPassword: "",
@@ -19,10 +19,8 @@ export default function CompanyCreationForm() {
   });
   const [errors, setErrors] = useState<CreateCompanyErrors>({});
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setcompanyFormData({
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setCompanyFormData({
       ...companyFormData,
       [e.target.name]: e.target.value,
     });
@@ -31,10 +29,7 @@ export default function CompanyCreationForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const { errors, data } = validateFormData(
-      createCompanyFormSchema,
-      companyFormData,
-    );
+    const { errors, data } = validateFormData(createCompanyFormSchema, companyFormData);
 
     if (errors) {
       setErrors(errors);
@@ -74,9 +69,7 @@ export default function CompanyCreationForm() {
         placeholder="e.g 12345"
         className="pl-4 pr-2"
       />
-      {errors.companyId && (
-        <p className="mt-2 text-red-600">{errors.companyId}</p>
-      )}
+      {errors.companyId && <p className="mt-2 text-red-600">{errors.companyId}</p>}
       <TextInput
         name="companyName"
         label="Name"
@@ -85,9 +78,7 @@ export default function CompanyCreationForm() {
         placeholder="e.g Apple"
         className="pl-4 pr-2"
       />
-      {errors.companyName && (
-        <p className="mt-2 text-red-600">{errors.companyName}</p>
-      )}
+      {errors.companyName && <p className="mt-2 text-red-600">{errors.companyName}</p>}
       <TextInput
         name="companyPassword"
         label="Password"
@@ -97,9 +88,7 @@ export default function CompanyCreationForm() {
         className="pl-4 pr-2"
         type="password"
       />
-      {errors.companyPassword && (
-        <p className="mt-2 text-red-600">{errors.companyPassword}</p>
-      )}
+      {errors.companyPassword && <p className="mt-2 text-red-600">{errors.companyPassword}</p>}
       <TextArea
         name="companyDescription"
         label="Description"
@@ -108,9 +97,7 @@ export default function CompanyCreationForm() {
         placeholder="e.g Apple"
         className="min-h-[6rem] overflow-auto pl-4 pr-2"
       />
-      {errors.companyDescription && (
-        <p className="mt-2 text-red-600">{errors.companyDescription}</p>
-      )}
+      {errors.companyDescription && <p className="mt-2 text-red-600">{errors.companyDescription}</p>}
       <div className="flex flex-col gap-3">
         <span className="text-sm font-semibold">Additional Documents (Optional):</span>
         <div className="flex w-full flex-wrap items-center gap-x-6 gap-y-3">
@@ -119,12 +106,8 @@ export default function CompanyCreationForm() {
               key={idx}
               className="relative flex h-32 w-32 flex-col items-center justify-center rounded-md bg-gray-100 px-2"
             >
-              <span className="text- text-lg font-bold">
-                {(document.size / 1024 / 1024).toFixed(2)} MB
-              </span>
-              <span className="w-full truncate text-xs font-medium text-blue-800">
-                {document.name}
-              </span>
+              <span className="text- text-lg font-bold">{(document.size / 1024 / 1024).toFixed(2)} MB</span>
+              <span className="w-full truncate text-xs font-medium text-blue-800">{document.name}</span>
               <span className="absolute bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap text-[.6rem] font-medium uppercase tracking-wider text-gray-400">
                 Click to preview
               </span>
@@ -155,10 +138,7 @@ export default function CompanyCreationForm() {
         </div>
       </div>
       <div className="mt-1 flex w-full items-center justify-center">
-        <Button
-          type="submit"
-          className="w-32 bg-secondary font-semibold text-white"
-        >
+        <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
           Create
         </Button>
       </div>

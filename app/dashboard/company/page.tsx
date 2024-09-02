@@ -1,5 +1,3 @@
-import CompanyCreationButton from "@/components/company/CompanyCreationButton";
-
 export default function CompanyPage() {
   return (
     <div className="w-full p-4">
@@ -8,9 +6,6 @@ export default function CompanyPage() {
         <p className="text-muted-foreground mt-1 text-sm">
           All the created companies are listed below
         </p>
-      </div>
-      <div className="mt-4 flex w-full justify-end">
-        <CompanyCreationButton />
       </div>
     </div>
   );
