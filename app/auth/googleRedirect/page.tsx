@@ -10,9 +10,6 @@ export default async function GoogleRedirectPage({ searchParams }: GoogleRedirec
     return redirect("/auth/login");
   }
 
-  const params = searchParams;
-  console.log("🚀 ~ GoogleRedirectPage ~ params:", params);
-
   const code = searchParams.code;
 
   return <GoogleRedirectComponent code={code} />;

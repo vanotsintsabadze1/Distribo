@@ -2,14 +2,13 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { LoginData } from "@/types/schema-types";
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserToken } from "../helpers/getUserToken";
 
 // User login logic
 
-export async function loginAction({ email, password }: LoginData) {
+export async function loginUser({ email, password }: LoginData) {
   if (!email || !password) {
     return { status: 400, message: "Please fill all fields." };
   }
@@ -42,15 +41,16 @@ export async function loginAction({ email, password }: LoginData) {
 
 // User logout logic
 
-export async function logoutAction() {
+export async function logoutUser() {
   cookies().delete("user");
   return redirect("/auth/login");
 }
 
 // Get User information
 
-export async function getUserInfoAction() {
+export async function getUserAuthStatus() {
   const token = await getUserToken();
+
   try {
     const res = await fetch(`${API_URL}/v1/User/GetCurrentUser`, {
       method: "GET",
@@ -65,7 +65,7 @@ export async function getUserInfoAction() {
       const userData = await res.json();
       return userData;
     } else {
-      throw new Error("Something went wrong!");
+      throw new Error("Something went wrong while trying to get user authentication status!");
     }
   } catch (error) {
     return console.log(error);
@@ -74,8 +74,7 @@ export async function getUserInfoAction() {
 
 // User Google autentication
 
-export async function googleAuthenticationAction(code: string) {
-  console.log("🚀 ~ googleAuthenticationAction ~ code:", code);
+export async function loginUserWithGoogle(code: string) {
   try {
     const res = await fetch(`${API_URL}/v1/User/google-redirect?code=${code}`, {
       method: "GET",
@@ -84,16 +83,39 @@ export async function googleAuthenticationAction(code: string) {
         Accept: "application/json",
       },
     });
-    console.log("🚀 ~ googleAuthenticationAction ~ API_URL:", API_URL);
-    console.log("🚀 ~ googleAuthenticationAction ~ res:", res);
 
     const data = await res.json();
-    console.log("🚀 ~ cookies ~ data:", data);
 
-    cookies().set("user", data, {
-      expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
-    });
+    if (!data!.status) {
+      // If status is not present in the response, it means that the user is authenticated
+      cookies().set("user", data, {
+        expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
+      });
+    } else {
+      throw new Error("Something went wrong while trying to login with Google!");
+    }
   } catch (error) {
+    return { message: error };
+  }
+}
+
+export async function confirmEmailAfterRegistration(token: string) {
+  try {
+    const res = await fetch(`${API_URL}/v1/User/RegistrationEmailConfirmation?token=${token}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    if (res.ok) {
+      return { status: 200, message: "Email confirmed successfully." };
+    } else {
+      throw new Error("Email confirmation failed.");
+    }
+  } catch (error) {
+    console.error(error);
     return { status: 500, message: "Something went wrong!" };
   }
 }

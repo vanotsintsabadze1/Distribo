@@ -1,20 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import TextInput from "../ui/TextInput";
 import Button from "../ui/Button";
+import TextInput from "../ui/TextInput";
+import toast from "react-hot-toast";
+import Spinner from "../ui/Spinner";
+import { useState } from "react";
 import { validateFormData } from "@/lib/utils/validation";
 import { createUserSchema } from "@/lib/schema/schema";
 import { CreateUserError } from "@/types/schema-types";
+import { createUser } from "@/lib/actions/admin/users/createUser";
 
 export default function UserCreationForm() {
-  const [userForm, setUserForm] = useState({
+  const [userForm, setUserForm] = useState<UserCreationPayload>({
     email: "",
     password: "",
     confirmPassword: "",
-    role: "user",
+    role: "User",
   });
   const [formErrors, setErrors] = useState<CreateUserError>({});
+  const [loading, setLoading] = useState(false);
 
   function handleChange(
     e:
@@ -25,12 +29,34 @@ export default function UserCreationForm() {
     setUserForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+  async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-
+    setLoading(true);
     const { errors } = validateFormData(createUserSchema, userForm);
+    console.log(errors);
 
-    errors ? setErrors(errors) : setErrors({});
+    if (errors) {
+      setErrors(errors);
+      setLoading(false);
+      return;
+    } else {
+      setErrors({});
+    }
+
+    const res = await createUser(userForm);
+    if (res?.status === 200) {
+      toast.success(res.message);
+      setUserForm({
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "User",
+      });
+    } else {
+      toast.error(res.message);
+    }
+
+    setLoading(false);
   }
 
   return (
@@ -71,13 +97,13 @@ export default function UserCreationForm() {
           onChange={handleChange}
           className="w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none focus:ring focus:ring-blue-500"
         >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
+          <option value="User">User</option>
+          <option value="Employee">Employee</option>
         </select>
       </div>
       <div className="mt-4 flex w-full items-center justify-center">
         <Button onClick={handleSubmit} type="submit" className="w-32 bg-secondary font-semibold text-white">
-          Create
+          {loading ? <Spinner color="white" size={20} /> : "Create"}
         </Button>
       </div>
     </form>
