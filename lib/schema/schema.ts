@@ -61,7 +61,7 @@ export const createUserSchema: ZodType<CreateUser> = z
       }),
     confirmPassword: z.string().min(8),
 
-    role: z.enum(["user", "admin"]),
+    role: z.enum(["User", "Admin"]),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     // By doing this we can access the password and confirmPassword fields and compare them to each other.

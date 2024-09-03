@@ -1,6 +1,6 @@
 "use client";
 
-import { googleAuthenticationAction } from "@/lib/actions/auth/authActions";
+import { loginUserWithGoogle } from "@/lib/actions/auth/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -11,7 +11,7 @@ interface GoogleRedirectComponentProps {
 export default function GoogleRedirectComponent({ code }: GoogleRedirectComponentProps) {
   const router = useRouter();
   const googleAuthenticateHandler = async () => {
-    await googleAuthenticationAction(code);
+    await loginUserWithGoogle(code);
     router.push("/dashboard");
   };
 

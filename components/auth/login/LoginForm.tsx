@@ -6,7 +6,7 @@ import { validateFormData } from "@/lib/utils/validation";
 import { loginFormSchema } from "@/lib/schema/schema";
 import { LoginData, LoginErrors } from "@/types/schema-types";
 import TextInput from "../../ui/TextInput";
-import { loginAction } from "@/lib/actions/auth/authActions";
+import { loginUser } from "@/lib/actions/auth/auth";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import GoogleAuthButton from "./GoogleAuthButton";
@@ -36,7 +36,7 @@ export default function LoginForm() {
     } else {
       setErrors({});
       const { email, password } = data;
-      const res = await loginAction({ email, password });
+      const res = await loginUser({ email, password });
 
       if (res?.status === 200) {
         router.push("/dashboard");
