@@ -31,11 +31,11 @@ export async function loginUser({ email, password }: LoginData) {
       return { status: 200, message: "Logged in successfully." };
     }
 
-    if (!res.ok) {
-      return { status: res.status, message: "Invalid Credentials" };
-    }
+    return res.ok
+      ? { status: 200, message: "Successfully logged the user" }
+      : { status: res.status, message: res.statusText };
   } catch (error) {
-    return { status: 500, message: "Something went wrong!" };
+    return { status: 500, message: "Internal Server Error" };
   }
 }
 
@@ -60,15 +60,11 @@ export async function getUserAuthStatus() {
         Authorization: `Bearer ${token}`,
       },
     });
+    const data = await res.json();
 
-    if (res.ok) {
-      const userData = await res.json();
-      return userData;
-    } else {
-      throw new Error("Something went wrong while trying to get user authentication status!");
-    }
+    return res.ok ? { status: 200, message: res.statusText, data } : { status: res.status, message: res.statusText };
   } catch (error) {
-    return console.log(error);
+    return { status: 500, message: "Internal Server Error" };
   }
 }
 
@@ -91,11 +87,12 @@ export async function loginUserWithGoogle(code: string) {
       cookies().set("user", data, {
         expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
       });
-    } else {
-      throw new Error("Something went wrong while trying to login with Google!");
     }
+    return res.ok
+      ? { status: 200, message: "Logged in successfully." }
+      : { status: res.status, message: res.statusText };
   } catch (error) {
-    return { message: error };
+    return { status: 500, message: "Internal Server Error" };
   }
 }
 
@@ -109,13 +106,11 @@ export async function confirmEmailAfterRegistration(token: string) {
       },
     });
 
-    if (res.ok) {
-      return { status: 200, message: "Email confirmed successfully." };
-    } else {
-      throw new Error("Email confirmation failed.");
-    }
+    return res.ok
+      ? { status: 200, message: "Confirmed email successfully" }
+      : { status: res.status, message: res.statusText };
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Something went wrong!" };
+    return { status: 500, message: "Internal Server Error" };
   }
 }

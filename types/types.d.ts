@@ -4,3 +4,9 @@ interface UserCreationPayload {
   confirmPassword: string;
   role: string;
 }
+
+interface ServerActionResponsePayload {
+  status: number;
+  message: string;
+  data?: any;
+}
