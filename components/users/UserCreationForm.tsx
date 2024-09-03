@@ -9,6 +9,7 @@ import { validateFormData } from "@/lib/utils/validation";
 import { createUserSchema } from "@/lib/schema/schema";
 import { CreateUserError } from "@/types/schema-types";
 import { createUser } from "@/lib/actions/admin/users/createUser";
+import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 
 export default function UserCreationForm() {
   const [userForm, setUserForm] = useState<UserCreationPayload>({
@@ -44,17 +45,9 @@ export default function UserCreationForm() {
     }
 
     const res = await createUser(userForm);
-    if (res?.status === 200) {
-      toast.success(res.message);
-      setUserForm({
-        email: "",
-        password: "",
-        confirmPassword: "",
-        role: "User",
-      });
-    } else {
-      toast.error(res.message);
-    }
+    const success = await apiResponseValidator({ res, options: { outputGenericError: true } });
+
+    success ? setUserForm({ email: "", password: "", confirmPassword: "", role: "User" }) : null;
 
     setLoading(false);
   }

@@ -19,15 +19,9 @@ export async function createUser(userInformation: UserCreationPayload) {
       body: JSON.stringify({ email, password, role }),
     });
 
-    console.log(res);
-
-    if (res.ok) {
-      return { status: 200, message: "User created successfully." };
-    } else {
-      throw new Error("User creation failed.");
-    }
+    return { status: res.status, message: res.statusText };
   } catch (error) {
     console.error(error);
-    return { message: "Something went wrong" };
+    return { status: 500, message: "Internal Server Error" };
   }
 }
