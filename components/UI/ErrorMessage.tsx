@@ -1,5 +1,5 @@
 interface ErrorMessageProps {
-  error: string[] | undefined;
+  error: string[] | number[] | undefined;
 }
 
 export default function ErrorMessage({ error }: ErrorMessageProps) {

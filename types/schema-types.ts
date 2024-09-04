@@ -49,3 +49,15 @@ export type CreateUserError = {
   confirmPassword?: string[];
   role?: string[];
 };
+
+export type CreateProduct = {
+  productName: string;
+  description: string;
+  price: number;
+};
+
+export type CreateProductError = {
+  productName?: string[];
+  description?: string[];
+  price?: number[];
+};

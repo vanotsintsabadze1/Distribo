@@ -4,11 +4,11 @@ interface InputProps {
   label: string;
   name: string;
   placeholder: string;
-  value?: string;
+  value?: string | number;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
-  type?: "text" | "password" | "email";
-  error?: string[];
+  type?: "text" | "password" | "email" | "number";
+  error?: string[] | number[];
 }
 
 export default function TextInput({
