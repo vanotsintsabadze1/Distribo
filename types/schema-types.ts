@@ -23,7 +23,7 @@ export type SignUpErrors = {
 export type CreateCompanyData = {
   companyId: string;
   companyName: string;
-  companyPassword: string;
+  companyAddress: string;
   companyDescription: string;
   companyDocuments?: File[];
 };
@@ -31,7 +31,7 @@ export type CreateCompanyData = {
 export type CreateCompanyErrors = {
   companyId?: string[];
   companyName?: string[];
-  companyPassword?: string[];
+  companyAddress?: string[];
   companyDescription?: string[];
   companyDocuments?: File[];
 };

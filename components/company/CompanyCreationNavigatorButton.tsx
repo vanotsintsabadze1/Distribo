@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Button from "../ui/Button";
 import { Plus } from "lucide-react";
 
-export default function CompanyCreationButton() {
+export default function CompanyCreationNavigatorButton() {
   const router = useRouter();
 
   function redirectToCreationForm() {
