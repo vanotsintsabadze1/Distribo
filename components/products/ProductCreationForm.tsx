@@ -3,38 +3,52 @@
 import Button from "../ui/Button";
 import TextInput from "../ui/TextInput";
 import Spinner from "../ui/Spinner";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { validateFormData } from "@/lib/utils/validation";
 import { createProductSchema } from "@/lib/schema/schema";
 import { CreateProduct, CreateProductError } from "@/types/schema-types";
 import TextArea from "../ui/TextArea";
-// import { createUser } from "@/lib/actions/admin/users/createUser";
-// import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import ImageUpload from "./ImageUpload";
+import { createProduct } from "@/lib/actions/admin/products/createProduct";
+import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 
 export default function ProductCreationForm() {
   const [productForm, setProductForm] = useState<CreateProduct>({
     productName: "",
     description: "",
     price: 0,
+    stock: 0,
   });
   const [formErrors, setErrors] = useState<CreateProductError>({});
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [selectedImage, setSelectedImage] = useState<File[]>([]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
     const { name, value, type } = e.target;
 
-    setProductForm((prev) => ({
-      ...prev,
-      //   Convert input value to number if the input type is "number", because input values are always string by default.
-      [name]: type === "number" ? Number(value) : value,
-    }));
+    const fieldNameMap = {
+      Name: "productName",
+      Description: "description",
+      Price: "price",
+      Stock: "stock",
+    };
+
+    const fieldKey = fieldNameMap[name as keyof typeof fieldNameMap];
+    if (fieldKey) {
+      setProductForm((prev) => ({
+        ...prev,
+        // Convert input value to number if the input type is "number"
+        [fieldKey]: type === "number" ? Number(value) : value,
+      }));
+    }
   }
 
   async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setLoading(true);
     const { errors } = validateFormData(createProductSchema, productForm);
-    console.log(errors);
 
     if (errors) {
       setErrors(errors);
@@ -44,21 +58,32 @@ export default function ProductCreationForm() {
       setErrors({});
     }
 
-    // const res = await createProduct(productForm);
-    // const success = await apiResponseValidator({ res, options: { outputGenericError: true } });
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
 
-    // success ? setProductForm({ productName: "", description: "", price: 0 }) : null;
+    const res = await createProduct(formData);
+    const success = await apiResponseValidator({ res, options: { outputGenericError: true } });
+
+    if (success) {
+      setProductForm({ productName: "", description: "", price: 0, stock: 0 });
+      setSelectedImage([]);
+    } else {
+      return null;
+    }
 
     setLoading(false);
   }
 
   return (
-    <form className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full">
+    <form
+      className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
+      ref={formRef}
+    >
       <TextInput
         label="Product Name"
         value={productForm.productName}
         onChange={handleChange}
-        name="productName"
+        name="Name"
         placeholder="e.g avocado"
         error={formErrors.productName}
       />
@@ -66,7 +91,7 @@ export default function ProductCreationForm() {
         label="Description"
         value={productForm.description}
         onChange={handleChange}
-        name="description"
+        name="Description"
         placeholder="Product description..."
         error={formErrors.description}
       />
@@ -75,10 +100,20 @@ export default function ProductCreationForm() {
         type="number"
         value={productForm.price}
         onChange={handleChange}
-        name="price"
+        name="Price"
         placeholder="e.g 12.00"
         error={formErrors.price}
       />
+      <TextInput
+        label="Stock"
+        type="number"
+        value={productForm.stock}
+        onChange={handleChange}
+        name="Stock"
+        placeholder="e.g 12.00"
+        error={formErrors.stock}
+      />
+      <ImageUpload inputRef={inputRef} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
       <div className="mt-4 flex w-full items-center justify-center">
         <Button onClick={handleSubmit} type="submit" className="w-32 bg-secondary font-semibold text-white">
           {loading ? <Spinner color="white" size={20} /> : "Create"}

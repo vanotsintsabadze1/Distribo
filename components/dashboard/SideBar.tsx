@@ -37,7 +37,7 @@ export default function Sidebar() {
       {/* --------- */}
       {/* For Desktop */}
       <aside
-        className={`${!isMinimized ? "w-80" : "w-auto"} relative hidden h-screen border-r-2 border-gray-100 bg-[#fdf9f7] transition-all duration-500 md:block`}
+        className={`${!isMinimized ? "w-80" : "w-auto"} relative hidden h-full border-r-2 border-gray-100 bg-[#fdf9f7] transition-all duration-500 md:block`}
       >
         <Logo />
         <ChevronLeft

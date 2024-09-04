@@ -54,10 +54,12 @@ export type CreateProduct = {
   productName: string;
   description: string;
   price: number;
+  stock: number;
 };
 
 export type CreateProductError = {
   productName?: string[];
   description?: string[];
   price?: number[];
+  stock?: number[];
 };
