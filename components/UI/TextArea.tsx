@@ -1,3 +1,5 @@
+import ErrorMessage from "./ErrorMessage";
+
 interface InputProps {
   label?: string;
   name: string;
@@ -6,6 +8,7 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   className?: string;
   resize?: "none" | "vertical" | "horizontal" | "both";
+  error?: string[];
 }
 
 export default function TextArea({
@@ -16,6 +19,7 @@ export default function TextArea({
   value,
   onChange,
   className,
+  error,
 }: InputProps) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -24,13 +28,16 @@ export default function TextArea({
           {label}
         </label>
       )}
-      <textarea
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        className={`${className} w-full rounded-md border border-gray-300 p-2 ${resize === "none" ? "resize-none" : resize === "vertical" ? "resize-y" : resize === "horizontal" ? "resize-x" : "resize"}`}
-      />
+      <div className="flex w-full flex-col gap-2">
+        <textarea
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className={`${className} w-full rounded-md border border-gray-300 p-2 ${resize === "none" ? "resize-none" : resize === "vertical" ? "resize-y" : resize === "horizontal" ? "resize-x" : "resize"}`}
+        />
+        {error && <ErrorMessage error={error} />}
+      </div>
     </div>
   );
 }

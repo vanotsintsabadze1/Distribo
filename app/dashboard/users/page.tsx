@@ -1,6 +1,6 @@
 import UserCreationNavigatorButton from "@/components/users/UserCreationNavigatorButton";
 
-export default function DashboardPage() {
+export default function UsersPage() {
   return (
     <div className="flex w-full flex-col p-4">
       <div className="w-full">

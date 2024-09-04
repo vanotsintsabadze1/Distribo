@@ -2,7 +2,6 @@
 
 import Button from "../ui/Button";
 import TextInput from "../ui/TextInput";
-import toast from "react-hot-toast";
 import Spinner from "../ui/Spinner";
 import { useState } from "react";
 import { validateFormData } from "@/lib/utils/validation";
