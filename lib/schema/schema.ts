@@ -30,18 +30,15 @@ export const signUpFormSchema: ZodType<SignUpData> = z
   });
 
 export const createCompanyFormSchema: ZodType<CreateCompanyData> = z.object({
-  companyId: z.string().min(1, { message: "Company ID is required" }).max(20, { message: "Company ID is too long" }),
+  companyId: z.string().length(9, { message: "Company ID number must be exactly 9 characters long" }),
   companyName: z
     .string()
     .min(1, { message: "Company Name is required" })
     .max(50, { message: "Company Name is too long" }),
-  companyPassword: z
+  companyAddress: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters long" })
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
-      message:
-        "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character",
-    }),
+    .min(1, { message: "Company Address is required" })
+    .max(50, { message: "Company Address is too long" }),
   companyDescription: z
     .string()
     .min(10, { message: "Description is too short" })
