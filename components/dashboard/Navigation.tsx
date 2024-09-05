@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, LayoutDashboard, LogOut, ShoppingBasket, User } from "lucide-react";
+import { Building2, LayoutDashboard, LogOut, ShoppingBasket, User, UserPen } from "lucide-react";
 import { logoutUser } from "@/lib/actions/auth/auth";
 
 interface NavigationProps {
@@ -42,6 +42,13 @@ export default function Navigation({ isMinimized }: NavigationProps) {
         >
           <ShoppingBasket />
           {!isMinimized && "Products"}
+        </Link>
+        <Link
+          href="/dashboard/profile"
+          className={`${pathname === "/dashboard/profile" && "bg-tertiary"} flex w-full gap-2 rounded-lg p-2 px-4`}
+        >
+          <UserPen />
+          {!isMinimized && "Profile"}
         </Link>
         <button type="button" className="flex w-full gap-2 rounded-lg p-2 px-4" onClick={() => logoutUser()}>
           <LogOut />

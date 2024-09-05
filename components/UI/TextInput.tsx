@@ -8,6 +8,7 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   type?: "text" | "password" | "email" | "number";
+  disabled?: boolean
   error?: string[] | number[];
 }
 
@@ -19,6 +20,7 @@ export default function TextInput({
   onChange,
   type = "text",
   className,
+  disabled,
   error,
 }: InputProps) {
   return (
@@ -34,6 +36,7 @@ export default function TextInput({
           onChange={onChange}
           placeholder={placeholder}
           className={`${className} w-full rounded-md border border-gray-300 p-2`}
+          disabled={disabled}
         />
         {error && <ErrorMessage error={error} />}
       </div>

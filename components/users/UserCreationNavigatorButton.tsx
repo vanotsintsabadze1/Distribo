@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Button from "../ui/Button";
 
 export default function UserCreationNavigatorButton() {
   const router = useRouter();
@@ -11,12 +12,14 @@ export default function UserCreationNavigatorButton() {
   }
 
   return (
-    <button
-      onClick={navigateToUserCreation}
-      className="font-meidum flex items-center justify-center gap-0.5 rounded-md bg-secondary px-4 py-2 text-sm text-white"
-    >
-      <Plus size={17} color="white" />
-      Create User
-    </button>
+    <div className="flex w-full justify-end">
+      <Button
+        onClick={navigateToUserCreation}
+        className="flex items-center justify-center gap-[5px] bg-secondary px-4 text-sm text-white"
+      >
+        <Plus size={17} color="white" />
+        Create User
+      </Button>
+    </div>
   );
 }
