@@ -3,12 +3,12 @@
 import Button from "../ui/Button";
 import TextInput from "../ui/TextInput";
 import Spinner from "../ui/Spinner";
+import TextArea from "../ui/TextArea";
+import ImageUpload from "./ImageUpload";
 import { useRef, useState } from "react";
 import { validateFormData } from "@/lib/utils/validation";
 import { createProductSchema } from "@/lib/schema/schema";
 import { CreateProduct, CreateProductError } from "@/types/schema-types";
-import TextArea from "../ui/TextArea";
-import ImageUpload from "./ImageUpload";
 import { createProduct } from "@/lib/actions/admin/products/createProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 
@@ -36,6 +36,7 @@ export default function ProductCreationForm() {
     };
 
     const fieldKey = fieldNameMap[name as keyof typeof fieldNameMap];
+
     if (fieldKey) {
       setProductForm((prev) => ({
         ...prev,
