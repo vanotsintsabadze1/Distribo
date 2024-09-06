@@ -10,3 +10,17 @@ interface ServerActionResponsePayload {
   message: string;
   data?: any;
 }
+
+interface ImageResponsePayload {
+  id: string;
+  url: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  images: ImageResponsePayload[];
+}
