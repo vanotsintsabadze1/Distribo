@@ -29,9 +29,7 @@ export default function Sidebar() {
           >
             <Menu size={35} />
           </button>
-          <AnimatePresence>
-            {isBurgerMenuOpen && <MobileBurgerMenu />}
-          </AnimatePresence>
+          <AnimatePresence>{isBurgerMenuOpen && <MobileBurgerMenu />}</AnimatePresence>
         </div>
       </div>
       {/* --------- */}

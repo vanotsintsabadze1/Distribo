@@ -5,10 +5,8 @@ interface ProductsWrapperProps {
 }
 
 export default function ProductsWrapper({ products }: ProductsWrapperProps) {
-  console.log(products.map((product) => product.id));
-
   return (
-    <div className="flex w-full flex-wrap items-center justify-center gap-x-10">
+    <div className="mt-10 flex w-full flex-wrap items-center justify-center gap-x-10">
       {products && products.map((product) => <ProductCard key={product.id} {...product} />)}
     </div>
   );

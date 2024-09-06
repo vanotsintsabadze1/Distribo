@@ -13,7 +13,7 @@ async function getAllProducts() {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      cache: "force-cache",
+      cache: "no-cache",
     });
 
     const data = await res.json();
@@ -30,7 +30,6 @@ export default async function ProductsPage() {
   const data = await getAllProducts();
   const products = data ? data.data : null;
 
-  // console.log(products);
   return (
     <PageLayoutComp title="Products" description="All the products are listed below.">
       <ProductCreationNavigatorButton />
