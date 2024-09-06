@@ -5,6 +5,7 @@ import { fetchSingleImage } from "@/lib/utils/fetchImages";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Spinner from "../ui/Spinner";
+import ProductActionsBar from "./ProductActionsBar";
 
 export default function ProductCard({ ...product }: Product) {
   const [image, setImage] = useState<string>("");
@@ -24,7 +25,14 @@ export default function ProductCard({ ...product }: Product) {
   return (
     <div className="flex w-64 flex-col items-center gap-2 rounded-lg p-4 shadow-md shadow-black/20">
       <div className="relative h-48 w-56 rounded-md shadow-md">
-        {image !== "" ? <Image src={image} alt={product.name} fill /> : <Spinner size={40} color="black" />}
+        {image !== "" ? (
+          <>
+            <Image src={image} alt={product.name} fill />
+            <ProductActionsBar productId={product.id} />
+          </>
+        ) : (
+          <Spinner size={40} color="black" />
+        )}
       </div>
       <div className="flex w-full flex-col items-center justify-center gap-2 text-center">
         <p className="text- font-bold">{product.name}</p>

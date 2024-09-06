@@ -1,5 +1,8 @@
 // Since setState functions have to be serialized, using "use client" declaration will throw an error, since this function will only itself be able to be used in a client environment.
-import toast from "react-hot-toast";
+
+// In some cases, when you have to use this function on load, if reactStrictMode is enabled, your images will get dupped.
+// It's because useEffect runs twice in strict mode, and the fetchImagesOnLoad function will run twice, causing the images to be fetched twice..
+
 import { API_URL } from "../constants/constants";
 
 interface FetchImagesProps {
@@ -9,6 +12,8 @@ interface FetchImagesProps {
 }
 
 export async function fetchImages({ images, setFiles, setImagesAsURLs }: FetchImagesProps) {
+  console.log("fetched");
+
   try {
     images.forEach(async (image) => {
       const res = await fetch(`${API_URL}/v1/Image/${image.url}`, {
