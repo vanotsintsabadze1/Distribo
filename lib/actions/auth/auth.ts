@@ -62,7 +62,9 @@ export async function getUserAuthStatus() {
     });
     const data = await res.json();
 
-    return res.ok ? { status: 200, message: res.statusText, data } : { status: res.status, message: res.statusText };
+    return res.ok
+      ? { status: 200, message: res.statusText, data: data as User }
+      : { status: res.status, message: res.statusText };
   } catch (error) {
     return { status: 500, message: "Internal Server Error" };
   }

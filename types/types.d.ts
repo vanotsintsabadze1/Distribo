@@ -1,3 +1,12 @@
+interface User {
+  id: string;
+  email: string;
+  emailConfirmed: boolean;
+  role: {
+    name: "Admin" | "User" | "Employee";
+  };
+}
+
 interface UserCreationPayload {
   email: string;
   password: string;
