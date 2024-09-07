@@ -1,3 +1,4 @@
+import PageAuthenticator from "@/components/auth/PageAuthenticator";
 import ProductEditForm from "@/components/products/ProductEditForm";
 import PageLayoutComp from "@/components/ui/PageLayoutComp";
 import { API_URL } from "@/lib/constants/constants";
@@ -32,11 +33,13 @@ export default async function IndividualProductEditPage({ params }: IndividualPr
   console.log(params.id);
 
   return (
-    data && (
-      <main className="flex w-full flex-col items-center py-4">
-        <PageLayoutComp title="Edit Product" description="Edit a product on this page"></PageLayoutComp>
-        <ProductEditForm {...data} />
-      </main>
-    )
+    <PageAuthenticator shouldAllow="admin" redirectTo="/dashboard/products">
+      {data && (
+        <main className="flex w-full flex-col items-center py-4">
+          <PageLayoutComp title="Edit Product" description="Edit a product on this page"></PageLayoutComp>
+          <ProductEditForm {...data} />
+        </main>
+      )}
+    </PageAuthenticator>
   );
 }
