@@ -5,6 +5,7 @@ import { LoginData } from "@/types/schema-types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserToken } from "../helpers/getUserToken";
+import { revalidateTag } from "next/cache";
 
 // User login logic
 
@@ -28,6 +29,7 @@ export async function loginUser({ email, password }: LoginData) {
       cookies().set("user", data, {
         expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
       });
+      revalidateTag("auth");
       return { status: 200, message: "Logged in successfully." };
     }
 
@@ -43,6 +45,7 @@ export async function loginUser({ email, password }: LoginData) {
 
 export async function logoutUser() {
   cookies().delete("user");
+  revalidateTag("auth");
   return redirect("/auth/login");
 }
 
@@ -58,6 +61,10 @@ export async function getUserAuthStatus() {
         "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
+      },
+      cache: "force-cache",
+      next: {
+        tags: ["auth"],
       },
     });
     const data = await res.json();
