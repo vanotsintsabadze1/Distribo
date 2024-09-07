@@ -1,16 +1,19 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import TextInput from "../ui/TextInput";
-import TextArea from "../ui/TextArea";
-import { fetchImages } from "@/lib/utils/fetchImages";
 import Image from "next/image";
 import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
+import TextInput from "../ui/TextInput";
+import TextArea from "../ui/TextArea";
+import { useState, useEffect, useRef } from "react";
+import { fetchImages } from "@/lib/utils/fetchImages";
 import { editProduct } from "@/lib/actions/admin/products/editProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
+import { CreateProduct, CreateProductError } from "@/types/schema-types";
+import { validateFormData } from "@/lib/utils/validation";
+import { createProductSchema } from "@/lib/schema/schema";
 
 export default function ProductEditForm({ ...product }: Product) {
   const [productData, setProductData] = useState({
@@ -23,6 +26,7 @@ export default function ProductEditForm({ ...product }: Product) {
   const [imagesAsFiles, setImagesAsFiles] = useState<File[]>([]);
   const [imagesAsURLs, setImagesAsURLs] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [formErrors, setFormErrors] = useState<CreateProductError>({});
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -55,8 +59,24 @@ export default function ProductEditForm({ ...product }: Product) {
     e.preventDefault();
     setLoading(true);
 
+    const { errors } = validateFormData(createProductSchema, {
+      productName: productData.Name,
+      description: productData.Description,
+      price: productData.Price,
+      stock: productData.Stock,
+    } as CreateProduct);
+
+    if (errors) {
+      setFormErrors(errors);
+      setLoading(false);
+      return;
+    } else {
+      setFormErrors({});
+    }
+
     const formData = new FormData(e.currentTarget);
     formData.append("Id", product.id);
+
     const res = await editProduct(formData);
     const validate = await apiResponseValidator({ res });
 
@@ -99,6 +119,7 @@ export default function ProductEditForm({ ...product }: Product) {
         value={productData.Name}
         onChange={(e) => setProductData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
         placeholder="Enter the product name.."
+        error={formErrors.productName}
       />
       <TextArea
         name="Description"
@@ -108,6 +129,7 @@ export default function ProductEditForm({ ...product }: Product) {
         value={productData.Description}
         onChange={(e) => setProductData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
         placeholder="Enter the product name.."
+        error={formErrors.description}
       />
       <TextInput
         name="Price"
@@ -116,6 +138,7 @@ export default function ProductEditForm({ ...product }: Product) {
         value={productData.Price}
         onChange={(e) => setProductData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
         placeholder="Enter the product name.."
+        error={formErrors.price}
       />
       <label htmlFor="ImageFiles" className="mt-3 w-full">
         <input
