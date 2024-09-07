@@ -13,6 +13,8 @@ import { createProduct } from "@/lib/actions/admin/products/createProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 
 export default function ProductCreationForm() {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [productForm, setProductForm] = useState<CreateProduct>({
     productName: "",
     description: "",
@@ -21,8 +23,6 @@ export default function ProductCreationForm() {
   });
   const [formErrors, setErrors] = useState<CreateProductError>({});
   const [loading, setLoading] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
