@@ -37,6 +37,7 @@ export default function UserCreationForm() {
 
     if (errors) {
       setErrors(errors);
+      console.log(errors);
       setLoading(false);
       return;
     } else {
