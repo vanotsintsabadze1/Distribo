@@ -11,6 +11,7 @@ import { createProductSchema } from "@/lib/schema/schema";
 import { CreateProduct, CreateProductError } from "@/types/schema-types";
 import { createProduct } from "@/lib/actions/admin/products/createProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { useRouter } from "next/navigation";
 
 export default function ProductCreationForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -24,6 +25,7 @@ export default function ProductCreationForm() {
   const [formErrors, setErrors] = useState<CreateProductError>({});
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const router = useRouter();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
     const { name, value, type } = e.target;
@@ -63,11 +65,12 @@ export default function ProductCreationForm() {
     const formData = new FormData(formRef.current);
 
     const res = await createProduct(formData);
-    const success = await apiResponseValidator({ res, options: { outputGenericError: true } });
+    const success = await apiResponseValidator({ res });
 
     if (success) {
       setProductForm({ productName: "", description: "", price: 0, stock: 0 });
       setSelectedImage([]);
+      router.push("/dashboard/products");
     } else {
       return null;
     }

@@ -45,7 +45,7 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 pathname === item.href
-                  ? "bg-accent text-accent-foreground"
+                  ? "bg-tertiary text-accent-foreground"
                   : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               }`}
             >

@@ -30,8 +30,6 @@ export default async function IndividualProductEditPage({ params }: IndividualPr
   const product = await getSingleProduct(params.id);
   const { data } = product;
 
-  console.log(params.id);
-
   return (
     <PageAuthenticator shouldAllow="admin" redirectTo="/dashboard/products">
       {data && (

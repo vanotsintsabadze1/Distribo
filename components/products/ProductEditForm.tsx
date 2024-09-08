@@ -165,7 +165,7 @@ export default function ProductEditForm({ ...product }: Product) {
       </div>
       <div className="mt-4 flex w-full items-center justify-center">
         <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
-          {loading ? <Spinner color="white" size={20} /> : "Create"}
+          {loading ? <Spinner color="white" size={20} /> : "Update"}
         </Button>
       </div>
     </form>

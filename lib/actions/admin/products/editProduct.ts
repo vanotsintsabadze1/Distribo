@@ -15,8 +15,6 @@ export async function editProduct(formData: FormData) {
       body: formData,
     });
 
-    console.log(res);
-
     return res.ok
       ? { status: 200, message: "Product updated successfully" }
       : { status: 400, message: "Failed to update product" };

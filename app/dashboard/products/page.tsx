@@ -3,8 +3,10 @@ import { getUserToken } from "@/lib/actions/helpers/getUserToken";
 import PageLayoutComp from "@/components/ui/PageLayoutComp";
 import ProductCreationNavigatorButton from "@/components/products/ProductCreationNavigatorButton";
 import ProductsWrapper from "@/components/products/ProductsWrapper";
+import { revalidatePath } from "next/cache";
 
 async function getAllProducts() {
+  revalidatePath("/dashboard/products");
   const token = await getUserToken();
 
   try {
