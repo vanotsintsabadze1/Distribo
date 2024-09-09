@@ -33,3 +33,11 @@ interface Product {
   stock: number;
   images: ImageResponsePayload[];
 }
+
+interface Company {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+}
