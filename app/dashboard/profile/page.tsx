@@ -11,7 +11,7 @@ export default async function ProfilePage() {
   return (
     <PageLayoutComp title="Profile" description="Update your profile information.">
       <CompanyCreationNavigatorButton />
-      {userData.data && <Profile userEmail={userEmail} userRole={userRole} />}
+      {userRole && userEmail !== undefined && <Profile userEmail={userEmail} userRole={userRole} />}
     </PageLayoutComp>
   );
 }
