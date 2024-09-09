@@ -1,5 +1,7 @@
 "use client";
 
+import { deleteProduct } from "@/lib/actions/admin/products/deleteProduct";
+import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { Trash2Icon, Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -14,8 +16,9 @@ export default function ProductActionsBar({ productId }: ProductActionsBarProps)
     router.push(`/dashboard/products/edit/${productId}`);
   }
 
-  function handleDelete() {
-    // TBA.
+  async function handleDelete() {
+    const res = await deleteProduct(productId);
+    await apiResponseValidator({ res });
   }
 
   return (
@@ -23,7 +26,7 @@ export default function ProductActionsBar({ productId }: ProductActionsBarProps)
       <button onClick={handleEdit}>
         <Edit size={17} className="text-white opacity-60 duration-200 ease-in-out hover:opacity-100" />
       </button>
-      <button>
+      <button onClick={handleDelete}>
         <Trash2Icon size={17} className="text-white opacity-60 duration-200 ease-in-out hover:opacity-100" />
       </button>
     </div>

@@ -12,8 +12,6 @@ interface FetchImagesProps {
 }
 
 export async function fetchImages({ images, setFiles, setImagesAsURLs }: FetchImagesProps) {
-  console.log("fetched");
-
   try {
     images.forEach(async (image) => {
       const res = await fetch(`${API_URL}/v1/Image/${image.url}`, {

@@ -24,7 +24,7 @@ function generateToastResponse(status: number, serverMessage: string, options?: 
   const genericMessage = statusMessages[status] || "Unexpected error";
   const message = options?.outputGenericError ? genericMessage : serverMessage;
   const toastFunction = status === 200 ? toast.success : toast.error;
-  toastFunction(message);
+  return toastFunction(message);
 }
 
 export async function apiResponseValidator({ res, options }: ApiResponseValidator): Promise<boolean> {

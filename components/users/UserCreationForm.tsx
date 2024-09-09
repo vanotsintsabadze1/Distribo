@@ -33,11 +33,9 @@ export default function UserCreationForm() {
     e.preventDefault();
     setLoading(true);
     const { errors } = validateFormData(createUserSchema, userForm);
-    console.log(errors);
 
     if (errors) {
       setErrors(errors);
-      console.log(errors);
       setLoading(false);
       return;
     } else {

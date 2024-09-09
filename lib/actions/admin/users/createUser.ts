@@ -4,7 +4,6 @@ import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../../helpers/getUserToken";
 
 export async function createUser(userInformation: UserCreationPayload) {
-  console.log("🚀 ~ createUser ~ userInformation:", userInformation);
   const { email, password, role } = userInformation;
   const token = await getUserToken();
 
