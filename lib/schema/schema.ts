@@ -30,7 +30,7 @@ export const signUpFormSchema: ZodType<SignUpData> = z
   });
 
 export const createCompanyFormSchema: ZodType<CreateCompanyData> = z.object({
-  companyId: z.string().length(9, { message: "Company ID number must be exactly 9 characters long" }),
+  // companyId: z.string().length(9, { message: "Company ID number must be exactly 9 characters long" }),
   companyName: z
     .string()
     .min(1, { message: "Company Name is required" })
@@ -39,11 +39,13 @@ export const createCompanyFormSchema: ZodType<CreateCompanyData> = z.object({
     .string()
     .min(1, { message: "Company Address is required" })
     .max(50, { message: "Company Address is too long" }),
-  companyDescription: z
-    .string()
-    .min(10, { message: "Description is too short" })
-    .max(500, { message: "Description is too long" }),
-  companyDocuments: z.array(z.instanceof(File)).optional(),
+  companyPhone: z.string().min(1),
+  companyEmail: z.string().email({ message: "Invalid email address" }),
+  // companyDescription: z
+  //   .string()
+  //   .min(10, { message: "Description is too short" })
+  //   .max(500, { message: "Description is too long" }),
+  // companyDocuments: z.array(z.instanceof(File)).optional(),
 });
 
 export const createUserSchema: ZodType<CreateUser> = z

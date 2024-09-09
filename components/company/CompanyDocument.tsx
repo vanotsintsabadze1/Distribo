@@ -25,7 +25,7 @@ export default function CompanyDocument({ inputRef, documents, setDocuments }: C
   }
   return (
     <div className="flex flex-col gap-3">
-      <span className="text-sm font-semibold">Additional Documents (Optional):</span>
+      <span className="text-sm font-semibold">Additional Documents (Optional, not implemented on backend yet):</span>
       <div className="flex w-full flex-wrap items-center gap-x-6 gap-y-3">
         {documents.map((document, idx) => (
           <div
