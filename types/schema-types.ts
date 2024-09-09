@@ -21,19 +21,23 @@ export type SignUpErrors = {
 };
 
 export type CreateCompanyData = {
-  companyId: string;
+  // companyId: string;
   companyName: string;
   companyAddress: string;
-  companyDescription: string;
-  companyDocuments?: File[];
+  companyPhone: string;
+  companyEmail: string;
+  // companyDescription: string;
+  // companyDocuments?: File[];
 };
 
 export type CreateCompanyErrors = {
-  companyId?: string[];
+  // companyId?: string[];
   companyName?: string[];
   companyAddress?: string[];
-  companyDescription?: string[];
-  companyDocuments?: File[];
+  companyPhone?: string[];
+  companyEmail?: string[];
+  // companyDescription?: string[];
+  // companyDocuments?: File[];
 };
 
 export type CreateUser = {
