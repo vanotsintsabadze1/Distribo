@@ -23,6 +23,7 @@ async function getSingleProduct(id: string) {
   } catch (error) {
     console.error(error);
     return { status: 500, message: "Internal Server Error", data: null };
+    [];
   }
 }
 
