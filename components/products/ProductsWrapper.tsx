@@ -1,7 +1,7 @@
 import ProductCard from "./ProductCard";
 
 interface ProductsWrapperProps {
-  products: Product[];
+  products: Product[] | null;
 }
 
 export default function ProductsWrapper({ products }: ProductsWrapperProps) {

@@ -82,6 +82,6 @@ export const createProductSchema: ZodType<CreateProduct> = z.object({
     .string()
     .min(8, { message: "Description must be at least 8 characters long" })
     .max(500, { message: "Description is too long" }),
-  price: z.number().positive({ message: "Price must be a positive number" }),
-  stock: z.number().positive({ message: "Stock must be a positive number" }),
+  price: z.number().nonnegative({ message: "Price must be a positive number" }),
+  stock: z.number().nonnegative({ message: "Stock must be a positive number" }),
 });

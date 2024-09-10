@@ -70,9 +70,9 @@ export default function ProductEditForm({ ...product }: Product) {
       setFormErrors(errors);
       setLoading(false);
       return;
-    } else {
-      setFormErrors({});
     }
+
+    setFormErrors({});
 
     const formData = new FormData(e.currentTarget);
     formData.append("Id", product.id);
@@ -82,6 +82,7 @@ export default function ProductEditForm({ ...product }: Product) {
 
     if (validate) {
       router.push("/dashboard/products");
+      router.refresh();
     }
 
     setLoading(false);
@@ -156,7 +157,7 @@ export default function ProductEditForm({ ...product }: Product) {
           <div key={url} className="relative h-20 w-20">
             <Image src={url} alt={url} fill />
             <div className="absolute right-1 top-1 rounded-lg">
-              <button onClick={() => removeImage(index)} className="rounded-lg bg-black/60">
+              <button onClick={() => removeImage(index)} type="button" className="rounded-lg bg-black/60">
                 <X size={17} className="text-white opacity-60 duration-200 ease-in-out hover:opacity-100" />
               </button>
             </div>
