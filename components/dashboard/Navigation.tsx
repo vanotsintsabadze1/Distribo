@@ -3,7 +3,10 @@ import Link from "next/link";
 import Button from "../ui/Button";
 import { logoutUser } from "@/lib/actions/auth/auth";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+
+interface NavigationProps {
+    isMinimized?: boolean
+}
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -13,8 +16,7 @@ const navItems = [
   { name: "Profile", href: "/dashboard/profile", icon: UserCircle },
 ];
 
-export default function Navigation() {
-  const [isMinimized, setIsMinimized] = useState(false);
+export default function Navigation({isMinimized} : NavigationProps) {
   const pathname = usePathname();
 
   return (

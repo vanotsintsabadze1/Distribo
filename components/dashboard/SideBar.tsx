@@ -51,7 +51,7 @@ export default function Sidebar() {
           >
             <ChevronLeft className={`h-4 w-4 transition-transform duration-300 ${isMinimized ? "rotate-180" : ""}`} />
           </button>
-          <Navigation />
+          <Navigation isMinimized={isMinimized}/>
         </div>
         {/*  */}
       </aside>
