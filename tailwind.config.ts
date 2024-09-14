@@ -20,6 +20,20 @@ const config: Config = {
         lg: "1024px",
         xl: "1280px",
       },
+      animation: {
+        fall: "fall 2s ease",
+        down: "down 2s ease",
+      },
+      keyframes: {
+        fall: {
+          "0%": { transform: " translate3d(0,40px,0)" },
+          "50%": { transform: "translate3d(0,0,0)" },
+        },
+        down: {
+          "0%": { transform: " translate3d(0,0,0)" },
+          "50%": { transform: "translate3d(0,40px,0)" },
+        },
+      },
     },
   },
   plugins: [],
