@@ -38,8 +38,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={DistriboFont.className}>
-        <Toaster position="top-center" />
-        {children}
+          <Toaster position="top-center" />
+          {children}
       </body>
     </html>
   );

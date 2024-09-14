@@ -16,9 +16,9 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
         <TextInput name="role" label="Role" placeholder={userRole} className="pl-4 pr-2" disabled={true} />
         <TextInput name="firstName" label="First Name" placeholder="e.g John" className="pl-4 pr-2" />
         <TextInput name="lastName" label="Last Name" placeholder="e.g Doe" className="pl-4 pr-2" />
-        {userRole === "user" && (
+        {userRole === "User" && (
           <div className="mx-auto">
-            <h1 className="text-xl font-semibold">Your Company</h1>
+            <h1 className="text-xl font-semibold text-center">Your Company</h1>
             <CompanyCard {...company} />
           </div>
         )}
