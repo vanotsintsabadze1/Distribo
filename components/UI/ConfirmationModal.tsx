@@ -9,7 +9,7 @@ interface ConfirmationModalProps {
 }
 
 const modalAnimations = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 100 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -17,7 +17,7 @@ export default function ConfirmationModal({ callback, isModalOpen, setIsModalOpe
   return (
     <Dialog.Root open={isModalOpen} onOpenChange={(e) => setIsModalOpen(e.open)}>
       <Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-40 bg-black/40" />
+        <Dialog.Backdrop className="data-[scope=dialog]:data-[part=backdrop]:data-[state=open]:animate-fadeIn data-[scope=dialog]:data-[part=backdrop]:data-[state=closed]:animate-fadeOut fixed inset-0 z-40 bg-black/40" />
         <Dialog.Positioner className="fixed inset-0 z-50 flex items-center justify-center">
           <AnimatePresence mode="wait">
             {isModalOpen && (

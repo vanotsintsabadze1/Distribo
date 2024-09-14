@@ -21,17 +21,17 @@ const config: Config = {
         xl: "1280px",
       },
       animation: {
-        fall: "fall 2s ease",
-        down: "down 2s ease",
+        fadeIn: "fadeIn 0.5s ease-in-out",
+        fadeOut: "fadeOut 0.5s ease-in-out",
       },
       keyframes: {
-        fall: {
-          "0%": { transform: " translate3d(0,40px,0)" },
-          "50%": { transform: "translate3d(0,0,0)" },
+        fadeIn: {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
-        down: {
-          "0%": { transform: " translate3d(0,0,0)" },
-          "50%": { transform: "translate3d(0,40px,0)" },
+        fadeOut: {
+          from: { opacity: "1" },
+          to: { opacity: "0" },
         },
       },
     },
