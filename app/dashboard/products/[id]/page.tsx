@@ -11,7 +11,7 @@ interface ProductDetailsPageProps {
 async function getProduct(productId: string) {
   const token = getUserToken();
   try {
-    const res = await fetch(`${API_URL}/v1/Product/id?id=${productId}`);
+    const res = await fetch(`${API_URL}/v1/Product/${productId}`);
 
     const data = await res.json();
 
