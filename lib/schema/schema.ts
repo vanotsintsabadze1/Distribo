@@ -1,5 +1,12 @@
 import { z, ZodType } from "zod";
-import { CreateCompanyData, LoginData, SignUpData, CreateUser, CreateProduct } from "@/types/schema-types";
+import {
+  CreateCompanyData,
+  LoginData,
+  SignUpData,
+  CreateUser,
+  CreateProduct,
+  ProfileSchema,
+} from "@/types/schema-types";
 
 export const loginFormSchema: ZodType<LoginData> = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -82,6 +89,15 @@ export const createProductSchema: ZodType<CreateProduct> = z.object({
     .string()
     .min(8, { message: "Description must be at least 8 characters long" })
     .max(500, { message: "Description is too long" }),
-  price: z.number().nonnegative({ message: "Price must be a positive number" }),
+  price: z.number().positive({ message: "Price must be greater than 0" }),
   stock: z.number().nonnegative({ message: "Stock must be a positive number" }),
 });
+
+export const profileSchema: ZodType<Partial<ProfileSchema>> = z
+  .object({
+    email: z.string(),
+    role: z.string(),
+    firstName: z.string(),
+    lastName: z.string(),
+  })
+  .partial();

@@ -1,28 +1,27 @@
 import ErrorMessage from "./ErrorMessage";
+import { UseFormRegister, FieldError, FieldValues, Path } from "react-hook-form";
 
-interface InputProps {
+interface InputProps<T extends FieldValues> {
   label: string;
-  name: string;
+  name: Path<T>;
   placeholder: string;
-  value?: string | number;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   type?: "text" | "password" | "email" | "number";
-  disabled?: boolean
-  error?: string[] | number[];
+  disabled?: boolean;
+  register: UseFormRegister<T>;
+  error?: FieldError | undefined;
 }
 
-export default function TextInput({
+export default function TextInput<T extends FieldValues>({
   name,
   placeholder,
   label,
-  value,
-  onChange,
   type = "text",
   className,
   disabled,
+  register,
   error,
-}: InputProps) {
+}: InputProps<T>) {
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor={name} className="text-sm font-semibold">
@@ -31,11 +30,11 @@ export default function TextInput({
       <div className="flex w-full flex-col gap-2">
         <input
           type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
           placeholder={placeholder}
           className={`${className} w-full rounded-md border border-gray-300 p-2`}
+          {...register(name, {
+            valueAsNumber: type === "number" ? true : false,
+          })}
           disabled={disabled}
         />
         {error && <ErrorMessage error={error} />}

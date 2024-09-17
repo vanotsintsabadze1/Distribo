@@ -1,26 +1,25 @@
+import { FieldError, FieldValues, Path, UseFormRegister } from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
 
-interface InputProps {
+interface InputProps<T extends FieldValues> {
   label?: string;
-  name: string;
+  name: Path<T>;
   placeholder: string;
-  value?: string;
-  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   className?: string;
   resize?: "none" | "vertical" | "horizontal" | "both";
-  error?: string[];
+  register: UseFormRegister<T>;
+  error?: FieldError | undefined;
 }
 
-export default function TextArea({
+export default function TextArea<T extends FieldValues>({
   name,
   placeholder,
   label,
   resize = "none",
-  value,
-  onChange,
   className,
+  register,
   error,
-}: InputProps) {
+}: InputProps<T>) {
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
@@ -30,10 +29,8 @@ export default function TextArea({
       )}
       <div className="flex w-full flex-col gap-2">
         <textarea
-          name={name}
-          value={value}
-          onChange={onChange}
           placeholder={placeholder}
+          {...register(name)}
           className={`${className} w-full rounded-md border border-gray-300 p-2 ${resize === "none" ? "resize-none" : resize === "vertical" ? "resize-y" : resize === "horizontal" ? "resize-x" : "resize"}`}
         />
         {error && <ErrorMessage error={error} />}

@@ -2,68 +2,55 @@
 
 import { useState } from "react";
 import Button from "../../ui/Button";
-import { validateFormData } from "@/lib/utils/validation";
 import { loginFormSchema } from "@/lib/schema/schema";
-import { LoginData, LoginErrors } from "@/types/schema-types";
+import { LoginData } from "@/types/schema-types";
 import TextInput from "../../ui/TextInput";
 import { loginUser } from "@/lib/actions/auth/auth";
 import { useRouter } from "next/navigation";
 import GoogleAuthButton from "./GoogleAuthButton";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import Spinner from "@/components/ui/Spinner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function LoginForm() {
-  const [loginFormData, setloginFormData] = useState<LoginData>({
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState<LoginErrors>({});
   const [loading, setLoading] = useState(false);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<LoginData>({
+    resolver: zodResolver(loginFormSchema),
+  });
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setloginFormData({
-      ...loginFormData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (loginFormData: LoginData) => {
+    if (!loginFormData) return;
     setLoading(true);
 
-    const { errors, data } = validateFormData(loginFormSchema, loginFormData);
-
-    if (errors) {
-      setErrors(errors);
-    } else {
-      setErrors({});
-      const { email, password } = data;
-      const res = await loginUser({ email, password });
-      const success = await apiResponseValidator({ res });
-      success ? router.push("/dashboard") : router.refresh();
-    }
+    const { email, password } = loginFormData;
+    const res = await loginUser({ email, password });
+    const success = await apiResponseValidator({ res });
+    success ? router.push("/dashboard") : router.refresh();
 
     setLoading(false);
   };
 
   return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
       <TextInput
         label="Email Address"
-        value={loginFormData.email}
-        onChange={handleChange}
         name="email"
         placeholder="e.g johndoe30@gmail.com"
+        register={register}
         error={errors.email}
       />
       <TextInput
         label="Password"
-        value={loginFormData.password}
-        onChange={handleChange}
         type="password"
         name="password"
         placeholder="e.g Something123$!@"
+        register={register}
         error={errors.password}
       />
 

@@ -1,58 +1,39 @@
 "use client";
 import Button from "@/components/ui/Button";
-import TextArea from "@/components/ui/TextArea";
 import TextInput from "@/components/ui/TextInput";
 import CompanyDocument from "./CompanyDocument";
 import { createCompanyFormSchema } from "@/lib/schema/schema";
-import { validateFormData } from "@/lib/utils/validation";
-import { CreateCompanyData, CreateCompanyErrors } from "@/types/schema-types";
+import { CreateCompanyData } from "@/types/schema-types";
 import { createCompany } from "@/lib/actions/company/createCompany";
 import { useRef, useState } from "react";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import Spinner from "../ui/Spinner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function CompanyCreationForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [documents, setDocuments] = useState<File[]>([]);
-  const [companyFormData, setCompanyFormData] = useState<CreateCompanyData>({
-    // companyId: "",
-    companyName: "",
-    companyAddress: "",
-    companyPhone: "",
-    companyEmail: "",
-    // companyDescription: "",
-  });
-  const [errors, setErrors] = useState<CreateCompanyErrors>({});
   const [loading, setLoading] = useState(false);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<CreateCompanyData>({
+    resolver: zodResolver(createCompanyFormSchema),
+  });
   const router = useRouter();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setCompanyFormData({
-      ...companyFormData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSubmit(companyFormData: CreateCompanyData) {
     setLoading(true);
 
-    const { errors, data } = validateFormData(createCompanyFormSchema, companyFormData);
-
-    if (errors) {
-      setErrors(errors);
-      setLoading(false);
-      return;
-    } else {
-      setErrors({});
-    }
-
+    const { companyName, companyAddress, companyPhone, companyEmail } = companyFormData;
     const res = await createCompany({
-      name: companyFormData.companyName,
-      address: companyFormData.companyAddress,
-      phone: companyFormData.companyPhone,
-      email: companyFormData.companyEmail,
+      name: companyName,
+      address: companyAddress,
+      phone: companyPhone,
+      email: companyEmail,
     });
 
     const success = await apiResponseValidator({ res });
@@ -66,7 +47,7 @@ export default function CompanyCreationForm() {
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
     >
       {/* <TextInput
@@ -81,37 +62,33 @@ export default function CompanyCreationForm() {
       <TextInput
         name="companyName"
         label="Company Name"
-        value={companyFormData.companyName}
-        onChange={handleChange}
-        placeholder="e.g Apple"
+        placeholder="e.g Company 1"
         className="pl-4 pr-2"
+        register={register}
         error={errors.companyName}
       />
       <TextInput
         name="companyAddress"
         label="Address"
-        value={companyFormData.companyAddress}
-        onChange={handleChange}
         placeholder="e.g street # 1"
         className="pl-4 pr-2"
+        register={register}
         error={errors.companyAddress}
       />
       <TextInput
         name="companyPhone"
         label="Phone"
-        value={companyFormData.companyPhone}
-        onChange={handleChange}
         placeholder="e.g +032 324 123"
         className="pl-4 pr-2"
+        register={register}
         error={errors.companyPhone}
       />
       <TextInput
         name="companyEmail"
         label="Email"
-        value={companyFormData.companyEmail}
-        onChange={handleChange}
         placeholder="e.g companymail@gmail.com"
         className="pl-4 pr-2"
+        register={register}
         error={errors.companyEmail}
       />
       {/* <TextArea

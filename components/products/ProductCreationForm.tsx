@@ -6,120 +6,98 @@ import Spinner from "../ui/Spinner";
 import TextArea from "../ui/TextArea";
 import ImageUpload from "./ImageUpload";
 import { useRef, useState } from "react";
-import { validateFormData } from "@/lib/utils/validation";
 import { createProductSchema } from "@/lib/schema/schema";
-import { CreateProduct, CreateProductError } from "@/types/schema-types";
+import { CreateProduct } from "@/types/schema-types";
 import { createProduct } from "@/lib/actions/admin/products/createProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ProductCreationForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [productForm, setProductForm] = useState<CreateProduct>({
-    productName: "",
-    description: "",
-    price: 0,
-    stock: 0,
-  });
-  const [formErrors, setErrors] = useState<CreateProductError>({});
   const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<CreateProduct>({
+    resolver: zodResolver(createProductSchema),
+  });
   const router = useRouter();
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
-    const { name, value, type } = e.target;
-
-    const fieldNameMap = {
-      Name: "productName",
-      Description: "description",
-      Price: "price",
-      Stock: "stock",
-    };
-
-    const fieldKey = fieldNameMap[name as keyof typeof fieldNameMap];
-
-    if (fieldKey) {
-      setProductForm((prev) => ({
-        ...prev,
-        // Convert input value to number if the input type is "number"
-        [fieldKey]: type === "number" ? Number(value) : value,
-      }));
-    }
-  }
-
-  async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
+  async function onSubmit(productFormData: CreateProduct) {
+    console.log("🚀 ~ onSubmit ~ productFormData:", productFormData)
     setLoading(true);
-    const { errors } = validateFormData(createProductSchema, productForm);
 
-    if (errors) {
-      setErrors(errors);
+    const formData = new FormData();
+    formData.append("Name", productFormData.productName);
+    formData.append("Description", productFormData.description);
+    formData.append("Price", productFormData.price.toString());
+    formData.append("Stock", productFormData.stock.toString());
+
+    // Append selected images
+    selectedImage.forEach((image) => {
+      formData.append(`ImageFiles`, image);
+    });
+    
+    console.log("🚀 ~ onSubmit ~ formData:", formData)
+    try {
+      const res = await createProduct(formData);
+      const success = await apiResponseValidator({ res });
+
+      if (success) {
+        setSelectedImage([]);
+        router.push("/dashboard/products");
+      }
+    } catch (error) {
+      console.error("Product creation failed:", error);
+    } finally {
       setLoading(false);
-      return;
-    } else {
-      setErrors({});
     }
-
-    if (!formRef.current) return;
-    const formData = new FormData(formRef.current);
-
-    const res = await createProduct(formData);
-    const success = await apiResponseValidator({ res });
-
-    if (success) {
-      setProductForm({ productName: "", description: "", price: 0, stock: 0 });
-      setSelectedImage([]);
-      router.push("/dashboard/products");
-    } else {
-      return null;
-    }
-
-    setLoading(false);
   }
 
   return (
     <form
       className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
       ref={formRef}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <TextInput
         label="Product Name"
-        value={productForm.productName}
-        onChange={handleChange}
-        name="Name"
+        name="productName"
         placeholder="e.g avocado"
-        error={formErrors.productName}
+        register={register}
+        error={errors.productName}
       />
       <TextArea
         label="Description"
-        value={productForm.description}
-        onChange={handleChange}
-        name="Description"
+        name="description"
         placeholder="Product description..."
-        error={formErrors.description}
+        register={register}
+        error={errors.description}
       />
       <TextInput
         label="Price"
         type="number"
-        value={productForm.price}
-        onChange={handleChange}
-        name="Price"
+        name="price"
         placeholder="e.g 12.00"
-        error={formErrors.price}
+        register={register}
+        error={errors.price}
       />
       <TextInput
         label="Stock"
         type="number"
-        value={productForm.stock}
-        onChange={handleChange}
-        name="Stock"
+        name="stock"
         placeholder="e.g 12.00"
-        error={formErrors.stock}
+        register={register}
+        error={errors.stock}
       />
       <ImageUpload inputRef={inputRef} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
       <div className="mt-4 flex w-full items-center justify-center">
-        <Button onClick={handleSubmit} type="submit" className="w-32 bg-secondary font-semibold text-white">
+        <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
           {loading ? <Spinner color="white" size={20} /> : "Create"}
         </Button>
       </div>
