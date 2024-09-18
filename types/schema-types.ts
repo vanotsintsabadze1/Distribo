@@ -32,25 +32,11 @@ export type CreateUser = {
   role: string;
 };
 
-export type CreateUserError = {
-  email?: string[];
-  password?: string[];
-  confirmPassword?: string[];
-  role?: string[];
-};
-
 export type CreateProduct = {
   productName: string;
   description: string;
   price: number | string;
   stock: number | string;
-};
-
-export type CreateProductError = {
-  productName?: string[];
-  description?: string[];
-  price?: number[];
-  stock?: number[];
 };
 
 export type ProfileSchema = {

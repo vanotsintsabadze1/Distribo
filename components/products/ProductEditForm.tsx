@@ -36,7 +36,6 @@ export default function ProductEditForm({ ...product }: Product) {
     setValue("productName", product.name);
     setValue("description", product.description);
     setValue("price", product.price);
-    setValue("stock", product.stock);
   }, [product, setValue]);
 
   async function fetchImagesOnLoad() {
