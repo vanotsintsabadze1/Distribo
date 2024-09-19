@@ -36,7 +36,8 @@ export default function ProductEditForm({ ...product }: Product) {
     setValue("productName", product.name);
     setValue("description", product.description);
     setValue("price", product.price);
-  }, [product, setValue]);
+    setValue("stock", product.stock);
+  }, []);
 
   async function fetchImagesOnLoad() {
     await fetchImages({ images: product.images, setFiles: setImagesAsFiles, setImagesAsURLs });
@@ -79,18 +80,15 @@ export default function ProductEditForm({ ...product }: Product) {
 
     // Append the images
     imagesAsFiles.forEach((file) => {
-      console.log("🚀 ~ imagesAsFiles.forEach ~ file:", file)
       formData.append("ImageFiles", file);
     });
 
     const res = await editProduct(formData, product.id);
-    
+
     const validate = await apiResponseValidator({ res });
-    
+
     if (validate) {
       router.push("/dashboard/products");
-      console.log('shemosvla');
-      
     }
 
     setLoading(false);
@@ -113,8 +111,8 @@ export default function ProductEditForm({ ...product }: Product) {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
       className="mt-10 flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <TextInput
         name="productName"
