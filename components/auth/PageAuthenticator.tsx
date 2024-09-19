@@ -15,9 +15,9 @@ export default async function PageAuthenticator({
   children,
 }: PageAuthenticatorProps) {
   const auth = await getUserAuthStatus();
-  const isAdmin = auth.data?.role.name === "Admin" || auth.data?.role.name === "Employee" ? true : false;
-  const isUser = auth.data?.role.name === "User" ? true : false;
-  const isEmployee = auth.data?.role.name === "Employee" ? true : false;
+  const isAdmin = auth.data?.role.name === "Admin" || auth.data?.role.name === "Employee";
+  const isUser = auth.data?.role.name === "User";
+  const isEmployee = auth.data?.role.name === "Employee";
 
   if (shouldNotAllowEmployee && isEmployee) {
     return redirect(redirectTo);
