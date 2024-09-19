@@ -41,10 +41,20 @@ export default function ProductCreationForm() {
     selectedImage.forEach((image) => {
       formData.append(`ImageFiles`, image);
     });
-    
+
     try {
       const res = await createProduct(formData);
-      const success = await apiResponseValidator({ res });
+      const success = await apiResponseValidator({
+        res,
+        options: {
+          customErrors: {
+            200: "Successfully created the product",
+            400: "Invalid Data",
+            403: "You don't have permissions",
+            409: "Company exists with that name already",
+          },
+        },
+      });
 
       if (success) {
         setSelectedImage([]);

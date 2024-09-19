@@ -30,7 +30,7 @@ export default function LoginForm() {
 
     const { email, password } = loginFormData;
     const res = await loginUser({ email, password });
-    const success = await apiResponseValidator({ res });
+    const success = await apiResponseValidator({ res, options: {customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" }} });
     success ? router.push("/dashboard") : router.refresh();
 
     setLoading(false);

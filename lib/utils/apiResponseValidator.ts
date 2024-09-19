@@ -2,9 +2,9 @@
 
 import { toast } from "react-hot-toast";
 
-type ApiResponseValidatorOptions = {
-  outputGenericError?: boolean;
-};
+type ApiResponseValidatorOptions =
+  | { outputGenericErrors: boolean; customErrors?: never }
+  | { outputGenericErrors?: never; customErrors: Record<number, string> };
 
 type ApiResponseValidator = {
   res: ServerActionResponsePayload;
@@ -22,7 +22,14 @@ const statusMessages: Record<number, string> = {
 
 function generateToastResponse(status: number, serverMessage: string, options?: ApiResponseValidatorOptions) {
   const genericMessage = statusMessages[status] || "Unexpected error";
-  const message = options?.outputGenericError ? genericMessage : serverMessage;
+  let message;
+
+  if (options?.customErrors) {
+    message = options.customErrors[status] || genericMessage;
+  } else {
+    message = genericMessage;
+  }
+
   const toastFunction = status === 200 ? toast.success : toast.error;
   return toastFunction(message);
 }

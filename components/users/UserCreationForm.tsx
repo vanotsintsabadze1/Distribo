@@ -26,7 +26,10 @@ export default function UserCreationForm() {
     setLoading(true);
 
     const res = await createUser(userFormData);
-    const success = await apiResponseValidator({ res, options: { outputGenericError: true } });
+    const success = await apiResponseValidator({
+      res,
+      options: { customErrors: { 200: "Successfully created the user", 400: "Email is taken" } },
+    });
 
     // Clear form fields by calling reset()
     if (success) reset();
