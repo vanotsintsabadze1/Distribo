@@ -85,7 +85,10 @@ export default function ProductEditForm({ ...product }: Product) {
 
     const res = await editProduct(formData, product.id);
 
-    const validate = await apiResponseValidator({ res });
+    const validate = await apiResponseValidator({
+      res,
+      options: { customErrors: { 200: "Successfully edited the product", 400: "Invalid Data" } },
+    });
 
     if (validate) {
       router.push("/dashboard/products");

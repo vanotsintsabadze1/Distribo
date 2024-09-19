@@ -25,7 +25,7 @@ export default function ProductActionsBar({ productId }: ProductActionsBarProps)
 
   async function handleDelete() {
     const res = await deleteProduct(productId);
-    await apiResponseValidator({ res });
+    await apiResponseValidator({ res, options: { customErrors: { 200: "Successfully deleted the product" } } });
   }
 
   return (
