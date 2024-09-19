@@ -2,7 +2,6 @@
 
 // In some cases, when you have to use this function on load, if reactStrictMode is enabled, your images will get dupped.
 // It's because useEffect runs twice in strict mode, and the fetchImagesOnLoad function will run twice, causing the images to be fetched twice.
-
 import { API_URL } from "../constants/constants";
 
 interface FetchImagesProps {
@@ -20,7 +19,9 @@ export async function fetchImages({ images, setFiles, setImagesAsURLs }: FetchIm
       });
 
       const data = await res.blob();
-      const file = new File([data], image.id);
+      const fileType = res.headers.get("Content-Type");
+      // const imageName = `${image.id}${fileType?.split("/")[1]}`;
+      const file = new File([data], image.id, { type: fileType as string });
       const url = URL.createObjectURL(data);
 
       setFiles && setFiles((prev) => [...prev, file]);
@@ -32,20 +33,21 @@ export async function fetchImages({ images, setFiles, setImagesAsURLs }: FetchIm
 }
 
 interface FetchSingleImageProps {
-  imageURL: string;
+  image: ImageResponsePayload;
   setImageAsURL: React.Dispatch<React.SetStateAction<string>>;
   setImageAsFile?: React.Dispatch<React.SetStateAction<File>>;
 }
 
-export async function fetchSingleImage({ imageURL, setImageAsURL, setImageAsFile }: FetchSingleImageProps) {
+export async function fetchSingleImage({ image, setImageAsURL, setImageAsFile }: FetchSingleImageProps) {
   try {
-    const res = await fetch(`${API_URL}/v1/Image/${imageURL}`, {
+    const res = await fetch(`${API_URL}/v1/Image/${image.url}`, {
       method: "GET",
       cache: "no-cache",
     });
 
     const data = await res.blob();
-    const file = new File([data], imageURL);
+    const fileType = res.headers.get("Content-Type");
+    const file = new File([data], image.id, { type: fileType as string });
     const url = URL.createObjectURL(data);
 
     setImageAsURL(url);

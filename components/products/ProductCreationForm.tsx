@@ -29,7 +29,6 @@ export default function ProductCreationForm() {
   const router = useRouter();
 
   async function onSubmit(productFormData: CreateProduct) {
-    console.log("🚀 ~ onSubmit ~ productFormData:", productFormData)
     setLoading(true);
 
     const formData = new FormData();
@@ -43,7 +42,6 @@ export default function ProductCreationForm() {
       formData.append(`ImageFiles`, image);
     });
     
-    console.log("🚀 ~ onSubmit ~ formData:", formData)
     try {
       const res = await createProduct(formData);
       const success = await apiResponseValidator({ res });
