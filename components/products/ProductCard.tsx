@@ -7,7 +7,11 @@ import Image from "next/image";
 import Spinner from "../ui/Spinner";
 import ProductActionsBar from "./ProductActionsBar";
 
-export default function ProductCard({ ...product }: Product) {
+interface ProductCardProps extends Product {
+  hasEditPerms: boolean;
+}
+
+export default function ProductCard({ hasEditPerms, ...product }: ProductCardProps ) {
   const [image, setImage] = useState<string>("");
 
   async function fetchCoverImageOnLoad() {
@@ -28,7 +32,7 @@ export default function ProductCard({ ...product }: Product) {
         {image !== "" ? (
           <>
             <Image src={image} alt={product.name} fill />
-            <ProductActionsBar productId={product.id} />
+            {hasEditPerms && <ProductActionsBar productId={product.id} />}
           </>
         ) : (
           <Spinner size={40} color="black" />

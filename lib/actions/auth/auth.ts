@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserToken } from "../helpers/getUserToken";
 import { revalidateTag } from "next/cache";
+import { decodeUserCredentials, encodeUserCredentials } from "../helpers/encodeUserCredentials";
 
 // User login logic
 
@@ -29,7 +30,14 @@ export async function loginUser({ email, password }: LoginData) {
       cookies().set("user", data, {
         expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
       });
-      revalidateTag("auth");
+
+      const doEncodedCredentialsExist = cookies().get("e_creds")?.value != null;
+
+      if (!doEncodedCredentialsExist) {
+        const userInfo = await getUserAuthStatus();
+        userInfo.data && await encodeUserCredentials(userInfo.data);
+      }
+      
       return { status: 200, message: "Logged in successfully." };
     }
 
@@ -45,6 +53,7 @@ export async function loginUser({ email, password }: LoginData) {
 
 export async function logoutUser() {
   cookies().delete("user");
+  cookies().delete("e_creds");
   revalidateTag("auth");
   return redirect("/auth/login");
 }
@@ -54,6 +63,10 @@ export async function logoutUser() {
 export async function getUserAuthStatus() {
   const token = await getUserToken();
 
+  if (!token) {
+    return {status: 400, message: "User is not authenticated", data: null}
+  }
+  
   try {
     const res = await fetch(`${API_URL}/v1/User/GetCurrentUser`, {
       method: "GET",
@@ -62,18 +75,15 @@ export async function getUserAuthStatus() {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
-      cache: "force-cache",
-      next: {
-        tags: ["auth"],
-      },
     });
+
     const data = await res.json();
 
     return res.ok
       ? { status: 200, message: res.statusText, data: data as User }
       : { status: res.status, message: res.statusText };
   } catch (error) {
-    return { status: 500, message: "Internal Server Error" };
+    return { status: 500, message: "Internal Server Error", data: null };
   }
 }
 
