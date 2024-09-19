@@ -3,11 +3,6 @@ export type LoginData = {
   password: string;
 };
 
-export type LoginErrors = {
-  email?: string[];
-  password?: string[];
-};
-
 export type SignUpData = {
   email: string;
   password: string;
@@ -30,16 +25,6 @@ export type CreateCompanyData = {
   // companyDocuments?: File[];
 };
 
-export type CreateCompanyErrors = {
-  // companyId?: string[];
-  companyName?: string[];
-  companyAddress?: string[];
-  companyPhone?: string[];
-  companyEmail?: string[];
-  // companyDescription?: string[];
-  // companyDocuments?: File[];
-};
-
 export type CreateUser = {
   email: string;
   password: string;
@@ -47,23 +32,16 @@ export type CreateUser = {
   role: string;
 };
 
-export type CreateUserError = {
-  email?: string[];
-  password?: string[];
-  confirmPassword?: string[];
-  role?: string[];
-};
-
 export type CreateProduct = {
   productName: string;
   description: string;
-  price: number;
-  stock: number;
+  price: number | string;
+  stock: number | string;
 };
 
-export type CreateProductError = {
-  productName?: string[];
-  description?: string[];
-  price?: number[];
-  stock?: number[];
+export type ProfileSchema = {
+  email: string;
+  role: string;
+  firstName: string;
+  lastName: string;
 };

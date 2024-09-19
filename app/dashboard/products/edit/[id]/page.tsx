@@ -11,7 +11,7 @@ interface IndividualProductEditPageProps {
 
 async function getSingleProduct(id: string) {
   try {
-    const res = await fetch(`${API_URL}/v1/Product/id?id=${id}`, {
+    const res = await fetch(`${API_URL}/v1/Product/${id}`, {
       method: "GET",
       cache: "no-cache",
     });

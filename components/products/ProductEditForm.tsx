@@ -11,27 +11,37 @@ import { editProduct } from "@/lib/actions/admin/products/editProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
-import { CreateProduct, CreateProductError } from "@/types/schema-types";
-import { validateFormData } from "@/lib/utils/validation";
+import { CreateProduct } from "@/types/schema-types";
 import { createProductSchema } from "@/lib/schema/schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ProductEditForm({ ...product }: Product) {
-  const [productData, setProductData] = useState({
-    Name: product.name,
-    Description: product.description,
-    Price: product.price,
-    Stock: product.stock,
-    ImageFiles: product.images,
-  });
   const [imagesAsFiles, setImagesAsFiles] = useState<File[]>([]);
   const [imagesAsURLs, setImagesAsURLs] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const [formErrors, setFormErrors] = useState<CreateProductError>({});
   const inputRef = useRef<HTMLInputElement>(null);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+    setValue,
+  } = useForm<CreateProduct>({
+    resolver: zodResolver(createProductSchema),
+  });
   const router = useRouter();
+
+  // Set form data values on component load
+  useEffect(() => {
+    setValue("productName", product.name);
+    setValue("description", product.description);
+    setValue("price", product.price);
+    setValue("stock", product.stock);
+  }, []);
 
   async function fetchImagesOnLoad() {
     await fetchImages({ images: product.images, setFiles: setImagesAsFiles, setImagesAsURLs });
+
     const inputFiles = new DataTransfer();
     imagesAsFiles.forEach((image) => {
       inputFiles.items.add(image);
@@ -41,13 +51,17 @@ export default function ProductEditForm({ ...product }: Product) {
     }
   }
 
+  useEffect(() => {
+    // Fetch images and set them in the state and input ref
+    fetchImagesOnLoad();
+  }, []);
+
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files || !inputRef.current?.files) {
       return;
     }
 
     const files = Array.from(e.target.files);
-
     setImagesAsFiles((prev) => [...prev, ...files]);
     files.forEach((file) => {
       const url = URL.createObjectURL(file);
@@ -55,34 +69,26 @@ export default function ProductEditForm({ ...product }: Product) {
     });
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function onSubmit(updateFormData: CreateProduct) {
     setLoading(true);
 
-    const { errors } = validateFormData(createProductSchema, {
-      productName: productData.Name,
-      description: productData.Description,
-      price: productData.Price,
-      stock: productData.Stock,
-    } as CreateProduct);
+    // Merge the product ID into the form data
+    const formData = new FormData();
+    formData.append("Name", updateFormData.productName);
+    formData.append("Description", updateFormData.description);
+    formData.append("Price", updateFormData.price.toString());
 
-    if (errors) {
-      setFormErrors(errors);
-      setLoading(false);
-      return;
-    }
+    // Append the images
+    imagesAsFiles.forEach((file) => {
+      formData.append("ImageFiles", file);
+    });
 
-    setFormErrors({});
+    const res = await editProduct(formData, product.id);
 
-    const formData = new FormData(e.currentTarget);
-    formData.append("Id", product.id);
-
-    const res = await editProduct(formData);
     const validate = await apiResponseValidator({ res });
 
     if (validate) {
       router.push("/dashboard/products");
-      router.refresh();
     }
 
     setLoading(false);
@@ -94,13 +100,7 @@ export default function ProductEditForm({ ...product }: Product) {
   }
 
   useEffect(() => {
-    fetchImagesOnLoad();
-  }, []);
-
-  useEffect(() => {
-    if (!inputRef.current?.files) {
-      return;
-    }
+    if (!inputRef.current?.files) return;
 
     const newFiles = new DataTransfer();
     imagesAsFiles.forEach((file) => {
@@ -111,35 +111,32 @@ export default function ProductEditForm({ ...product }: Product) {
 
   return (
     <form
-      onSubmit={handleSubmit}
       className="mt-10 flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
+      onSubmit={handleSubmit(onSubmit)}
     >
       <TextInput
-        name="Name"
+        name="productName"
         label="Name"
-        value={productData.Name}
-        onChange={(e) => setProductData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
         placeholder="Enter the product name.."
-        error={formErrors.productName}
+        register={register}
+        error={errors.productName}
       />
       <TextArea
-        name="Description"
+        name="description"
         label="Description"
         className="h-24"
         resize="vertical"
-        value={productData.Description}
-        onChange={(e) => setProductData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
-        placeholder="Enter the product name.."
-        error={formErrors.description}
+        placeholder="Enter the product description.."
+        register={register}
+        error={errors.description}
       />
       <TextInput
-        name="Price"
+        name="price"
         type="number"
         label="Price"
-        value={productData.Price}
-        onChange={(e) => setProductData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
-        placeholder="Enter the product name.."
-        error={formErrors.price}
+        placeholder="Enter the price.."
+        register={register}
+        error={errors.price}
       />
       <label htmlFor="ImageFiles" className="mt-3 w-full">
         <input

@@ -15,7 +15,7 @@ export default function ProductCard({ ...product }: Product) {
       return;
     }
 
-    await fetchSingleImage({ imageURL: product.images[0].url, setImageAsURL: setImage });
+    await fetchSingleImage({ image: product.images[0], setImageAsURL: setImage });
   }
 
   useEffect(() => {

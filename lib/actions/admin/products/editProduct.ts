@@ -3,13 +3,14 @@
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../../helpers/getUserToken";
 
-export async function editProduct(formData: FormData) {
+export async function editProduct(formData: FormData, id: string) {
   const token = await getUserToken();
 
   try {
-    const res = await fetch(`${API_URL}/v1/Product`, {
+    const res = await fetch(`${API_URL}/v1/Product/${id}`, {
       method: "PUT",
       headers: {
+        Accept: "application/octet-stream",
         Authorization: `Bearer ${token}`,
       },
       body: formData,
