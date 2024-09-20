@@ -13,12 +13,14 @@ import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../ui/ErrorMessage";
 
 export default function ProductCreationForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [loading, setLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
     register,
@@ -29,6 +31,11 @@ export default function ProductCreationForm() {
   const router = useRouter();
 
   async function onSubmit(productFormData: CreateProduct) {
+    if (selectedImage.length === 0) {
+      setImageError("Please upload at least one product image.");
+      return;
+    }
+
     setLoading(true);
 
     const formData = new FormData();
@@ -63,6 +70,7 @@ export default function ProductCreationForm() {
     } catch (error) {
       console.error("Product creation failed:", error);
     } finally {
+      setImageError(null);
       setLoading(false);
     }
   }
@@ -104,6 +112,7 @@ export default function ProductCreationForm() {
         error={errors.stock}
       />
       <ImageUpload inputRef={inputRef} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
+      {imageError && selectedImage.length === 0 && <ErrorMessage error={imageError}/>}
       <div className="mt-4 flex w-full items-center justify-center">
         <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
           {loading ? <Spinner color="white" size={20} /> : "Create"}

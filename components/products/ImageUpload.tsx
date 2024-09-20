@@ -59,7 +59,7 @@ export default function ImageUpload({ setSelectedImage, selectedImage, inputRef 
         className="block w-full text-sm text-gray-500 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white"
       />
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <div className="mt-4 grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-2">
         {selectedImage.map((file, index) => (
           <div key={index} className="relative h-32 w-32">
             <img

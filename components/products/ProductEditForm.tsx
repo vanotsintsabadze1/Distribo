@@ -15,10 +15,12 @@ import { CreateProduct } from "@/types/schema-types";
 import { createProductSchema } from "@/lib/schema/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../ui/ErrorMessage";
 
 export default function ProductEditForm({ ...product }: Product) {
   const [imagesAsFiles, setImagesAsFiles] = useState<File[]>([]);
   const [imagesAsURLs, setImagesAsURLs] = useState<string[]>([]);
+  const [imageError, setImageError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const {
@@ -70,6 +72,11 @@ export default function ProductEditForm({ ...product }: Product) {
   }
 
   async function onSubmit(updateFormData: CreateProduct) {
+    if (imagesAsFiles.length === 0) {
+      setImageError("Please upload at least one product image.");
+      return;
+    }
+
     setLoading(true);
 
     // Merge the product ID into the form data
@@ -94,6 +101,7 @@ export default function ProductEditForm({ ...product }: Product) {
       router.push("/dashboard/products");
     }
 
+    setImageError(null);
     setLoading(false);
   }
 
@@ -152,6 +160,7 @@ export default function ProductEditForm({ ...product }: Product) {
           onChange={handleImageUpload}
         />
       </label>
+      {imageError && imagesAsFiles.length === 0 && <ErrorMessage error={imageError} />}
       <div className="mt-3 flex w-full flex-wrap items-center gap-x-5">
         {imagesAsURLs.map((url, index) => (
           <div key={url} className="relative h-20 w-20">
