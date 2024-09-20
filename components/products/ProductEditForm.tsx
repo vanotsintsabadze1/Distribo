@@ -15,6 +15,7 @@ import { CreateProduct } from "@/types/schema-types";
 import { createProductSchema } from "@/lib/schema/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../ui/ErrorMessage";
 
 export default function ProductEditForm({ ...product }: Product) {
   const [imagesAsFiles, setImagesAsFiles] = useState<File[]>([]);
@@ -159,7 +160,7 @@ export default function ProductEditForm({ ...product }: Product) {
           onChange={handleImageUpload}
         />
       </label>
-      {imageError && imagesAsFiles.length === 0 && <p className="text-xs font-semibold text-red-600">{imageError}</p>}
+      {imageError && imagesAsFiles.length === 0 && <ErrorMessage error={imageError} />}
       <div className="mt-3 flex w-full flex-wrap items-center gap-x-5">
         {imagesAsURLs.map((url, index) => (
           <div key={url} className="relative h-20 w-20">

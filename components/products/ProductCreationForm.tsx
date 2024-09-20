@@ -13,6 +13,7 @@ import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "../ui/ErrorMessage";
 
 export default function ProductCreationForm() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -111,7 +112,7 @@ export default function ProductCreationForm() {
         error={errors.stock}
       />
       <ImageUpload inputRef={inputRef} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
-      {imageError && selectedImage.length === 0 && <p className="text-xs font-semibold text-red-600">{imageError}</p>}
+      {imageError && selectedImage.length === 0 && <ErrorMessage error={imageError}/>}
       <div className="mt-4 flex w-full items-center justify-center">
         <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
           {loading ? <Spinner color="white" size={20} /> : "Create"}
