@@ -59,16 +59,26 @@ export default function ProductEditForm({ ...product }: Product) {
   }, []);
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files || !inputRef.current?.files) {
-      return;
-    }
+    if (!e.target.files || !inputRef.current?.files) return;
 
     const files = Array.from(e.target.files);
-    setImagesAsFiles((prev) => [...prev, ...files]);
+    const validFiles: File[] = [];
+
+    // Validate image size
     files.forEach((file) => {
-      const url = URL.createObjectURL(file);
-      setImagesAsURLs((prev) => [...prev, url]);
+      if (file.size > 10 * 1024 * 1024) {
+        setImageError(`File ${file.name} is too large. Maximum file size is 10MB.`);
+      } else {
+        validFiles.push(file);
+        const url = URL.createObjectURL(file);
+        setImagesAsURLs((prev) => [...prev, url]);
+      }
     });
+
+    if (validFiles.length > 0) {
+      setImagesAsFiles((prev) => [...prev, ...validFiles]);
+      setImageError(null);
+    }
   }
 
   async function onSubmit(updateFormData: CreateProduct) {
@@ -160,7 +170,7 @@ export default function ProductEditForm({ ...product }: Product) {
           onChange={handleImageUpload}
         />
       </label>
-      {imageError && imagesAsFiles.length === 0 && <ErrorMessage error={imageError} />}
+      {imageError && <ErrorMessage error={imageError} />}
       <div className="mt-3 flex w-full flex-wrap items-center gap-x-5">
         {imagesAsURLs.map((url, index) => (
           <div key={url} className="relative h-20 w-20">

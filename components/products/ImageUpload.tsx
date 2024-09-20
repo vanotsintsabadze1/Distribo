@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useState } from "react";
+import ErrorMessage from "../ui/ErrorMessage";
 
 interface ImageUploadProps {
   inputRef: React.RefObject<HTMLInputElement>;
@@ -13,6 +14,7 @@ export default function ImageUpload({ setSelectedImage, selectedImage, inputRef 
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (files) {
+       // Validate image size
       const validFiles = Array.from(files).filter((file) => {
         if (file.size > 10 * 1024 * 1024) {
           setError(`File ${file.name} is too large. Maximum file size is 10MB.`);
@@ -20,6 +22,8 @@ export default function ImageUpload({ setSelectedImage, selectedImage, inputRef 
         }
         return true;
       });
+
+      if (validFiles.length === 0) return;
 
       setSelectedImage((prev) => [...prev, ...validFiles]);
       setError(null);
@@ -58,7 +62,7 @@ export default function ImageUpload({ setSelectedImage, selectedImage, inputRef 
         ref={inputRef}
         className="block w-full text-sm text-gray-500 file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white"
       />
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <ErrorMessage error={error} />}
       <div className="grid grid-cols-4 gap-2">
         {selectedImage.map((file, index) => (
           <div key={index} className="relative h-32 w-32">

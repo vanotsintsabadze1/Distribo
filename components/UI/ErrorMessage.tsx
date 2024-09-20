@@ -1,7 +1,7 @@
 import { FieldError } from "react-hook-form";
 
 interface ErrorMessageProps {
-  error: FieldError | string;
+  error: FieldError | string | null;
 }
 
 export default function ErrorMessage({ error }: ErrorMessageProps) {
