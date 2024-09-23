@@ -35,9 +35,9 @@ export async function loginUser({ email, password }: LoginData) {
 
       if (!doEncodedCredentialsExist) {
         const userInfo = await getUserAuthStatus();
-        userInfo.data && await encodeUserCredentials(userInfo.data);
+        userInfo.data && (await encodeUserCredentials(userInfo.data));
       }
-      
+
       return { status: 200, message: "Logged in successfully." };
     }
 
@@ -64,9 +64,9 @@ export async function getUserAuthStatus() {
   const token = await getUserToken();
 
   if (!token) {
-    return {status: 400, message: "User is not authenticated", data: null}
+    return { status: 400, message: "User is not authenticated", data: null };
   }
-  
+
   try {
     const res = await fetch(`${API_URL}/v1/User/GetCurrentUser`, {
       method: "GET",
@@ -125,11 +125,13 @@ export async function confirmEmailAfterRegistration(token: string) {
       },
     });
 
+    const data = await res.json();
+
     return res.ok
-      ? { status: 200, message: "Confirmed email successfully" }
-      : { status: res.status, message: res.statusText };
+      ? { status: 200, message: "Confirmed email successfully", data }
+      : { status: res.status, message: res.statusText, data: null };
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return { status: 500, message: "Internal Server Error", data: null };
   }
 }
