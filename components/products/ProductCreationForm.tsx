@@ -66,6 +66,7 @@ export default function ProductCreationForm() {
       if (success) {
         setSelectedImage([]);
         router.push("/dashboard/products");
+        router.refresh()
       }
     } catch (error) {
       console.error("Product creation failed:", error);
