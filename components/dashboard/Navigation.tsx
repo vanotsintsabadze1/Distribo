@@ -1,4 +1,4 @@
-import { LayoutDashboard, Building2, Users, Package, UserCircle, LogOut } from "lucide-react";
+import { LayoutDashboard, Building2, Users, Package, UserCircle, LogOut, ListOrdered } from "lucide-react";
 import Link from "next/link";
 import Button from "../ui/Button";
 import { logoutUser } from "@/lib/actions/auth/auth";
@@ -13,6 +13,7 @@ const navItems = [
   { name: "Users", href: "/dashboard/users", icon: Users },
   { name: "Products", href: "/dashboard/products", icon: Package },
   { name: "Companies", href: "/dashboard/company", icon: Building2 },
+  { name: "Orders", href: "/dashboard/orders", icon: ListOrdered },
   { name: "Profile", href: "/dashboard/profile", icon: UserCircle },
 ];
 

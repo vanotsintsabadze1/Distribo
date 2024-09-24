@@ -12,7 +12,7 @@ interface ButtonProps {
 
 export default function Button({ children, type, className, onClick }: ButtonProps) {
   return (
-    <button type={type ? type : "button"} onClick={onClick} className={`${className} rounded-md p-2`}>
+    <button type={type ? type : "button"} onClick={onClick} className={`${className} rounded-md p-2 px-4`}>
       {children}
     </button>
   );
