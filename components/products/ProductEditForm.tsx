@@ -109,6 +109,7 @@ export default function ProductEditForm({ ...product }: Product) {
 
     if (validate) {
       router.push("/dashboard/products");
+      router.refresh()
     }
 
     setImageError(null);

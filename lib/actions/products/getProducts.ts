@@ -1,17 +1,10 @@
 "use server";
 
 import { API_URL } from "@/lib/constants/constants";
-import { getUserToken } from "../helpers/getUserToken";
 
 export async function getAllProducts() {
-  const token = await getUserToken();
-
   try {
     const res = await fetch(`${API_URL}/v1/Product`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
       cache: "no-cache",
     });
 
