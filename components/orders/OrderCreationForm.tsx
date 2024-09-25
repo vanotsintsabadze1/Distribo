@@ -6,10 +6,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateOrder } from "@/types/schema-types";
 import { createOrderSchema } from "@/lib/schema/schema";
-import { createOrder } from "@/lib/actions/orders/CreateOrder";
 import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { createOrder } from "@/lib/actions/orders/createOrder";
+import { useRouter } from "next/navigation";
+import DatePickerComp from "../ui/DatePickerComp";
 
 interface OrderCreationFormProps {
   productId: string;
@@ -17,26 +19,30 @@ interface OrderCreationFormProps {
 
 export default function OrderCreationForm({ productId }: OrderCreationFormProps) {
   const [loading, setLoading] = useState(false);
+  const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
     handleSubmit,
     register,
     formState: { errors },
     getValues,
-    reset,
   } = useForm<CreateOrder>({
     resolver: zodResolver(createOrderSchema),
   });
+  const router = useRouter();
 
   async function onSubmit() {
+    if (deadlineDate === null) {
+      setErrorMessage("Deadline date is required");
+      return;
+    }
     setLoading(true);
 
-    // Calculate the deadline: 3 days from the current date in UTC
-    const deadline = new Date();
-    deadline.setUTCDate(deadline.getUTCDate() + 3);
     const quantity = getValues("quantity");
 
     const res = await createOrder({
-      deliveryDateDeadline: deadline,
+      deliveryDateDeadline: deadlineDate,
       items: [
         {
           productId,
@@ -50,6 +56,10 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
     });
 
     setLoading(false);
+    if (res.status === 200) {
+      router.push("/dashboard/products");
+      router.refresh();
+    }
   }
 
   return (
@@ -57,6 +67,7 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
       className="m-auto flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <DatePickerComp setDeadlineDate={setDeadlineDate} errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
       <TextInput
         label="Quantity"
         type="number"

@@ -20,7 +20,7 @@ interface OrderItem {
 }
 
 interface OrderCreationPayload {
-  deliveryDateDeadline: Date;
+  deliveryDateDeadline: DatePickerValueChangeDetails;
   items: OrderItem[];
 }
 
