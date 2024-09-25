@@ -55,7 +55,7 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
         />
         {userRole === "User" && (
           <div className="mx-auto">
-            <h1 className="text-center text-xl font-semibold">Your Company</h1>
+            <h1 className="text-center text-sm font-semibold">Your Company</h1>
             <CompanyCard {...company} />
           </div>
         )}
