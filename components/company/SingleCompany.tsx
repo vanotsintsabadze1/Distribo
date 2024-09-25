@@ -2,17 +2,18 @@
 import Image from "next/image";
 import { BookUser, ArrowUpDown } from "lucide-react";
 import { useState } from "react";
+import SingleCompanyDetails from "./SingleCompanyDetails";
 
 enum ActiveTab {
   Details,
   Orders,
 }
 
-export default function SingleCompany() {
+export default function SingleCompany({ ...company }: Company) {
   const [active, setActive] = useState(ActiveTab.Details);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex w-full flex-col items-center">
       <div className="flex items-center justify-center">
         <div className="border-green relative h-32 w-32 rounded-full border-2 border-black">
           <Image
@@ -39,6 +40,7 @@ export default function SingleCompany() {
           <span className="text-xs font-bold">Orders</span>
         </button>
       </div>
+      {active === ActiveTab.Details ? <SingleCompanyDetails {...company} /> : <></>}
     </div>
   );
 }
