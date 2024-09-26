@@ -6,6 +6,7 @@ import {
   CreateUser,
   CreateProduct,
   ProfileSchema,
+  CreateOrder,
 } from "@/types/schema-types";
 
 export const loginFormSchema: ZodType<LoginData> = z.object({
@@ -91,6 +92,10 @@ export const createProductSchema: ZodType<CreateProduct> = z.object({
     .max(500, { message: "Description is too long" }),
   price: z.number().positive({ message: "Price must be greater than 0" }),
   stock: z.number().nonnegative({ message: "Stock must be a positive number" }),
+});
+
+export const createOrderSchema: ZodType<CreateOrder> = z.object({
+  quantity: z.number().positive({ message: "Price must be greater than 0" }),
 });
 
 export const profileSchema: ZodType<Partial<ProfileSchema>> = z

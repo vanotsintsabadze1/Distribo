@@ -1,5 +1,5 @@
 import ProductDetails from "@/components/products/ProductDetails";
-import { getUserToken } from "@/lib/actions/helpers/getUserToken";
+import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import { API_URL } from "@/lib/constants/constants";
 
 interface ProductDetailsPageProps {
@@ -9,7 +9,6 @@ interface ProductDetailsPageProps {
 }
 
 async function getProduct(productId: string) {
-  const token = getUserToken();
   try {
     const res = await fetch(`${API_URL}/v1/Product/${productId}`);
 
@@ -26,6 +25,8 @@ async function getProduct(productId: string) {
 
 export default async function ProductDetailsPage({ params: { id } }: ProductDetailsPageProps) {
   const product = await getProduct(id);
+  const userRole = await getUserRole()
 
-  return <ProductDetails product={product.data} />;
+
+  return <ProductDetails product={product.data} userRole={userRole}/>;
 }

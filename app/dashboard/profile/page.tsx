@@ -2,6 +2,7 @@ import CompanyCreationNavigatorButton from "@/components/company/CompanyCreation
 import Profile from "@/components/profile/Profile";
 import PageLayoutComp from "@/components/ui/PageLayoutComp";
 import { getUserAuthStatus } from "@/lib/actions/auth/auth";
+import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import { getUserToken } from "@/lib/actions/helpers/getUserToken";
 import { API_URL } from "@/lib/constants/constants";
 
@@ -30,7 +31,7 @@ async function getCompany() {
 export default async function ProfilePage() {
   const userData = await getUserAuthStatus();
   const userEmail = userData.data?.email;
-  const userRole = userData.data?.role.name;
+  const userRole = await getUserRole()
   const companiesData = await getCompany();
   const company = companiesData ? companiesData.data : null;
 
