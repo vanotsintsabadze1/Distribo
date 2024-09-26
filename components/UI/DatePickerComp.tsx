@@ -74,17 +74,17 @@ export default function DatePickerComp({ setDeadlineDate }: DatePickerCompProps)
                               const lastDayOfVisibleRange = new Date(
                                 datePicker.visibleRange.end.year,
                                 datePicker.visibleRange.end.month - 1,
-                                datePicker.visibleRange.end.day
+                                datePicker.visibleRange.end.day,
                               );
                               const isAfterLastDay = currentDate.getTime() > lastDayOfVisibleRange.getTime();
-                              
+
                               const isDisabled = isPastDays || isAfterLastDay;
-                              
+
                               return (
                                 <DatePicker.TableCell key={id} value={day}>
                                   <DatePicker.TableCellTrigger
                                     className={`flex items-center justify-center p-3 text-sm ${
-                                      isDisabled ? "opacity-50" : ""
+                                      isDisabled ? "opacity-50 hover:cursor-not-allowed" : "rounded-md hover:bg-white"
                                     }`}
                                   >
                                     {day.day}
@@ -127,7 +127,7 @@ export default function DatePickerComp({ setDeadlineDate }: DatePickerCompProps)
                                 <DatePicker.TableCell key={id} value={month.value}>
                                   <DatePicker.TableCellTrigger
                                     className={`flex items-center justify-center p-3 text-sm ${
-                                      isPastMonth ? "opacity-50" : ""
+                                      isPastMonth ? "opacity-50 hover:cursor-not-allowed" : "rounded-md hover:bg-white"
                                     }`}
                                   >
                                     {month.label}
@@ -169,7 +169,7 @@ export default function DatePickerComp({ setDeadlineDate }: DatePickerCompProps)
                                 <DatePicker.TableCell key={id} value={year.value}>
                                   <DatePicker.TableCellTrigger
                                     className={`flex items-center justify-center p-3 text-sm ${
-                                      isPastYear ? "opacity-50" : ""
+                                      isPastYear ? "opacity-50 hover:cursor-not-allowed" : "rounded-md hover:bg-white"
                                     }`}
                                   >
                                     {year.label}

@@ -32,6 +32,8 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
   const router = useRouter();
 
   async function onSubmit() {
+    if (deadlineDate === null) return;
+
     setLoading(true);
 
     const quantity = getValues("quantity");
@@ -47,7 +49,17 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
     });
     await apiResponseValidator({
       res,
-      options: { customErrors: { 200: "Order completed!", 400: res.message } },
+      options: {
+        customErrors: {
+          200: "Order completed!",
+          400:
+            res.message === "NotEnoughStock"
+              ? "There is not enough stock"
+              : res.message === "UserHasNotCompany"
+                ? "User has not company"
+                : "Bad request",
+        },
+      },
     });
 
     setLoading(false);

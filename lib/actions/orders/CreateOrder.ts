@@ -18,7 +18,7 @@ export async function createOrder(orderItems: OrderCreationPayload) {
     });
     if (!res.ok) {
       const errorResponse = await res.json();
-      return { status: res.status, message: errorResponse.title };
+      return { status: res.status, message: errorResponse.Code };
     }
 
     return { status: res.status, message: res.statusText };
