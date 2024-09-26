@@ -1,29 +1,23 @@
 import { DatePicker, DatePickerValueChangeDetails, Portal } from "@ark-ui/react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import ErrorMessage from "./ErrorMessage";
 
 interface DatePickerCompProps {
   setDeadlineDate: (date: Date | null) => void;
-  errorMessage: string | null;
-  setErrorMessage: (error: string | null) => void;
+  deadlineDate: Date | null;
 }
 
-export default function DatePickerComp({ setDeadlineDate, errorMessage, setErrorMessage }: DatePickerCompProps) {
+export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePickerCompProps) {
   const today = new Date();
+  const availableDate = new Date(today);
+  availableDate.setDate(today.getDate() + 1);
+  const formattedDate = availableDate.toISOString().split("T")[0];
 
   const handleDateChange = (date: any) => {
     if (date?.valueAsString) {
       const dateString = date.valueAsString[0];
       const selected = new Date(dateString);
 
-      setErrorMessage(null);
-
-      if (selected <= today) {
-        setErrorMessage("Please select a deadline date in the future.");
-        setDeadlineDate(null);
-      } else {
-        setDeadlineDate(selected);
-      }
+      setDeadlineDate(selected);
     }
   };
 
@@ -31,6 +25,7 @@ export default function DatePickerComp({ setDeadlineDate, errorMessage, setError
     <DatePicker.Root
       timeZone="UTC"
       onValueChange={(details: DatePickerValueChangeDetails) => handleDateChange(details)}
+      min={formattedDate}
     >
       <DatePicker.Label className="text-sm font-semibold">Choose order delivery deadline</DatePicker.Label>
       <DatePicker.Control className="mt-1.5 flex items-center gap-2">
@@ -39,23 +34,22 @@ export default function DatePickerComp({ setDeadlineDate, errorMessage, setError
           <Calendar size={25} />
         </DatePicker.Trigger>
       </DatePicker.Control>
-      <div className="mt-2">{errorMessage && <ErrorMessage error={errorMessage} />}</div>
       <Portal>
         <DatePicker.Positioner>
-          <DatePicker.Content className="data-[scope=date-picker]:data-[part=content]:data-[state=open]:animate-fadeIn data-[scope=date-picker]:data-[part=content]:data-[state=closed]:animate-fadeOut rounded-md bg-tertiary p-2">
+          <DatePicker.Content className="absolute -left-40 rounded-md bg-tertiary p-2 data-[scope=date-picker]:data-[part=content]:data-[state=closed]:animate-fadeOut data-[scope=date-picker]:data-[part=content]:data-[state=open]:animate-fadeIn">
             <div className="flex items-center justify-between gap-2">
-              <DatePicker.YearSelect className="rounded-md p-1" />
-              <DatePicker.MonthSelect className="rounded-md p-1" />
+              <DatePicker.YearSelect className="rounded-md p-1 text-sm" />
+              <DatePicker.MonthSelect className="rounded-md p-1 text-sm" />
             </div>
             <DatePicker.View view="day">
               <DatePicker.Context>
                 {(datePicker) => (
                   <>
-                    <DatePicker.ViewControl className="flex items-center justify-between">
+                    <DatePicker.ViewControl className="flex items-center justify-between p-3">
                       <DatePicker.PrevTrigger>
                         <ChevronLeft />
                       </DatePicker.PrevTrigger>
-                      <DatePicker.ViewTrigger>
+                      <DatePicker.ViewTrigger className="text-sm">
                         <DatePicker.RangeText />
                       </DatePicker.ViewTrigger>
                       <DatePicker.NextTrigger>
@@ -75,7 +69,13 @@ export default function DatePickerComp({ setDeadlineDate, errorMessage, setError
                           <DatePicker.TableRow key={id}>
                             {week.map((day, id) => (
                               <DatePicker.TableCell key={id} value={day}>
-                                <DatePicker.TableCellTrigger className="flex items-center justify-center">
+                                <DatePicker.TableCellTrigger
+                                  className={`flex items-center justify-center p-2 text-sm ${
+                                    new Date(day.year, day.month - 1, day.day).getTime() < today.getTime()
+                                      ? "opacity-50"
+                                      : ""
+                                  }`}
+                                >
                                   {day.day}
                                 </DatePicker.TableCellTrigger>
                               </DatePicker.TableCell>
@@ -92,11 +92,11 @@ export default function DatePickerComp({ setDeadlineDate, errorMessage, setError
               <DatePicker.Context>
                 {(datePicker) => (
                   <>
-                    <DatePicker.ViewControl className="flex items-center justify-between">
+                    <DatePicker.ViewControl className="flex items-center justify-between p-2 text-sm">
                       <DatePicker.PrevTrigger>
                         <ChevronLeft />
                       </DatePicker.PrevTrigger>
-                      <DatePicker.ViewTrigger>
+                      <DatePicker.ViewTrigger className="text-sm">
                         <DatePicker.RangeText />
                       </DatePicker.ViewTrigger>
                       <DatePicker.NextTrigger>
@@ -107,13 +107,22 @@ export default function DatePickerComp({ setDeadlineDate, errorMessage, setError
                       <DatePicker.TableBody>
                         {datePicker.getMonthsGrid({ columns: 4, format: "short" }).map((months, id) => (
                           <DatePicker.TableRow key={id}>
-                            {months.map((month, id) => (
-                              <DatePicker.TableCell key={id} value={month.value}>
-                                <DatePicker.TableCellTrigger className="flex items-center justify-center">
-                                  {month.label}
-                                </DatePicker.TableCellTrigger>
-                              </DatePicker.TableCell>
-                            ))}
+                            {months.map((month, id) => {
+                              const isCurrentYear = datePicker.visibleRange.start.year === today.getFullYear();
+                              const isPastMonth = isCurrentYear && month.value < today.getMonth() + 1;
+
+                              return (
+                                <DatePicker.TableCell key={id} value={month.value}>
+                                  <DatePicker.TableCellTrigger
+                                    className={`flex items-center justify-center p-2 text-sm ${
+                                      isPastMonth ? "opacity-50" : ""
+                                    }`}
+                                  >
+                                    {month.label}
+                                  </DatePicker.TableCellTrigger>
+                                </DatePicker.TableCell>
+                              );
+                            })}
                           </DatePicker.TableRow>
                         ))}
                       </DatePicker.TableBody>
@@ -126,11 +135,11 @@ export default function DatePickerComp({ setDeadlineDate, errorMessage, setError
               <DatePicker.Context>
                 {(datePicker) => (
                   <>
-                    <DatePicker.ViewControl className="flex items-center justify-between">
+                    <DatePicker.ViewControl className="flex items-center justify-between p-2 text-sm">
                       <DatePicker.PrevTrigger>
                         <ChevronLeft />
                       </DatePicker.PrevTrigger>
-                      <DatePicker.ViewTrigger>
+                      <DatePicker.ViewTrigger className="text-sm">
                         <DatePicker.RangeText />
                       </DatePicker.ViewTrigger>
                       <DatePicker.NextTrigger>
@@ -141,13 +150,21 @@ export default function DatePickerComp({ setDeadlineDate, errorMessage, setError
                       <DatePicker.TableBody>
                         {datePicker.getYearsGrid({ columns: 4 }).map((years, id) => (
                           <DatePicker.TableRow key={id}>
-                            {years.map((year, id) => (
-                              <DatePicker.TableCell key={id} value={year.value}>
-                                <DatePicker.TableCellTrigger className="flex items-center justify-center">
-                                  {year.label}
-                                </DatePicker.TableCellTrigger>
-                              </DatePicker.TableCell>
-                            ))}
+                            {years.map((year, id) => {
+                              const currentMonth = today.getFullYear();
+                              const isPastYear = year.value < currentMonth;
+                              return (
+                                <DatePicker.TableCell key={id} value={year.value}>
+                                  <DatePicker.TableCellTrigger
+                                    className={`flex items-center justify-center p-2 text-sm ${
+                                      isPastYear ? "opacity-50" : ""
+                                    }`}
+                                  >
+                                    {year.label}
+                                  </DatePicker.TableCellTrigger>
+                                </DatePicker.TableCell>
+                              );
+                            })}
                           </DatePicker.TableRow>
                         ))}
                       </DatePicker.TableBody>

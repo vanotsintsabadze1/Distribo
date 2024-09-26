@@ -20,7 +20,6 @@ interface OrderCreationFormProps {
 export default function OrderCreationForm({ productId }: OrderCreationFormProps) {
   const [loading, setLoading] = useState(false);
   const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const {
     handleSubmit,
@@ -33,10 +32,6 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
   const router = useRouter();
 
   async function onSubmit() {
-    if (deadlineDate === null) {
-      setErrorMessage("Deadline date is required");
-      return;
-    }
     setLoading(true);
 
     const quantity = getValues("quantity");
@@ -67,7 +62,7 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
       className="m-auto flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <DatePickerComp setDeadlineDate={setDeadlineDate} errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
+      <DatePickerComp setDeadlineDate={setDeadlineDate} deadlineDate={deadlineDate}/>
       <TextInput
         label="Quantity"
         type="number"
