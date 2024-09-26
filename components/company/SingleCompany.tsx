@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { BookUser, ArrowUpDown } from "lucide-react";
 import { useState } from "react";
 import SingleCompanyDetails from "./SingleCompanyDetails";
@@ -9,22 +8,16 @@ enum ActiveTab {
   Orders,
 }
 
-export default function SingleCompany({ ...company }: Company) {
+interface SingleCompanyProps extends Company {
+  children: React.ReactNode;
+}
+
+export default function SingleCompany({ children, ...company }: SingleCompanyProps) {
   const [active, setActive] = useState(ActiveTab.Details);
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <div className="flex items-center justify-center">
-        <div className="border-green relative h-32 w-32 rounded-full border-2 border-black">
-          <Image
-            src={"https://placehold.co/600x400/000000/FFFFFF/png"}
-            alt="company-profile-picture"
-            fill
-            className="rounded-full"
-          />
-        </div>
-      </div>
-      <div className="mt-4 flex w-full items-center justify-center gap-2">
+    <>
+      <section className="mt-4 flex w-full items-center justify-center gap-2">
         <button
           onClick={() => setActive(ActiveTab.Details)}
           className={`flex items-center justify-center gap-1 rounded-md bg-gray-200/50 transition-opacity duration-200 ease-in-out ${active === ActiveTab.Details ? "opacity-100" : "opacity-50"} px-4 py-2 shadow-sm`}
@@ -39,8 +32,8 @@ export default function SingleCompany({ ...company }: Company) {
           <ArrowUpDown size={15} />
           <span className="text-xs font-bold">Orders</span>
         </button>
-      </div>
-      {active === ActiveTab.Details ? <SingleCompanyDetails {...company} /> : <></>}
-    </div>
+      </section>
+      {active === ActiveTab.Details ? <SingleCompanyDetails {...company} /> : children}
+    </>
   );
 }

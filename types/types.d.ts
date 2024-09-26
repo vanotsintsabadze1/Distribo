@@ -41,3 +41,10 @@ interface Company {
   phone: string;
   email: string;
 }
+
+interface Order {
+  id: string;
+  createdAt: Date;
+  deliveryDate: Date;
+  status: number;
+}
