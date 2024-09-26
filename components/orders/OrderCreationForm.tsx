@@ -62,7 +62,7 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
       className="m-auto flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <DatePickerComp setDeadlineDate={setDeadlineDate} deadlineDate={deadlineDate}/>
+      <DatePickerComp setDeadlineDate={setDeadlineDate} />
       <TextInput
         label="Quantity"
         type="number"

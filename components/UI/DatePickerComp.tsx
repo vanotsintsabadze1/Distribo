@@ -3,10 +3,9 @@ import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface DatePickerCompProps {
   setDeadlineDate: (date: Date | null) => void;
-  deadlineDate: Date | null;
 }
 
-export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePickerCompProps) {
+export default function DatePickerComp({ setDeadlineDate }: DatePickerCompProps) {
   const today = new Date();
   const availableDate = new Date(today);
   availableDate.setDate(today.getDate() + 1);
@@ -28,16 +27,16 @@ export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePi
       min={formattedDate}
     >
       <DatePicker.Label className="text-sm font-semibold">Choose order delivery deadline</DatePicker.Label>
-      <DatePicker.Control className="mt-1.5 flex items-center gap-2">
-        <DatePicker.Input className="rounded-md border border-gray-300 p-2" />
+      <DatePicker.Control className="mt-1.5 flex items-center gap-3">
+        <DatePicker.Input className="rounded-md border border-gray-300 p-3" />
         <DatePicker.Trigger>
           <Calendar size={25} />
         </DatePicker.Trigger>
       </DatePicker.Control>
       <Portal>
         <DatePicker.Positioner>
-          <DatePicker.Content className="absolute -left-40 rounded-md bg-tertiary p-2 data-[scope=date-picker]:data-[part=content]:data-[state=closed]:animate-fadeOut data-[scope=date-picker]:data-[part=content]:data-[state=open]:animate-fadeIn">
-            <div className="flex items-center justify-between gap-2">
+          <DatePicker.Content className="absolute -left-40 rounded-md bg-tertiary p-3 data-[scope=date-picker]:data-[part=content]:data-[state=closed]:animate-fadeOut data-[scope=date-picker]:data-[part=content]:data-[state=open]:animate-fadeIn">
+            <div className="flex items-center justify-between gap-3">
               <DatePicker.YearSelect className="rounded-md p-1 text-sm" />
               <DatePicker.MonthSelect className="rounded-md p-1 text-sm" />
             </div>
@@ -60,26 +59,39 @@ export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePi
                       <DatePicker.TableHead>
                         <DatePicker.TableRow>
                           {datePicker.weekDays.map((weekDay, id) => (
-                            <DatePicker.TableHeader key={id}>{weekDay.short.slice(0, 1)}</DatePicker.TableHeader>
+                            <DatePicker.TableHeader key={id} className="text-sm">
+                              {weekDay.short.slice(0, 1)}
+                            </DatePicker.TableHeader>
                           ))}
                         </DatePicker.TableRow>
                       </DatePicker.TableHead>
                       <DatePicker.TableBody>
                         {datePicker.weeks.map((week, id) => (
                           <DatePicker.TableRow key={id}>
-                            {week.map((day, id) => (
-                              <DatePicker.TableCell key={id} value={day}>
-                                <DatePicker.TableCellTrigger
-                                  className={`flex items-center justify-center p-2 text-sm ${
-                                    new Date(day.year, day.month - 1, day.day).getTime() < today.getTime()
-                                      ? "opacity-50"
-                                      : ""
-                                  }`}
-                                >
-                                  {day.day}
-                                </DatePicker.TableCellTrigger>
-                              </DatePicker.TableCell>
-                            ))}
+                            {week.map((day, id) => {
+                              const currentDate = new Date(day.year, day.month - 1, day.day);
+                              const isPastDays = currentDate.getTime() < today.getTime();
+                              const lastDayOfVisibleRange = new Date(
+                                datePicker.visibleRange.end.year,
+                                datePicker.visibleRange.end.month - 1,
+                                datePicker.visibleRange.end.day
+                              );
+                              const isAfterLastDay = currentDate.getTime() > lastDayOfVisibleRange.getTime();
+                              
+                              const isDisabled = isPastDays || isAfterLastDay;
+                              
+                              return (
+                                <DatePicker.TableCell key={id} value={day}>
+                                  <DatePicker.TableCellTrigger
+                                    className={`flex items-center justify-center p-3 text-sm ${
+                                      isDisabled ? "opacity-50" : ""
+                                    }`}
+                                  >
+                                    {day.day}
+                                  </DatePicker.TableCellTrigger>
+                                </DatePicker.TableCell>
+                              );
+                            })}
                           </DatePicker.TableRow>
                         ))}
                       </DatePicker.TableBody>
@@ -92,7 +104,7 @@ export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePi
               <DatePicker.Context>
                 {(datePicker) => (
                   <>
-                    <DatePicker.ViewControl className="flex items-center justify-between p-2 text-sm">
+                    <DatePicker.ViewControl className="flex items-center justify-between p-3 text-sm">
                       <DatePicker.PrevTrigger>
                         <ChevronLeft />
                       </DatePicker.PrevTrigger>
@@ -114,7 +126,7 @@ export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePi
                               return (
                                 <DatePicker.TableCell key={id} value={month.value}>
                                   <DatePicker.TableCellTrigger
-                                    className={`flex items-center justify-center p-2 text-sm ${
+                                    className={`flex items-center justify-center p-3 text-sm ${
                                       isPastMonth ? "opacity-50" : ""
                                     }`}
                                   >
@@ -135,7 +147,7 @@ export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePi
               <DatePicker.Context>
                 {(datePicker) => (
                   <>
-                    <DatePicker.ViewControl className="flex items-center justify-between p-2 text-sm">
+                    <DatePicker.ViewControl className="flex items-center justify-between p-3 text-sm">
                       <DatePicker.PrevTrigger>
                         <ChevronLeft />
                       </DatePicker.PrevTrigger>
@@ -156,7 +168,7 @@ export default function DatePickerComp({ setDeadlineDate, deadlineDate }: DatePi
                               return (
                                 <DatePicker.TableCell key={id} value={year.value}>
                                   <DatePicker.TableCellTrigger
-                                    className={`flex items-center justify-center p-2 text-sm ${
+                                    className={`flex items-center justify-center p-3 text-sm ${
                                       isPastYear ? "opacity-50" : ""
                                     }`}
                                   >
