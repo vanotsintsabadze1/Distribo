@@ -51,3 +51,10 @@ interface Company {
   phone: string;
   email: string;
 }
+
+interface Order {
+  id: string;
+  createdAtUtc: Date;
+  deliveryDateDeadline: Date;
+  status: number;
+}

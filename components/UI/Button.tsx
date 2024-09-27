@@ -8,11 +8,17 @@ interface ButtonProps {
   textColor?: string;
   width?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  disabled?: boolean;
 }
 
-export default function Button({ children, type, className, onClick }: ButtonProps) {
+export default function Button({ children, type, className, onClick, disabled }: ButtonProps) {
   return (
-    <button type={type ? type : "button"} onClick={onClick} className={`${className} rounded-md p-2 px-4`}>
+    <button
+      disabled={disabled}
+      type={type ? type : "button"}
+      onClick={onClick}
+      className={`${className} rounded-md p-2 px-4`}
+    >
       {children}
     </button>
   );
