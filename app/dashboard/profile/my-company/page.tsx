@@ -3,9 +3,16 @@ import SingleCompanyOrders from "@/components/company/SingleCompanyOrders";
 import { getCompany } from "@/lib/actions/company/getCompany";
 import Image from "next/image";
 
-export default async function MyCompanyPage() {
+interface MyCompanyPageProps {
+  searchParams: {
+    orders: string;
+  };
+}
+
+export default async function MyCompanyPage({ searchParams }: MyCompanyPageProps) {
   const companyData = await getCompany();
   const company = companyData ? companyData.data : null;
+  const isOrdersQueryEnabled = searchParams.orders;
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -20,7 +27,7 @@ export default async function MyCompanyPage() {
             />
           </div>
         </section>
-        <SingleCompany {...company}>
+        <SingleCompany shouldShowOrdersTab={isOrdersQueryEnabled} {...company}>
           <SingleCompanyOrders />
         </SingleCompany>
       </div>

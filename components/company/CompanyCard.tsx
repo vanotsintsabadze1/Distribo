@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function CompanyCard({ name }: Company) {
   return (
-    <div className="lg mx-auto my-6 max-w-sm overflow-hidden rounded-lg bg-white">
+    <div className="lg mx-auto mt-6 max-w-sm overflow-hidden rounded-lg bg-white">
       <div className="flex w-full flex-col items-center">
         <div className="relative h-32 w-32 rounded-full border-2 border-gray-100">
           <div className="flex h-full w-full items-center justify-center rounded-full bg-green-600">

@@ -23,7 +23,7 @@ export default function SingleCompanyOrderTypeSelector({ setType }: SingleCompan
         </Select.Trigger>
       </Select.Control>
       <Portal>
-        <Select.Positioner className="mt-1 w-28 rounded-md bg-tertiary text-xs">
+        <Select.Positioner className="mt-1 w-28 rounded-md bg-tertiary text-xs shadow-sm">
           <Select.Content>
             <Select.ItemGroup className="">
               {selectItems.map((item) => (

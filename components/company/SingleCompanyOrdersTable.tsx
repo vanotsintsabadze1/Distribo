@@ -1,11 +1,9 @@
 "use client";
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { useState } from "react";
 import { format, toZonedTime } from "date-fns-tz";
 import { LOCAL_TZ, OrderType } from "@/lib/constants/constants";
-import Button from "../ui/Button";
-import { Trash2Icon } from "lucide-react";
+import SingleCompanyOrderCancellationButton from "./SingleCompanyOrderCancellationButton";
 
 interface SingleCompanyOrdersTableProps {
   orders: Order[];
@@ -40,10 +38,7 @@ const columns = [
   }),
 ];
 
-export default function SingleCompanyOrdersTable({ orders: defaultOrders }: SingleCompanyOrdersTableProps) {
-  const [orders, setOrders] = useState(() => [...defaultOrders]);
-
-  console.log(orders);
+export default function SingleCompanyOrdersTable({ orders }: SingleCompanyOrdersTableProps) {
   const table = useReactTable({ data: orders, columns, getCoreRowModel: getCoreRowModel() });
 
   return (
@@ -71,10 +66,7 @@ export default function SingleCompanyOrdersTable({ orders: defaultOrders }: Sing
               ))}
               <td className="max-w-28 truncate border border-gray-200 px-2 py-2">
                 <div className="flex w-full items-center justify-center">
-                  <Button className="text- flex items-center justify-center gap-1 bg-red-600 px-3 py-1 font-medium text-white">
-                    <Trash2Icon size={15} className="mb-[1.5px] text-white" />
-                    Cancel
-                  </Button>
+                  <SingleCompanyOrderCancellationButton table={table} row={row} />
                 </div>
               </td>
             </tr>

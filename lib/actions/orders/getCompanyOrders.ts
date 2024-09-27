@@ -11,6 +11,7 @@ export async function getCompanyOrders(status: number, page: number) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: "no-cache",
     });
     const data = await res.json();
     const orders = data.orders ? data.orders : null;

@@ -35,7 +35,13 @@ export default function SingleCompanyOrdersWrapper({ orders: defaultOrders }: Si
         {orders && (
           <>
             <SingleCompanyOrderTypeSelector setType={setOrderType} />
-            <SingleCompanyOrdersTable orders={orders} />
+            {orders.length > 0 ? (
+              <SingleCompanyOrdersTable orders={orders} />
+            ) : (
+              <div className="flex w-full items-center justify-center font-light uppercase tracking-wider text-gray-500">
+                No Orders Found
+              </div>
+            )}
           </>
         )}
       </div>

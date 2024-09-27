@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useForm } from "react-hook-form";
 import CompanyCard from "../company/CompanyCard";
@@ -15,9 +15,7 @@ interface ProfileProps {
 }
 
 export default function Profile({ userEmail, userRole, company }: ProfileProps) {
-  const {
-    register,
-  } = useForm<ProfileSchema>({
+  const { register } = useForm<ProfileSchema>({
     resolver: zodResolver(profileSchema),
   });
   return (
@@ -46,20 +44,14 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
           className="pl-4 pr-2"
           register={register}
         />
-        <TextInput
-          name="lastName"
-          label="Last Name"
-          placeholder="e.g Doe"
-          className="pl-4 pr-2"
-          register={register}
-        />
+        <TextInput name="lastName" label="Last Name" placeholder="e.g Doe" className="pl-4 pr-2" register={register} />
         {userRole === "User" && company && (
           <div className="mx-auto">
             <h1 className="text-center text-sm font-semibold">Your Company</h1>
             <CompanyCard {...company} />
           </div>
         )}
-        <div className="mt-1 flex w-full items-center justify-center">
+        <div className="flex w-full items-center justify-center">
           <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
             Update
           </Button>
