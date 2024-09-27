@@ -44,7 +44,7 @@ interface Company {
 
 interface Order {
   id: string;
-  createdAt: Date;
-  deliveryDate: Date;
+  createdAtUtc: Date;
+  deliveryDateDeadline: Date;
   status: number;
 }

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import SingleCompanyOrderTypeSelector from "./SingleCompanyOrderTypeSelector";
 import { getCompanyOrders } from "@/lib/actions/orders/getCompanyOrders";
 import Spinner from "../ui/Spinner";
+import SingleCompanyOrdersTable from "./SingleCompanyOrdersTable";
 
 interface SingleCompanyOrdersWrapperProps {
   orders: Order[];
@@ -30,8 +31,13 @@ export default function SingleCompanyOrdersWrapper({ orders: defaultOrders }: Si
 
   return (
     <Suspense fallback={<Spinner size={40} color="black" />}>
-      <div className="flex w-full flex-col items-end gap-4 px-4 md:w-[40rem]">
-        <SingleCompanyOrderTypeSelector setType={setOrderType} />
+      <div className="mt-8 flex w-full flex-col items-end gap-4 px-4 md:w-[46rem]">
+        {orders && (
+          <>
+            <SingleCompanyOrderTypeSelector setType={setOrderType} />
+            <SingleCompanyOrdersTable orders={orders} />
+          </>
+        )}
       </div>
     </Suspense>
   );
