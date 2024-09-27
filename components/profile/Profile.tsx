@@ -53,7 +53,7 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
           className="pl-4 pr-2"
           register={register}
         />
-        {userRole === "User" && (
+        {userRole === "User" && company && (
           <div className="mx-auto">
             <h1 className="text-center text-sm font-semibold">Your Company</h1>
             <CompanyCard {...company} />

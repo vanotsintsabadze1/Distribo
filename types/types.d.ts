@@ -14,6 +14,16 @@ interface UserCreationPayload {
   role: string;
 }
 
+interface OrderItem {
+  productId: string;
+  quantity: number | string;
+}
+
+interface OrderCreationPayload {
+  deliveryDateDeadline: DatePickerValueChangeDetails;
+  items: OrderItem[];
+}
+
 interface ServerActionResponsePayload {
   status: number;
   message: string;

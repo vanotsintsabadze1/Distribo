@@ -39,6 +39,10 @@ export type CreateProduct = {
   stock: number | string;
 };
 
+export type CreateOrder = {
+  quantity: number | string;
+};
+
 export type ProfileSchema = {
   email: string;
   role: string;

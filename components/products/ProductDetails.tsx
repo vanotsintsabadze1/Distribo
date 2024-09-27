@@ -3,13 +3,17 @@
 import { fetchSingleImage } from "@/lib/utils/fetchImages";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Button from "../ui/Button";
+import { useRouter } from "next/navigation";
 
 interface ProductDetailsProps {
-    product: Product;
+  product: Product;
+  userRole: string | null;
 }
 
-export default function ProductDetails({ product }: ProductDetailsProps) {
-    const [image, setImage] = useState<string>("");
+export default function ProductDetails({ product, userRole }: ProductDetailsProps) {
+  const [image, setImage] = useState<string>("");
+  const router = useRouter();
 
   async function fetchCoverImageOnLoad() {
     if (product.images.length === 0) {
@@ -20,20 +24,26 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
 
   useEffect(() => {
     fetchCoverImageOnLoad();
-  },[]);
+  }, []);
+
+  function handleClick() {
+    router.push(`/dashboard/products/${product.id}/create-order`);
+  }
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col items-center justify-between space-y-8 p-4 md:flex-row md:items-start md:space-y-0 md:p-8">
       <div className="flex w-full items-center justify-center md:w-1/2">
-        {image && <Image
-          src={image}
-          alt={product.name}
-          width={400}
-          height={400}
-          className="transform rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105"
-        />}
+        {image && (
+          <Image
+            src={image}
+            alt={product.name}
+            width={400}
+            height={400}
+            className="transform rounded-lg shadow-lg transition-transform duration-300 ease-in-out hover:scale-105"
+          />
+        )}
       </div>
-      <div className="w-full flex-1 px-4 space-y-6 md:w-1/2">
+      <div className="w-full flex-1 space-y-6 px-4 md:w-1/2">
         <h1 className="text-3xl font-bold text-gray-900 lg:text-4xl">{product.name}</h1>
         <p className="text-lg text-gray-700">{product.description}</p>
         <div className="flex items-center justify-between text-lg font-semibold text-gray-800">
@@ -44,6 +54,11 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
             {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
           </span>
         </div>
+        {userRole === "User" && (
+          <Button type="button" onClick={handleClick} className="bg-secondary text-white">
+            Order Now
+          </Button>
+        )}
       </div>
     </div>
   );
