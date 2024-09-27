@@ -2,14 +2,14 @@ import CompanyCreationNavigatorButton from "@/components/company/CompanyCreation
 import Profile from "@/components/profile/Profile";
 import PageLayoutComp from "@/components/ui/PageLayoutComp";
 import { getUserAuthStatus } from "@/lib/actions/auth/auth";
+import { getCompany } from "@/lib/actions/company/getCompany";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
-import { getCompanyOrders } from "@/lib/actions/orders/getCompanyOrders";
 
 export default async function ProfilePage() {
   const userData = await getUserAuthStatus();
   const userEmail = userData.data?.email;
   const userRole = await getUserRole();
-  const companiesData = await getCompanyOrders(0, 1);
+  const companiesData = await getCompany();
   const company = companiesData ? companiesData.data : null;
 
   return (

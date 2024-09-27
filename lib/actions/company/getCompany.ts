@@ -3,20 +3,22 @@
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
 
-export async function getCompanyOrders(status: number, page: number) {
+export async function getCompany() {
   const token = await getUserToken();
 
   try {
-    const res = await fetch(`${API_URL}/v1/Order/CompaniesByStatus/${status}/${page}`, {
+    const res = await fetch(`${API_URL}/v1/Company`, {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: "no-cache",
     });
+
     const data = await res.json();
-    const orders = data.orders ? data.orders : null;
 
     return res.ok
-      ? { status: 200, message: "Successfully got the company orders", data: orders }
+      ? { status: 200, message: "Successfully fetched the companies", data }
       : { status: res.status, message: res.statusText, data: null };
   } catch (error) {
     console.error(error);
