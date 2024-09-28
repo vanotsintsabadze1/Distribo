@@ -1,5 +1,5 @@
 import SingleCompany from "@/components/company/SingleCompany";
-import SingleCompanyOrders from "@/components/company/SingleCompanyOrders";
+import SingleCompanyOrders from "@/components/orders/SingleCompanyOrders";
 import { getCompany } from "@/lib/actions/company/getCompany";
 import Image from "next/image";
 

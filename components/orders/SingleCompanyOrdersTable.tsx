@@ -4,9 +4,11 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import { format, toZonedTime } from "date-fns-tz";
 import { LOCAL_TZ, OrderType } from "@/lib/constants/constants";
 import SingleCompanyOrderCancellationButton from "./SingleCompanyOrderCancellationButton";
+import SingleCompanyOrderActions from "./SingleCompanyOrderActions";
 
 interface SingleCompanyOrdersTableProps {
   orders: Order[];
+  role: string | null;
 }
 
 const columnHelper = createColumnHelper<Order>();
@@ -38,7 +40,7 @@ const columns = [
   }),
 ];
 
-export default function SingleCompanyOrdersTable({ orders }: SingleCompanyOrdersTableProps) {
+export default function SingleCompanyOrdersTable({ orders, role }: SingleCompanyOrdersTableProps) {
   const table = useReactTable({ data: orders, columns, getCoreRowModel: getCoreRowModel() });
 
   return (
@@ -65,9 +67,11 @@ export default function SingleCompanyOrdersTable({ orders }: SingleCompanyOrders
                 </td>
               ))}
               <td className="max-w-28 truncate border border-gray-200 px-2 py-2">
-                <div className="flex w-full items-center justify-center">
+                {role === "User" ? (
                   <SingleCompanyOrderCancellationButton table={table} row={row} />
-                </div>
+                ) : (
+                  <SingleCompanyOrderActions table={table} row={row} />
+                )}
               </td>
             </tr>
           ))}
