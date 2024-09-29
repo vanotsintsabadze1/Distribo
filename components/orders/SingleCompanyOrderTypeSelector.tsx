@@ -9,7 +9,7 @@ interface SingleCompanyOrderTypeSelectorProps {
 }
 
 export default function SingleCompanyOrderTypeSelector({ setType }: SingleCompanyOrderTypeSelectorProps) {
-  const selectItems = ["Pending", "Confirmed", "Rejected"];
+  const selectItems = ["Pending", "Rejected", "Confirmed"];
 
   return (
     <Select.Root items={selectItems} className="flex flex-col gap-2 text-xs" positioning={{ placement: "bottom" }}>
@@ -26,11 +26,11 @@ export default function SingleCompanyOrderTypeSelector({ setType }: SingleCompan
         <Select.Positioner className="mt-1 w-28 rounded-md bg-tertiary text-xs shadow-sm">
           <Select.Content>
             <Select.ItemGroup className="">
-              {selectItems.map((item) => (
+              {selectItems.map((item, index) => (
                 <Select.Item
                   key={item}
                   item={item}
-                  onClick={() => setType(OrderType[item as keyof typeof OrderType])}
+                  onClick={() => setType(index)}
                   className="cursor-pointer rounded-md py-3 text-center text-[.7rem] font-bold uppercase hover:bg-gray-100"
                 >
                   <Select.ItemText>
