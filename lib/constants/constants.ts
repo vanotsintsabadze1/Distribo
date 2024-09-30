@@ -4,5 +4,5 @@ export const LOCAL_TZ = "Asia/Tbilisi";
 export enum OrderType {
   Pending,
   Rejected,
-  Confirmed,
+  Approved,
 }
