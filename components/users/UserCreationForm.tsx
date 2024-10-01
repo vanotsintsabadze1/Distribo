@@ -39,7 +39,7 @@ export default function UserCreationForm() {
 
   return (
     <form
-      className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
+      className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full m-auto"
       onSubmit={handleSubmit(onSubmit)}
     >
       <TextInput

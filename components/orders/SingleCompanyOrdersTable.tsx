@@ -32,8 +32,8 @@ const columns = [
       <span>
         {info.getValue() === OrderType.Pending
           ? "⏳ Pending"
-          : info.getValue() === OrderType.Confirmed
-            ? "✅ Confirmed"
+          : info.getValue() === OrderType.Approved
+            ? "✅ Approved"
             : "❌ Rejected  "}
       </span>
     ),
