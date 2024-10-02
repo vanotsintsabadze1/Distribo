@@ -40,7 +40,8 @@ export type CreateProduct = {
 };
 
 export type CreateOrder = {
-  quantity: number | string;
+  deliveryDateDeadline: string;
+  quantity: number;
 };
 
 export type ProfileSchema = {

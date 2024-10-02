@@ -1,11 +1,14 @@
 import { DatePicker, DatePickerValueChangeDetails, Portal } from "@ark-ui/react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import ErrorMessage from "./ErrorMessage";
+import { FieldError } from "react-hook-form";
 
 interface DatePickerCompProps {
   setDeadlineDate: (date: Date | null) => void;
+  errorMessage: FieldError | string | null;
 }
 
-export default function DatePickerComp({ setDeadlineDate }: DatePickerCompProps) {
+export default function DatePickerComp({ setDeadlineDate, errorMessage }: DatePickerCompProps) {
   const today = new Date();
   const availableDate = new Date(today);
   availableDate.setDate(today.getDate() + 1);
@@ -15,7 +18,6 @@ export default function DatePickerComp({ setDeadlineDate }: DatePickerCompProps)
     if (date?.valueAsString) {
       const dateString = date.valueAsString[0];
       const selected = new Date(dateString);
-
       setDeadlineDate(selected);
     }
   };
@@ -28,11 +30,12 @@ export default function DatePickerComp({ setDeadlineDate }: DatePickerCompProps)
     >
       <DatePicker.Label className="text-sm font-semibold">Choose order delivery deadline</DatePicker.Label>
       <DatePicker.Control className="mt-1.5 flex items-center gap-3">
-        <DatePicker.Input className="rounded-md border border-gray-300 p-3" />
+        <DatePicker.Input className="rounded-md border border-gray-300 p-3" readOnly />
         <DatePicker.Trigger>
           <Calendar size={25} />
         </DatePicker.Trigger>
       </DatePicker.Control>
+      <div className="mt-2">{errorMessage && <ErrorMessage error={errorMessage} />}</div>
       <Portal>
         <DatePicker.Positioner>
           <DatePicker.Content className="absolute -left-40 rounded-md bg-tertiary p-3 data-[scope=date-picker]:data-[part=content]:data-[state=closed]:animate-fadeOut data-[scope=date-picker]:data-[part=content]:data-[state=open]:animate-fadeIn">
