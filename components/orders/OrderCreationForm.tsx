@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import TextInput from "../ui/TextInput";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateOrder } from "@/types/schema-types";
 import { createOrderSchema } from "@/lib/schema/schema";
@@ -19,27 +19,23 @@ interface OrderCreationFormProps {
 
 export default function OrderCreationForm({ productId }: OrderCreationFormProps) {
   const [loading, setLoading] = useState(false);
-  const [deadlineDate, setDeadlineDate] = useState<Date | null>(null);
 
   const {
     handleSubmit,
     register,
     formState: { errors },
-    getValues,
+    control,
   } = useForm<CreateOrder>({
     resolver: zodResolver(createOrderSchema),
   });
   const router = useRouter();
 
-  async function onSubmit() {
-    if (deadlineDate === null) return;
-
+  async function onSubmit(orderData: CreateOrder) {
     setLoading(true);
-
-    const quantity = getValues("quantity");
+    const { deliveryDateDeadline, quantity } = orderData;
 
     const res = await createOrder({
-      deliveryDateDeadline: deadlineDate,
+      deliveryDateDeadline,
       items: [
         {
           productId,
@@ -47,6 +43,7 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
         },
       ],
     });
+
     await apiResponseValidator({
       res,
       options: {
@@ -74,7 +71,16 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
       className="m-auto flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <DatePickerComp setDeadlineDate={setDeadlineDate} />
+      <Controller
+        control={control}
+        name="deliveryDateDeadline"
+        render={({ field }) => (
+          <DatePickerComp
+            setDeadlineDate={(date) => field.onChange(date?.toISOString() || "")}
+            errorMessage={errors.deliveryDateDeadline || null}
+          />
+        )}
+      />
       <TextInput
         label="Quantity"
         type="number"

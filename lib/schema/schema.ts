@@ -95,7 +95,16 @@ export const createProductSchema: ZodType<CreateProduct> = z.object({
 });
 
 export const createOrderSchema: ZodType<CreateOrder> = z.object({
-  quantity: z.number().positive({ message: "Price must be greater than 0" }),
+  deliveryDateDeadline: z
+    .string({
+      required_error: "Delivery deadline date is required",
+    })
+    .datetime({ offset: true, message: "Delivery deadline date is required" }),
+  quantity: z
+    .number({
+      invalid_type_error: "Quantity is required",
+    })
+    .positive({ message: "Quantity must be greater than 0" }),
 });
 
 export const profileSchema: ZodType<Partial<ProfileSchema>> = z
