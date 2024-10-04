@@ -11,7 +11,7 @@ import { ProfileSchema } from "@/types/schema-types";
 interface ProfileProps {
   userEmail: string;
   userRole: string;
-  company: Company;
+  company: Company | null;
 }
 
 export default function Profile({ userEmail, userRole, company }: ProfileProps) {

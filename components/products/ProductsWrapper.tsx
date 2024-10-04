@@ -6,7 +6,7 @@ interface ProductsWrapperProps {
 }
 
 export default async function ProductsWrapper({ products }: ProductsWrapperProps) {
-  const role = await getUserRole();  
+  const role = await getUserRole();
   const hasEditPerms = role === "Admin" || role === "Employee";
 
   return (
