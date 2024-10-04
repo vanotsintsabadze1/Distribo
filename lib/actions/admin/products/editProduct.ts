@@ -10,7 +10,7 @@ export async function editProduct(formData: FormData, id: string) {
     const res = await fetch(`${API_URL}/v1/Product/${id}`, {
       method: "PUT",
       headers: {
-        Accept: "application/octet-stream",
+        Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: formData,
