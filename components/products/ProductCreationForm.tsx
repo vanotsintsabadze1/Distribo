@@ -16,11 +16,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "../ui/ErrorMessage";
 
 export default function ProductCreationForm() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const formRef = useRef<HTMLFormElement>(null);
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const {
     handleSubmit,
     register,

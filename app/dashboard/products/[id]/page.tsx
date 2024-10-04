@@ -10,7 +10,7 @@ interface ProductDetailsPageProps {
 
 async function getProduct(productId: string) {
   try {
-    const res = await fetch(`${API_URL}/v1/Product/${productId}`);
+    const res = await fetch(`${API_URL}/v1/Product/${productId}`, { cache: "no-cache" });
 
     const data = await res.json();
 
@@ -25,8 +25,7 @@ async function getProduct(productId: string) {
 
 export default async function ProductDetailsPage({ params: { id } }: ProductDetailsPageProps) {
   const product = await getProduct(id);
-  const userRole = await getUserRole()
+  const userRole = await getUserRole();
 
-
-  return <ProductDetails product={product.data} userRole={userRole}/>;
+  return <ProductDetails product={product.data} userRole={userRole} />;
 }
