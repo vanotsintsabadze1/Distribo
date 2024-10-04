@@ -11,8 +11,8 @@ import { editProduct } from "@/lib/actions/admin/products/editProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
-import { CreateProduct } from "@/types/schema-types";
-import { createProductSchema } from "@/lib/schema/schema";
+import { EditProduct } from "@/types/schema-types";
+import { editProductSchema } from "@/lib/schema/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "../ui/ErrorMessage";
@@ -27,19 +27,16 @@ export default function ProductEditForm({ ...product }: Product) {
     handleSubmit,
     register,
     formState: { errors },
-    setValue,
-  } = useForm<CreateProduct>({
-    resolver: zodResolver(createProductSchema),
+  } = useForm<EditProduct>({
+    resolver: zodResolver(editProductSchema),
+    defaultValues: {
+      productName: product.name,
+      description: product.description,
+      price: product.price,
+    },
   });
+  
   const router = useRouter();
-
-  // Set form data values on component load
-  useEffect(() => {
-    setValue("productName", product.name);
-    setValue("description", product.description);
-    setValue("price", product.price);
-    setValue("stock", product.stock);
-  }, []);
 
   async function fetchImagesOnLoad() {
     await fetchImages({ images: product.images, setFiles: setImagesAsFiles, setImagesAsURLs });
@@ -81,7 +78,7 @@ export default function ProductEditForm({ ...product }: Product) {
     }
   }
 
-  async function onSubmit(updateFormData: CreateProduct) {
+  async function onSubmit(updateFormData: EditProduct) {
     if (imagesAsFiles.length === 0) {
       setImageError("Please upload at least one product image.");
       return;
@@ -109,7 +106,7 @@ export default function ProductEditForm({ ...product }: Product) {
 
     if (validate) {
       router.push("/dashboard/products");
-      router.refresh()
+      router.refresh();
     }
 
     setImageError(null);

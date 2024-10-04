@@ -39,6 +39,12 @@ export type CreateProduct = {
   stock: number | string;
 };
 
+export type EditProduct = {
+  productName: string;
+  description: string;
+  price: number | string;
+};
+
 export type CreateOrder = {
   deliveryDateDeadline: string;
   quantity: number;

@@ -7,6 +7,7 @@ import {
   CreateProduct,
   ProfileSchema,
   CreateOrder,
+  EditProduct,
 } from "@/types/schema-types";
 
 export const loginFormSchema: ZodType<LoginData> = z.object({
@@ -92,6 +93,18 @@ export const createProductSchema: ZodType<CreateProduct> = z.object({
     .max(500, { message: "Description is too long" }),
   price: z.number().positive({ message: "Price must be greater than 0" }),
   stock: z.number().nonnegative({ message: "Stock must be a positive number" }),
+});
+
+export const editProductSchema: ZodType<EditProduct> = z.object({
+  productName: z
+    .string()
+    .min(1, { message: "Product name is required" })
+    .max(100, { message: "Product name is too long" }),
+  description: z
+    .string()
+    .min(8, { message: "Description must be at least 8 characters long" })
+    .max(500, { message: "Description is too long" }),
+  price: z.number().positive({ message: "Price must be greater than 0" }),
 });
 
 export const createOrderSchema: ZodType<CreateOrder> = z.object({
