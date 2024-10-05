@@ -1,10 +1,17 @@
 "use server";
 
-import { API_URL } from "@/lib/constants/constants";
+import { API_URL, UserRole } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
+import { getUserRole } from "../helpers/encodeUserCredentials";
 
 export async function getCompanyOrders(status: number, page: number, pageSize: number) {
   const token = await getUserToken();
+  
+  const role = await getUserRole();
+
+  if (role === UserRole.Admin || role === UserRole.Employee) {
+    return { status: 403, message: "Forbidden", data: null };
+  }
 
   try {
     const res = await fetch(`${API_URL}/v1/Order/CompaniesByStatus/${status}/${page}?pageSize=${pageSize}`, {
@@ -13,11 +20,10 @@ export async function getCompanyOrders(status: number, page: number, pageSize: n
       },
       cache: "no-cache",
     });
-    const data = await res.json();
-    const orders = data.orders ? data.orders : null;
+    const data: OrderPayload | null = await res.json();
 
     return res.ok
-      ? { status: 200, message: "Successfully got the company orders", data: orders }
+      ? { status: 200, message: "Successfully got the company orders", data: data }
       : { status: res.status, message: res.statusText, data: null };
   } catch (error) {
     console.error(error);

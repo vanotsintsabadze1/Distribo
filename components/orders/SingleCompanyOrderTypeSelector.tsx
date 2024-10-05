@@ -2,14 +2,24 @@
 
 import { ChevronDownIcon } from "lucide-react";
 import { Portal, Select } from "@ark-ui/react";
-import { OrderType } from "@/lib/constants/constants";
+import { useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-interface SingleCompanyOrderTypeSelectorProps {
-  setType: React.Dispatch<React.SetStateAction<OrderType>>;
-}
-
-export default function SingleCompanyOrderTypeSelector({ setType }: SingleCompanyOrderTypeSelectorProps) {
+export default function SingleCompanyOrderTypeSelector() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const ordersParam = searchParams.get("orders");
   const selectItems = ["Pending", "Rejected", "Approved"];
+
+  function handleTypeChange(index: number) {
+    if (ordersParam) {
+      router.push(`${pathname}?orders=true&type=${index}&page=1`);
+    } else {
+      router.push(`${pathname}?type=${index}&page=1`);
+    }
+  }
 
   return (
     <Select.Root items={selectItems} className="flex flex-col gap-2 text-xs" positioning={{ placement: "bottom" }}>
@@ -30,7 +40,7 @@ export default function SingleCompanyOrderTypeSelector({ setType }: SingleCompan
                 <Select.Item
                   key={item}
                   item={item}
-                  onClick={() => setType(index)}
+                  onClick={() => handleTypeChange(index)}
                   className="cursor-pointer rounded-md py-3 text-center text-[.7rem] font-bold uppercase hover:bg-gray-100"
                 >
                   <Select.ItemText>
