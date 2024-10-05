@@ -1,4 +1,5 @@
 import { getUserAuthStatus } from "@/lib/actions/auth/auth";
+import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import { UserRole } from "@/lib/constants/constants";
 import { redirect } from "next/navigation";
 
@@ -15,10 +16,10 @@ export default async function PageAuthenticator({
   shouldNotAllowEmployee,
   children,
 }: PageAuthenticatorProps) {
-  const auth = await getUserAuthStatus();
-  const isAdmin = auth.data?.role.name === UserRole.Admin || auth.data?.role.name === UserRole.Employee;
-  const isUser = auth.data?.role.name === UserRole.User;
-  const isEmployee = auth.data?.role.name === UserRole.Employee;
+  const role = await getUserRole();
+  const isUser = role === UserRole.User;
+  const isEmployee = role === UserRole.Employee;
+  const isAdmin = role === UserRole.Admin || role === "Employee";
 
   if (shouldNotAllowEmployee && isEmployee) {
     return redirect(redirectTo);
