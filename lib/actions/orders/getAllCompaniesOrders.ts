@@ -9,7 +9,7 @@ export async function getAllCompaniesOrders(status: number, page: number, pageSi
   const role = await getUserRole();
 
   if (role === UserRole.User) {
-    return { status: 403, message: "Forbidden", data: null }
+    return { status: 403, message: "Forbidden", data: null };
   }
 
   try {
@@ -19,11 +19,10 @@ export async function getAllCompaniesOrders(status: number, page: number, pageSi
       },
       cache: "no-cache",
     });
-    const data = await res.json();
-    const orders = data.orders ? data.orders : null;
+    const data: OrderPayload | null = await res.json();
 
     return res.ok
-      ? { status: 200, message: "Successfully got the companies orders", data: orders }
+      ? { status: 200, message: "Successfully got the companies orders", data }
       : { status: res.status, message: res.statusText, data: null };
   } catch (error) {
     console.error(error);

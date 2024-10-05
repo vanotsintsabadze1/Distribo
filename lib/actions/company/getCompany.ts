@@ -1,10 +1,17 @@
 "use server";
 
-import { API_URL } from "@/lib/constants/constants";
+import { API_URL, UserRole } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
+import { getUserRole } from "../helpers/encodeUserCredentials";
 
 export async function getCompany() {
   const token = await getUserToken();
+
+  const role = await getUserRole();
+
+  if (role === UserRole.Admin || role === UserRole.Employee) {
+    return { status: 403, message: "Forbidden", data: null };
+  }
 
   try {
     const res = await fetch(`${API_URL}/v1/Company`, {

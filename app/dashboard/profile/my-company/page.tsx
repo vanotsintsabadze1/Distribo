@@ -6,13 +6,17 @@ import Image from "next/image";
 interface MyCompanyPageProps {
   searchParams: {
     orders: string;
+    type: string;
+    page: string;
   };
 }
 
 export default async function MyCompanyPage({ searchParams }: MyCompanyPageProps) {
   const companyData = await getCompany();
   const company = companyData ? companyData.data : null;
-  const isOrdersQueryEnabled = searchParams.orders;
+  const isOrdersQueryEnabled = searchParams.orders === "true";
+  const page = isNaN(parseInt(searchParams.page)) ? 1 : parseInt(searchParams.page);
+  const type = isNaN(parseInt(searchParams.type)) ? 0 : parseInt(searchParams.type);
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -28,7 +32,7 @@ export default async function MyCompanyPage({ searchParams }: MyCompanyPageProps
           </div>
         </section>
         <SingleCompany shouldShowOrdersTab={isOrdersQueryEnabled} {...company}>
-          <SingleCompanyOrders />
+          <SingleCompanyOrders type={type} page={page} />
         </SingleCompany>
       </div>
     </div>

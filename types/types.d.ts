@@ -58,3 +58,8 @@ interface Order {
   deliveryDateDeadline: Date;
   status: number;
 }
+
+interface OrderPayload {
+  orders: Order[];
+  totalCount: number;
+}
