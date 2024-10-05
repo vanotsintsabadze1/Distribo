@@ -4,6 +4,7 @@ import PageLayoutComp from "@/components/ui/PageLayoutComp";
 import { getUserAuthStatus } from "@/lib/actions/auth/auth";
 import { getCompany } from "@/lib/actions/company/getCompany";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
+import { UserRole } from "@/lib/constants/constants";
 
 export default async function ProfilePage() {
   const userData = await getUserAuthStatus();
@@ -11,7 +12,7 @@ export default async function ProfilePage() {
   const userRole = await getUserRole();
   const companiesData = await getCompany();
   const company: Company | null = companiesData ? companiesData.data : null;
-  const isAdmin = userRole === "Admin" || userRole === "Employee";
+  const isAdmin = userRole === UserRole.Admin || userRole === UserRole.Employee;
 
   return (
     <PageLayoutComp title="Profile" description="Update your profile information.">

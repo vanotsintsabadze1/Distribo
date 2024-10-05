@@ -3,9 +3,12 @@ import Link from "next/link";
 import Button from "../ui/Button";
 import { logoutUser } from "@/lib/actions/auth/auth";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
+import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
+import { UserRole } from "@/lib/constants/constants";
 
 interface NavigationProps {
-    isMinimized?: boolean
+  isMinimized?: boolean;
 }
 
 const navItems = [
@@ -17,8 +20,18 @@ const navItems = [
   { name: "Profile", href: "/dashboard/profile", icon: UserCircle },
 ];
 
-export default function Navigation({isMinimized} : NavigationProps) {
+export default function Navigation({ isMinimized }: NavigationProps) {
   const pathname = usePathname();
+  const [role, setRole] = useState<string | null>();
+
+  async function retrieveUserRole() {
+    const res = await getUserRole();
+    setRole(res);
+  }
+
+  useEffect(() => {
+    retrieveUserRole();
+  }, []);
 
   return (
     <nav className="mt-12 flex flex-grow flex-col space-y-2 px-2 lg:mt-6">
@@ -26,11 +39,11 @@ export default function Navigation({isMinimized} : NavigationProps) {
         <Link
           key={item.href}
           href={item.href}
-          className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors text-white lg:text-black ${
+          className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors lg:text-black ${
             pathname === item.href
-              ? "bg-tertiary text-accent-foreground text-black"
+              ? "text-accent-foreground bg-tertiary text-black"
               : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-          }`}
+          } ${role != UserRole.Admin && role != UserRole.Employee && item.name === "Users" && "hidden"}`}
         >
           <item.icon className="h-5 w-5 flex-shrink-0" />
           <span
@@ -41,7 +54,7 @@ export default function Navigation({isMinimized} : NavigationProps) {
         </Link>
       ))}
       <Button
-        className="flex items-center rounded-lg px-3 py-2 text-white text-sm font-medium transition-colors lg:text-black"
+        className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors lg:text-black"
         onClick={() => logoutUser()}
       >
         <LogOut className="h-5 w-5 flex-shrink-0" />

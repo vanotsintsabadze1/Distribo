@@ -1,3 +1,4 @@
+import { UserRole } from "@/lib/constants/constants";
 import ProductCard from "./ProductCard";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 
@@ -7,7 +8,7 @@ interface ProductsWrapperProps {
 
 export default async function ProductsWrapper({ products }: ProductsWrapperProps) {
   const role = await getUserRole();
-  const hasEditPerms = role === "Admin" || role === "Employee";
+  const hasEditPerms = role === UserRole.Admin || role === UserRole.Employee;
 
   return (
     <div className="mt-10 flex w-full flex-wrap items-center justify-center gap-x-10">

@@ -1,4 +1,5 @@
 import { getUserAuthStatus } from "@/lib/actions/auth/auth";
+import { UserRole } from "@/lib/constants/constants";
 import { redirect } from "next/navigation";
 
 interface PageAuthenticatorProps {
@@ -15,9 +16,9 @@ export default async function PageAuthenticator({
   children,
 }: PageAuthenticatorProps) {
   const auth = await getUserAuthStatus();
-  const isAdmin = auth.data?.role.name === "Admin" || auth.data?.role.name === "Employee";
-  const isUser = auth.data?.role.name === "User";
-  const isEmployee = auth.data?.role.name === "Employee";
+  const isAdmin = auth.data?.role.name === UserRole.Admin || auth.data?.role.name === UserRole.Employee;
+  const isUser = auth.data?.role.name === UserRole.User;
+  const isEmployee = auth.data?.role.name === UserRole.Employee;
 
   if (shouldNotAllowEmployee && isEmployee) {
     return redirect(redirectTo);
