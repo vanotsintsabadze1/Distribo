@@ -20,7 +20,6 @@ export async function fetchImages({ images, setFiles, setImagesAsURLs }: FetchIm
 
       const data = await res.blob();
       const fileType = res.headers.get("Content-Type");
-      // const imageName = `${image.id}${fileType?.split("/")[1]}`;
       const file = new File([data], image.id, { type: fileType as string });
       const url = URL.createObjectURL(data);
 

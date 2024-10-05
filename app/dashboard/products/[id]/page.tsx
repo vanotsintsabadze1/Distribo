@@ -1,4 +1,4 @@
-import ProductDetails from "@/components/products/ProductDetails";
+import ProductDetails from "@/components/products/productDetails/ProductDetails";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import { API_URL } from "@/lib/constants/constants";
 
