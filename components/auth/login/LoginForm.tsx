@@ -12,6 +12,7 @@ import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -30,8 +31,12 @@ export default function LoginForm() {
 
     const { email, password } = loginFormData;
     const res = await loginUser({ email, password });
-    const success = await apiResponseValidator({ res, options: {customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" }} });
-    success ? router.push("/dashboard") : router.refresh();
+    const success = await apiResponseValidator({
+      res,
+      options: { customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" } },
+    });
+    const role = await getUserRole();
+    success && router.push("/dashboard");
 
     setLoading(false);
   };
