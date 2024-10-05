@@ -11,20 +11,6 @@ interface ProductImagesCarouselProps {
 export default function ProductImagesCarousel({ images }: ProductImagesCarouselProps) {
   const [imageIndex, setImageIndex] = useState(0);
 
-  //   const getVisibleImages = () => {
-  //     const visibleImages: string[] = [];
-  //     const imageCount = images.length;
-
-  //     if (imageCount === 0) return visibleImages;
-
-  //     // Only show available images
-  //     for (let i = 0; i < Math.min(3, imageCount); i++) {
-  //       visibleImages.push(images[(imageIndex + i) % imageCount]);
-  //     }
-
-  //     return visibleImages;
-  //   };
-
   return (
     <div className="m-auto flex items-center p-4 md:p-0">
       {images.length > 0 ? (
