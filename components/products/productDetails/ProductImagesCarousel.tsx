@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Carousel } from "@ark-ui/react/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import Spinner from "@/components/ui/Spinner";
 
 interface ProductImagesCarouselProps {
   images: string[];
@@ -10,24 +11,24 @@ interface ProductImagesCarouselProps {
 export default function ProductImagesCarousel({ images }: ProductImagesCarouselProps) {
   const [imageIndex, setImageIndex] = useState(0);
 
-  const getVisibleImages = () => {
-    const visibleImages: string[] = [];
-    const imageCount = images.length;
+  //   const getVisibleImages = () => {
+  //     const visibleImages: string[] = [];
+  //     const imageCount = images.length;
 
-    if (imageCount === 0) return visibleImages;
+  //     if (imageCount === 0) return visibleImages;
 
-    // Only show available images
-    for (let i = 0; i < Math.min(3, imageCount); i++) {
-      visibleImages.push(images[(imageIndex + i) % imageCount]);
-    }
+  //     // Only show available images
+  //     for (let i = 0; i < Math.min(3, imageCount); i++) {
+  //       visibleImages.push(images[(imageIndex + i) % imageCount]);
+  //     }
 
-    return visibleImages;
-  };
+  //     return visibleImages;
+  //   };
 
   return (
-    <div className="flex items-center p-4 md:p-0">
-      {images.length > 0 && (
-        <Carousel.Root align="center" loop={true} slidesPerView={3} orientation="horizontal" spacing="10px">
+    <div className="m-auto flex items-center p-4 md:p-0">
+      {images.length > 0 ? (
+        <Carousel.Root align="center" loop={true} slidesPerView={3} orientation="horizontal" spacing="12px">
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <Image
@@ -57,8 +58,8 @@ export default function ProductImagesCarousel({ images }: ProductImagesCarouselP
               </Carousel.Control>
             </div>
             <Carousel.Viewport className="w-[270px]">
-              <Carousel.ItemGroup>
-                {getVisibleImages().map((image, index) => (
+              <Carousel.ItemGroup className="flex flex-wrap items-center justify-center">
+                {images.map((image, index) => (
                   <Carousel.Item key={index} index={index}>
                     <div className="relative">
                       <Image
@@ -67,9 +68,9 @@ export default function ProductImagesCarousel({ images }: ProductImagesCarouselP
                         width={90}
                         height={60}
                         className={`h-[60px] w-[90px] cursor-pointer rounded-md shadow-md transition-all ${
-                          imageIndex === (index + imageIndex) % images.length ? "shadow-lg" : "opacity-50"
+                          imageIndex === index ? "border-2 border-black shadow-lg" : "border-2 border-gray-300 opacity-50"
                         }`}
-                        onClick={() => setImageIndex((imageIndex + index) % images.length)}
+                        onClick={() => setImageIndex(index)}
                       />
                     </div>
                   </Carousel.Item>
@@ -78,6 +79,8 @@ export default function ProductImagesCarousel({ images }: ProductImagesCarouselP
             </Carousel.Viewport>
           </div>
         </Carousel.Root>
+      ) : (
+        <Spinner size={40} color="black" />
       )}
     </div>
   );
