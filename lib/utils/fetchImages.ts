@@ -20,7 +20,7 @@ export async function fetchImages({ images, setFiles, setImagesAsURLs }: FetchIm
 
       const data = await res.blob();
       const fileType = res.headers.get("Content-Type");
-      const file = new File([data], image.id, { type: fileType as string });
+      const file = new File([data], image.id as string, { type: fileType as string });
       const url = URL.createObjectURL(data);
 
       setFiles && setFiles((prev) => [...prev, file]);
@@ -46,7 +46,7 @@ export async function fetchSingleImage({ image, setImageAsURL, setImageAsFile }:
 
     const data = await res.blob();
     const fileType = res.headers.get("Content-Type");
-    const file = new File([data], image.id, { type: fileType as string });
+    const file = new File([data], image.id as string, { type: fileType as string });
     const url = URL.createObjectURL(data);
 
     setImageAsURL(url);
@@ -55,3 +55,5 @@ export async function fetchSingleImage({ image, setImageAsURL, setImageAsFile }:
     console.error(error);
   }
 }
+
+

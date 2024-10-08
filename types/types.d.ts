@@ -31,7 +31,7 @@ interface ServerActionResponsePayload {
 }
 
 interface ImageResponsePayload {
-  id: string;
+  id?: string;
   url: string;
 }
 
@@ -57,6 +57,9 @@ interface Order {
   createdAtUtc: Date;
   deliveryDateDeadline: Date;
   status: number;
+  productImageUrl: string;
+  productName: string;
+  companyName: string;
 }
 
 interface OrderPayload {

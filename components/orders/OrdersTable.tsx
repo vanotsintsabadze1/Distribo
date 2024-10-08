@@ -4,9 +4,10 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import { format, toZonedTime } from "date-fns-tz";
 import { LOCAL_TZ, OrderType } from "@/lib/constants/constants";
 import SingleCompanyOrderCancellationButton from "./SingleCompanyOrderCancellationButton";
-import SingleCompanyOrderActions from "./SingleCompanyOrderActions";
+import AdminOrderActions from "./AdminOrderActions";
+import OrderCellImage from "./OrderCellImage";
 
-interface SingleCompanyOrdersTableProps {
+interface OrdersTableProps {
   orders: Order[];
   role: string | null;
 }
@@ -14,8 +15,16 @@ interface SingleCompanyOrdersTableProps {
 const columnHelper = createColumnHelper<Order>();
 
 const columns = [
-  columnHelper.accessor("id", {
-    header: "ID",
+  columnHelper.accessor("productImageUrl", {
+    header: "IMAGE",
+    cell: (info) => <OrderCellImage imageUrl={info.getValue()} />,
+  }),
+  columnHelper.accessor("productName", {
+    header: "PRODUCT",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("companyName", {
+    header: "COMPANY",
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("createdAtUtc", {
@@ -40,7 +49,7 @@ const columns = [
   }),
 ];
 
-export default function SingleCompanyOrdersTable({ orders, role }: SingleCompanyOrdersTableProps) {
+export default function OrdersTable({ orders, role }: OrdersTableProps) {
   const table = useReactTable({ data: orders, columns, getCoreRowModel: getCoreRowModel() });
 
   return (
@@ -50,7 +59,7 @@ export default function SingleCompanyOrdersTable({ orders, role }: SingleCompany
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id} className="whitespace-nowrap rounded-md bg-tertiary">
               {headerGroup.headers.map((header) => (
-                <th key={header.id} className="px-10 py-2 uppercase">
+                <th key={header.id} className="px-8 py-2 uppercase">
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
@@ -70,7 +79,7 @@ export default function SingleCompanyOrdersTable({ orders, role }: SingleCompany
                 {role === "User" ? (
                   <SingleCompanyOrderCancellationButton table={table} row={row} />
                 ) : (
-                  <SingleCompanyOrderActions table={table} row={row} />
+                  <AdminOrderActions table={table} row={row} />
                 )}
               </td>
             </tr>

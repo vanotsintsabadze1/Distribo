@@ -1,5 +1,5 @@
 import PageAuthenticator from "@/components/auth/PageAuthenticator";
-import SingleCompanyOrdersWrapper from "@/components/orders/SingleCompanyOrdersWrapper";
+import OrdersWrapper from "@/components/orders/OrdersWrapper";
 import PageLayoutComp from "@/components/ui/PageLayoutComp";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import { getAllCompaniesOrders } from "@/lib/actions/orders/getAllCompaniesOrders";
@@ -21,7 +21,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   return (
     <PageAuthenticator shouldAllow="admin" redirectTo="/dashboard/profile/my-company?orders=true">
       <PageLayoutComp title="Orders" description="All the orders are listed below.">
-        <SingleCompanyOrdersWrapper orders={orders?.data} role={role} page={page} />
+        <OrdersWrapper orders={orders?.data} role={role} page={page} />
       </PageLayoutComp>
     </PageAuthenticator>
   );

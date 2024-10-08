@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export default function SingleCompanyOrderTypeSelector() {
+export default function OrdersTypeSelector() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

@@ -19,7 +19,7 @@ enum ErrorTypes {
   OrderStockMismatch = "OrderStockMismatch",
 }
 
-export default function SingleCompanyOrderActions({ table, row }: SingleCompanyOrderActions) {
+export default function AdminOrderActions({ table, row }: SingleCompanyOrderActions) {
   const [isRejectedLoading, setIsRejectedLoading] = useState(false);
   const [isApproveLoading, setIsApproveLoading] = useState(false);
   const router = useRouter();
@@ -67,8 +67,8 @@ export default function SingleCompanyOrderActions({ table, row }: SingleCompanyO
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       <Button
-        disabled={table.getRow(row.id).getAllCells()[3].getValue() !== OrderType.Pending}
-        className={`flex h-7 w-24 items-center justify-center gap-1 bg-green-600 ${table.getRow(row.id).getAllCells()[3].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
+        disabled={table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending}
+        className={`flex h-7 w-24 items-center justify-center gap-1 bg-green-600 ${table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
         onClick={() => onOrderApprove(table.getRow(row.id).getAllCells()[0].getValue() as string)}
       >
         {isApproveLoading ? (
@@ -81,8 +81,8 @@ export default function SingleCompanyOrderActions({ table, row }: SingleCompanyO
         )}
       </Button>
       <Button
-        disabled={table.getRow(row.id).getAllCells()[3].getValue() !== OrderType.Pending}
-        className={`flex h-7 w-24 items-center justify-center gap-1 bg-red-600 ${table.getRow(row.id).getAllCells()[3].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
+        disabled={table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending}
+        className={`flex h-7 w-24 items-center justify-center gap-1 bg-red-600 ${table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
         onClick={() => onOrderReject(table.getRow(row.id).getAllCells()[0].getValue() as string)}
       >
         {isRejectedLoading ? (
