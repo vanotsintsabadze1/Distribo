@@ -50,6 +50,12 @@ export type CreateOrder = {
   quantity: number;
 };
 
+export type UpdateProductStock = {
+  selectedDescription: "receive" | "writeOff" | "other";
+  quantity: number;
+  description?: string
+};
+
 export type ProfileSchema = {
   email: string;
   role: string;
