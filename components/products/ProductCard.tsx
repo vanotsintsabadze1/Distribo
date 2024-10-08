@@ -11,7 +11,7 @@ interface ProductCardProps extends Product {
   hasEditPerms: boolean;
 }
 
-export default function ProductCard({ hasEditPerms, ...product }: ProductCardProps ) {
+export default function ProductCard({ hasEditPerms, ...product }: ProductCardProps) {
   const [image, setImage] = useState<string>("");
 
   async function fetchCoverImageOnLoad() {

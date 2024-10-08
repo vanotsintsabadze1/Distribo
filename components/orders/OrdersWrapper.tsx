@@ -1,23 +1,23 @@
-import SingleCompanyOrdersTable from "./SingleCompanyOrdersTable";
-import SingleCompanyOrderTypeSelector from "./SingleCompanyOrderTypeSelector";
+import OrdersTable from "./OrdersTable";
+import OrdersTypeSelector from "./OrdersTypeSelector";
 import OrderPageCell from "./OrderPageCell";
 
-interface SingleCompanyOrdersWrapperProps {
+interface OrdersWrapperProps {
   orders: OrderPayload | null;
   page: number;
   role: string | null;
 }
 
-export default function SingleCompanyOrdersWrapper({ orders, role, page }: SingleCompanyOrdersWrapperProps) {
+export default async function OrdersWrapper({ orders, role, page }: OrdersWrapperProps) {
   const pageCount = orders?.totalCount && Math.ceil(orders?.totalCount / 10);
 
   return (
-    <div className="m-auto mb-10 mt-8 flex w-full flex-col items-end gap-4 px-4 md:w-[46rem]">
+    <div className="m-auto mb-10 mt-8 flex w-full flex-col items-end gap-4 px-4 md:w-[59rem]">
+      <OrdersTypeSelector />
       {orders ? (
         <>
-          <SingleCompanyOrderTypeSelector />
           {orders.orders.length > 0 ? (
-            <SingleCompanyOrdersTable orders={orders.orders} role={role} />
+            <OrdersTable orders={orders.orders} role={role} />
           ) : (
             <div className="flex w-full items-center justify-center font-light uppercase tracking-wider text-gray-500">
               No Orders Found
@@ -35,7 +35,7 @@ export default function SingleCompanyOrdersWrapper({ orders, role, page }: Singl
         </>
       ) : (
         <div className="flex w-full items-center justify-center font-light uppercase tracking-wider text-gray-500">
-          Failed to load orders..
+          There are no available orders.
         </div>
       )}
     </div>
