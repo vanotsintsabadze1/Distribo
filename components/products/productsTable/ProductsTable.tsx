@@ -61,7 +61,7 @@ export default function ProductsTable({ products, role }: ProductsWrapperProps) 
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
-              <th className="px-10 py-2">Actions</th>
+              <th className="px-10 py-2 text-center">Actions</th>
             </tr>
           ))}
         </thead>

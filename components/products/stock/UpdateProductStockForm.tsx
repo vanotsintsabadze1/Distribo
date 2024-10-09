@@ -81,8 +81,8 @@ export default function UpdateProductStockForm({ productId, stock }: UpdateProdu
     >
       <label className="flex flex-col gap-2">
         Pick an update description
-        <select {...register("selectedDescription")} className="rounded-md border p-2 w-32">
-          <option value=""></option>
+        <select {...register("selectedDescription")} className="w-32 rounded-md border p-2">
+          <option value="">Default</option>
           <option value="receive">Receive</option>
           <option value="writeOff">Write-off</option>
           <option value="other">Other</option>
