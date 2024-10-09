@@ -8,6 +8,7 @@ import {
   ProfileSchema,
   CreateOrder,
   EditProduct,
+  UpdateProductStock,
 } from "@/types/schema-types";
 
 export const loginFormSchema: ZodType<LoginData> = z.object({
@@ -119,6 +120,30 @@ export const createOrderSchema: ZodType<CreateOrder> = z.object({
     })
     .positive({ message: "Quantity must be greater than 0" }),
 });
+
+export const updateProductStockSchema = z
+  .object({
+    selectedDescription: z.enum(["receive", "writeOff", "other"], {
+      errorMap: () => ({ message: "Please select a valid description" }),
+    }),
+    quantity: z
+      .number({
+        invalid_type_error: "Quantity is required",
+      })
+      .positive({ message: "Quantity must be greater than 0" }),
+    description: z.string().optional(), 
+  })
+  .superRefine((data, ctx) => {
+    // If 'other' is selected, make 'description' required
+    if (data.selectedDescription === "other" && (!data.description || data.description.trim() === "")) {
+      ctx.addIssue({
+        path: ["description"],
+        message: "Description is required when 'Other' is selected",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  });
+
 
 export const profileSchema: ZodType<Partial<ProfileSchema>> = z
   .object({
