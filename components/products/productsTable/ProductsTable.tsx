@@ -51,13 +51,13 @@ export default function ProductsTable({ products, role }: ProductsWrapperProps) 
   });
 
   return (
-    <div className="mt-6 flex w-full items-center overflow-auto rounded-lg border p-2 text-lg md:overflow-visible">
+    <div className="mt-6 flex w-full items-center overflow-auto rounded-lg border md:overflow-visible">
       <table className="w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="rounded-md text-left">
+            <tr key={headerGroup.id} className="text-left text-gray-500 border-b">
               {headerGroup.headers.map((header) => (
-                <th key={header.id} className="py-2">
+                <th key={header.id} className="p-4 font-medium">
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
               ))}
@@ -67,9 +67,9 @@ export default function ProductsTable({ products, role }: ProductsWrapperProps) 
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr key={row.id} className="border-b hover:bg-gray-50">
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="text-rigt max-w-28 truncate py-2">
+                <td key={cell.id} className="text-rigt max-w-28 truncate p-4">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
