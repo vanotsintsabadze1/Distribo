@@ -24,7 +24,7 @@ export default function ProductThumbnail({ images }: ProductThumbnailProps) {
 
   useEffect(() => {
     fetchCoverImageOnLoad();
-  }, []);
+  }, [images]);
   return (
     <>
       {loading ? (
