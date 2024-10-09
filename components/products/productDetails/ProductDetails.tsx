@@ -62,11 +62,6 @@ export default function ProductDetails({ product, userRole }: ProductDetailsProp
             Order Now
           </Button>
         )}
-        {(userRole === "Admin" || userRole === "Employee") && (
-          <Button type="button" onClick={updateStockNavigator} className="bg-secondary text-white">
-            Update Stock
-          </Button>
-        )}
       </div>
     </div>
   );

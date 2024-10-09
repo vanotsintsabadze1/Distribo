@@ -69,7 +69,7 @@ export default function UpdateProductStockForm({ productId, stock }: UpdateProdu
     });
     setLoading(false);
     if (res.status === 200) {
-      router.push(`/dashboard/products/${productId}`);
+      router.push(`/dashboard/products`);
       router.refresh();
     }
   }
