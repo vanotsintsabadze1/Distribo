@@ -31,7 +31,7 @@ interface ServerActionResponsePayload {
 }
 
 interface ImageResponsePayload {
-  id?: string;
+  base64?: string;
   url: string;
 }
 
