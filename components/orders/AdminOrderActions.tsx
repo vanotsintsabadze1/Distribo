@@ -24,6 +24,8 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
   const [isApproveLoading, setIsApproveLoading] = useState(false);
   const router = useRouter();
 
+  const orderId = table.getRow(row.id).getValue("id");
+
   async function onOrderReject(id: string) {
     setIsRejectedLoading(true);
     const res = await rejectOrder(id);
@@ -69,7 +71,7 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
       <Button
         disabled={table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending}
         className={`flex h-7 w-24 items-center justify-center gap-1 bg-green-600 ${table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
-        onClick={() => onOrderApprove(table.getRow(row.id).getAllCells()[0].getValue() as string)}
+        onClick={() => onOrderApprove(orderId as string)}
       >
         {isApproveLoading ? (
           <Spinner size={15} color="white" />
@@ -83,7 +85,7 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
       <Button
         disabled={table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending}
         className={`flex h-7 w-24 items-center justify-center gap-1 bg-red-600 ${table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
-        onClick={() => onOrderReject(table.getRow(row.id).getAllCells()[0].getValue() as string)}
+        onClick={() => onOrderReject(orderId as string)}
       >
         {isRejectedLoading ? (
           <Spinner size={15} color="white" />

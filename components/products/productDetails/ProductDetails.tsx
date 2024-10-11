@@ -33,13 +33,17 @@ export default function ProductDetails({ product, userRole }: ProductDetailsProp
 
   // Function to get the visible images
 
-  function handleClick() {
+  function createOrderNavigator() {
     router.push(`/dashboard/products/${product.id}/create-order`);
+  }
+
+  function updateStockNavigator() {
+    router.push(`/dashboard/products/${product.id}/update-stock`);
   }
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col items-center justify-between space-y-8 p-4 md:flex-row md:items-start md:space-y-0 md:p-8">
-       <ProductImagesCarousel images={images}/>
+      <ProductImagesCarousel images={images} />
       <div className="w-full space-y-6 px-4 md:w-1/2">
         <h1 className="text-3xl font-bold text-gray-900 lg:text-4xl">{product.name}</h1>
         <p className="text-lg text-gray-700">{product.description}</p>
@@ -54,7 +58,7 @@ export default function ProductDetails({ product, userRole }: ProductDetailsProp
           </span>
         </div>
         {userRole === "User" && (
-          <Button type="button" onClick={handleClick} className="bg-secondary text-white">
+          <Button type="button" onClick={createOrderNavigator} className="bg-secondary text-white">
             Order Now
           </Button>
         )}

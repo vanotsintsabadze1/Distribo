@@ -15,6 +15,13 @@ interface OrdersTableProps {
 const columnHelper = createColumnHelper<Order>();
 
 const columns = [
+  columnHelper.accessor("id", {
+    header: "ID",
+    cell: (info) => info.getValue(),
+    enableSorting: false,
+    enableHiding: true,
+    meta: { isVisible: false },
+  }),
   columnHelper.accessor("productImageUrl", {
     header: "IMAGE",
     cell: (info) => <OrderCellImage imageUrl={info.getValue()} />,
@@ -50,7 +57,14 @@ const columns = [
 ];
 
 export default function OrdersTable({ orders, role }: OrdersTableProps) {
-  const table = useReactTable({ data: orders, columns, getCoreRowModel: getCoreRowModel() });
+  const table = useReactTable({
+    data: orders,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    state: {
+      columnVisibility: { id: false },
+    },
+  });
 
   return (
     <div className="flex w-full items-center overflow-auto text-xs md:justify-center md:overflow-visible">
