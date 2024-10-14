@@ -13,10 +13,11 @@ export default async function ProfilePage() {
   const companiesData = await getCompany();
   const company: Company | null = companiesData ? companiesData.data : null;
   const isAdmin = userRole === UserRole.Admin || userRole === UserRole.Employee;
+  const isRootUser = userRole === UserRole.RootUser;
 
   return (
     <PageLayoutComp title="Profile" description="Update your profile information.">
-      {company && !company.id && !isAdmin && <CompanyCreationNavigatorButton />}
+      {!company && !isAdmin && isRootUser && <CompanyCreationNavigatorButton />}
       {userRole && userEmail !== undefined && <Profile userEmail={userEmail} userRole={userRole} company={company} />}
     </PageLayoutComp>
   );
