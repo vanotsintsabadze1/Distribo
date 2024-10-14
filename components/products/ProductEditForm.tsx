@@ -6,7 +6,6 @@ import Spinner from "../ui/Spinner";
 import TextInput from "../ui/TextInput";
 import TextArea from "../ui/TextArea";
 import { useState, useEffect, useRef } from "react";
-import { fetchImages } from "@/lib/utils/fetchImages";
 import { editProduct } from "@/lib/actions/admin/products/editProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
@@ -16,12 +15,14 @@ import { editProductSchema } from "@/lib/schema/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "../ui/ErrorMessage";
+import { imageFileBuilder } from "@/lib/utils/imageFileBuilder";
+import toast from "react-hot-toast";
 
 export default function ProductEditForm({ ...product }: Product) {
   const [imagesAsFiles, setImagesAsFiles] = useState<File[]>([]);
-  const [imagesAsURLs, setImagesAsURLs] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const injectEvent = new Event("injectEvent");
   const inputRef = useRef<HTMLInputElement>(null);
   const {
     handleSubmit,
@@ -35,48 +36,27 @@ export default function ProductEditForm({ ...product }: Product) {
       price: product.price,
     },
   });
-  
+
   const router = useRouter();
 
   async function fetchImagesOnLoad() {
-    await fetchImages({ images: product.images, setFiles: setImagesAsFiles, setImagesAsURLs });
-
-    const inputFiles = new DataTransfer();
-    imagesAsFiles.forEach((image) => {
-      inputFiles.items.add(image);
-    });
-    if (inputRef.current) {
-      inputRef.current.files = inputFiles.files;
+    for (const image of product.images) {
+      const imageName = image.url.split("/")[3];
+      const file = await imageFileBuilder(imageName);
+      if (file) {
+        setImagesAsFiles((prev) => [...prev, file]);
+        return;
+      }
+      toast.error(
+        "Error occured while trying to build images, please don't update the product, otherwise some of the images will be lost",
+      );
     }
+    window.dispatchEvent(injectEvent);
   }
 
   useEffect(() => {
-    // Fetch images and set them in the state and input ref
     fetchImagesOnLoad();
   }, []);
-
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files || !inputRef.current?.files) return;
-
-    const files = Array.from(e.target.files);
-    const validFiles: File[] = [];
-
-    // Validate image size
-    files.forEach((file) => {
-      if (file.size > 10 * 1024 * 1024) {
-        setImageError(`File ${file.name} is too large. Maximum file size is 10MB.`);
-      } else {
-        validFiles.push(file);
-        const url = URL.createObjectURL(file);
-        setImagesAsURLs((prev) => [...prev, url]);
-      }
-    });
-
-    if (validFiles.length > 0) {
-      setImagesAsFiles((prev) => [...prev, ...validFiles]);
-      setImageError(null);
-    }
-  }
 
   async function onSubmit(updateFormData: EditProduct) {
     if (imagesAsFiles.length === 0) {
@@ -97,6 +77,8 @@ export default function ProductEditForm({ ...product }: Product) {
       formData.append("ImageFiles", file);
     });
 
+    console.log(formData);
+
     const res = await editProduct(formData, product.id);
 
     const validate = await apiResponseValidator({
@@ -113,19 +95,16 @@ export default function ProductEditForm({ ...product }: Product) {
     setLoading(false);
   }
 
-  function removeImage(index: number) {
-    setImagesAsFiles((prev) => prev.filter((_, i) => i !== index));
-    setImagesAsURLs((prev) => prev.filter((_, i) => i !== index));
-  }
-
   useEffect(() => {
-    if (!inputRef.current?.files) return;
-
-    const newFiles = new DataTransfer();
-    imagesAsFiles.forEach((file) => {
-      newFiles.items.add(file);
+    window.addEventListener("injectEvent", () => {
+      const newFilesCollection = new DataTransfer();
+      imagesAsFiles.forEach((file) => {
+        newFilesCollection.items.add(file);
+      });
+      if (inputRef.current) {
+        inputRef.current.files = newFilesCollection.files;
+      }
     });
-    inputRef.current.files = newFiles.files;
   }, [imagesAsFiles]);
 
   return (
@@ -165,16 +144,16 @@ export default function ProductEditForm({ ...product }: Product) {
           name="ImageFiles"
           multiple
           className="block w-full text-sm text-gray-500 text-transparent file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white"
-          onChange={handleImageUpload}
+          // onChange={handleImageUpload}
         />
       </label>
       {imageError && <ErrorMessage error={imageError} />}
       <div className="mt-3 flex w-full flex-wrap items-center gap-x-5">
-        {imagesAsURLs.map((url, index) => (
-          <div key={url} className="relative h-20 w-20">
-            <Image src={url} alt={url} fill />
+        {product.images.map((image, index) => (
+          <div key={image.url} className="relative h-20 w-20">
+            <Image src={image.url} alt={image.url} fill />
             <div className="absolute right-1 top-1 rounded-lg">
-              <button onClick={() => removeImage(index)} type="button" className="rounded-lg bg-black/60">
+              <button type="button" className="rounded-lg bg-black/60">
                 <X size={17} className="text-white opacity-60 duration-200 ease-in-out hover:opacity-100" />
               </button>
             </div>
