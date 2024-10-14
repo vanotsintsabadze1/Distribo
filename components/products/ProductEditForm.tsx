@@ -5,8 +5,9 @@ import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
 import TextInput from "../ui/TextInput";
 import TextArea from "../ui/TextArea";
+import ErrorMessage from "../ui/ErrorMessage";
+import toast from "react-hot-toast";
 import { useState, useEffect, useRef } from "react";
-import { fetchImages } from "@/lib/utils/fetchImages";
 import { editProduct } from "@/lib/actions/admin/products/editProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
@@ -15,13 +16,14 @@ import { EditProduct } from "@/types/schema-types";
 import { editProductSchema } from "@/lib/schema/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ErrorMessage from "../ui/ErrorMessage";
+import { imageFileBuilder } from "@/lib/utils/imageFileBuilder";
 
 export default function ProductEditForm({ ...product }: Product) {
   const [imagesAsFiles, setImagesAsFiles] = useState<File[]>([]);
-  const [imagesAsURLs, setImagesAsURLs] = useState<string[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [imageURLs, setImageURLs] = useState<string[]>(() => product.images.map((image) => image.url));
   const [loading, setLoading] = useState(false);
+  const injectEvent = new Event("injectEvent");
   const inputRef = useRef<HTMLInputElement>(null);
   const {
     handleSubmit,
@@ -35,47 +37,62 @@ export default function ProductEditForm({ ...product }: Product) {
       price: product.price,
     },
   });
-  
+
   const router = useRouter();
 
-  async function fetchImagesOnLoad() {
-    await fetchImages({ images: product.images, setFiles: setImagesAsFiles, setImagesAsURLs });
-
-    const inputFiles = new DataTransfer();
-    imagesAsFiles.forEach((image) => {
-      inputFiles.items.add(image);
+  // This function gets invoked on a custom event InjectImage, which is dispatched when the images are fetched from the server on the initial load
+  // and it's also dispatched when the user uploads a new image.
+  // This way, instead of using useEffect and running the method times the new image in the uploaded images, we can just dispatch the event and run the method once.
+  async function onImageInjectionEvent() {
+    const newFilesCollection = new DataTransfer();
+    imagesAsFiles.forEach((file) => {
+      newFilesCollection.items.add(file);
     });
     if (inputRef.current) {
-      inputRef.current.files = inputFiles.files;
+      inputRef.current.files = newFilesCollection.files;
+    }
+  }
+
+  async function fetchImagesOnLoad() {
+    for (const image of product.images) {
+      const imageName = image.url.split("/")[3];
+      const file = await imageFileBuilder(imageName);
+      if (file) {
+        setImagesAsFiles((prev) => [...prev, file]);
+      } else {
+        toast.error(
+          "Error occured while trying to build images, please don't update the product, otherwise some of the images will be lost",
+        );
+      }
+    }
+    window.dispatchEvent(injectEvent);
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files?.length || !e.target.files) {
+      return;
+    }
+
+    const files = Array.from(e.target.files);
+    for (const file of files) {
+      const blobUrl = URL.createObjectURL(file);
+      setImageURLs((prev) => [...prev, blobUrl]);
+      setImagesAsFiles((prev) => [...prev, file]);
     }
   }
 
   useEffect(() => {
-    // Fetch images and set them in the state and input ref
+    window.addEventListener("injectEvent", onImageInjectionEvent);
     fetchImagesOnLoad();
+
+    return () => {
+      window.removeEventListener("injectEvent", onImageInjectionEvent);
+    };
   }, []);
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files || !inputRef.current?.files) return;
-
-    const files = Array.from(e.target.files);
-    const validFiles: File[] = [];
-
-    // Validate image size
-    files.forEach((file) => {
-      if (file.size > 10 * 1024 * 1024) {
-        setImageError(`File ${file.name} is too large. Maximum file size is 10MB.`);
-      } else {
-        validFiles.push(file);
-        const url = URL.createObjectURL(file);
-        setImagesAsURLs((prev) => [...prev, url]);
-      }
-    });
-
-    if (validFiles.length > 0) {
-      setImagesAsFiles((prev) => [...prev, ...validFiles]);
-      setImageError(null);
-    }
+  async function handleImageRemoval(index: number) {
+    setImageURLs((prev) => prev.filter((_, i) => i !== index));
+    setImagesAsFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
   async function onSubmit(updateFormData: EditProduct) {
@@ -112,21 +129,6 @@ export default function ProductEditForm({ ...product }: Product) {
     setImageError(null);
     setLoading(false);
   }
-
-  function removeImage(index: number) {
-    setImagesAsFiles((prev) => prev.filter((_, i) => i !== index));
-    setImagesAsURLs((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  useEffect(() => {
-    if (!inputRef.current?.files) return;
-
-    const newFiles = new DataTransfer();
-    imagesAsFiles.forEach((file) => {
-      newFiles.items.add(file);
-    });
-    inputRef.current.files = newFiles.files;
-  }, [imagesAsFiles]);
 
   return (
     <form
@@ -170,11 +172,11 @@ export default function ProductEditForm({ ...product }: Product) {
       </label>
       {imageError && <ErrorMessage error={imageError} />}
       <div className="mt-3 flex w-full flex-wrap items-center gap-x-5">
-        {imagesAsURLs.map((url, index) => (
-          <div key={url} className="relative h-20 w-20">
-            <Image src={url} alt={url} fill />
+        {imageURLs.map((image, index) => (
+          <div key={image} className="relative h-20 w-20">
+            <Image src={image} alt={image} fill />
             <div className="absolute right-1 top-1 rounded-lg">
-              <button onClick={() => removeImage(index)} type="button" className="rounded-lg bg-black/60">
+              <button onClick={() => handleImageRemoval(index)} type="button" className="rounded-lg bg-black/60">
                 <X size={17} className="text-white opacity-60 duration-200 ease-in-out hover:opacity-100" />
               </button>
             </div>

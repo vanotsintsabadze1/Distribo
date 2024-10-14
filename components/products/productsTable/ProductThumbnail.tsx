@@ -6,10 +6,9 @@ interface ProductThumbnailProps {
 }
 
 export default function ProductThumbnail({ images }: ProductThumbnailProps) {
-  const imageSrc = images.length > 0 && images[0].base64 ? images[0].base64 : noImage;
   return (
     <Image
-      src={imageSrc}
+      src={images[0].url}
       alt="Order Image"
       width={80}
       height={60}

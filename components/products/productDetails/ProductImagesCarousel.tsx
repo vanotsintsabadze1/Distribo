@@ -1,11 +1,11 @@
 import Image from "next/image";
+import Spinner from "@/components/ui/Spinner";
 import { Carousel } from "@ark-ui/react/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import Spinner from "@/components/ui/Spinner";
 
 interface ProductImagesCarouselProps {
-  images: string[];
+  images: ImageResponsePayload[];
 }
 
 export default function ProductImagesCarousel({ images }: ProductImagesCarouselProps) {
@@ -18,7 +18,7 @@ export default function ProductImagesCarousel({ images }: ProductImagesCarouselP
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <Image
-                src={images[imageIndex]}
+                src={images[imageIndex].url}
                 alt={`Slide`}
                 width={420}
                 height={300}
@@ -49,12 +49,14 @@ export default function ProductImagesCarousel({ images }: ProductImagesCarouselP
                   <Carousel.Item key={index} index={index}>
                     <div className="relative">
                       <Image
-                        src={image}
+                        src={image.url}
                         alt={`Slide ${index}`}
                         width={90}
                         height={60}
                         className={`h-[60px] w-[90px] cursor-pointer rounded-md shadow-md transition-all ${
-                          imageIndex === index ? "border-2 border-black shadow-lg" : "border-2 border-gray-300 opacity-50"
+                          imageIndex === index
+                            ? "border-2 border-black shadow-lg"
+                            : "border-2 border-gray-300 opacity-50"
                         }`}
                         onClick={() => setImageIndex(index)}
                       />
