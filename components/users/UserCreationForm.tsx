@@ -39,7 +39,7 @@ export default function UserCreationForm() {
 
   return (
     <form
-      className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full m-auto"
+      className="m-auto flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
       onSubmit={handleSubmit(onSubmit)}
     >
       <TextInput
@@ -73,6 +73,7 @@ export default function UserCreationForm() {
           {...register("role")}
           className="w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none focus:ring focus:ring-blue-500"
         >
+          <option value="RootUser">Root User</option>
           <option value="User">User</option>
           <option value="Employee">Employee</option>
         </select>

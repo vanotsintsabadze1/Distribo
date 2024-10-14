@@ -9,6 +9,7 @@ export enum OrderType {
 }
 
 export enum UserRole {
+  RootUser = "RootUser",
   User = "User",
   Employee = "Employee",
   Admin = "Admin",
