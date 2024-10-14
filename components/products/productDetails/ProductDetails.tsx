@@ -12,24 +12,7 @@ interface ProductDetailsProps {
 }
 
 export default function ProductDetails({ product, userRole }: ProductDetailsProps) {
-  const [images, setImages] = useState<string[]>([]);
   const router = useRouter();
-
-  async function fetchImagesOnLoad() {
-    if (product.images.length === 0) {
-      return;
-    }
-
-    const imageURLs: string[] = [];
-    for (const image of product.images) {
-      await fetchSingleImage({ image, setImageAsURL: (url) => imageURLs.push(url as string) });
-    }
-    setImages(imageURLs);
-  }
-
-  useEffect(() => {
-    fetchImagesOnLoad();
-  }, []);
 
   // Function to get the visible images
 
@@ -37,13 +20,9 @@ export default function ProductDetails({ product, userRole }: ProductDetailsProp
     router.push(`/dashboard/products/${product.id}/create-order`);
   }
 
-  function updateStockNavigator() {
-    router.push(`/dashboard/products/${product.id}/update-stock`);
-  }
-
   return (
     <div className="mx-auto flex max-w-7xl flex-col items-center justify-between space-y-8 p-4 md:flex-row md:items-start md:space-y-0 md:p-8">
-      <ProductImagesCarousel images={images} />
+      <ProductImagesCarousel images={product.images} />
       <div className="w-full space-y-6 px-4 md:w-1/2">
         <h1 className="text-3xl font-bold text-gray-900 lg:text-4xl">{product.name}</h1>
         <p className="text-lg text-gray-700">{product.description}</p>

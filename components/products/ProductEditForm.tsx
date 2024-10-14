@@ -51,7 +51,6 @@ export default function ProductEditForm({ ...product }: Product) {
     if (inputRef.current) {
       inputRef.current.files = newFilesCollection.files;
     }
-    console.log(inputRef.current?.files);
   }
 
   async function fetchImagesOnLoad() {
@@ -96,11 +95,6 @@ export default function ProductEditForm({ ...product }: Product) {
     setImagesAsFiles((prev) => prev.filter((_, i) => i !== index));
   }
 
-  useEffect(() => {
-    console.log(imagesAsFiles);
-    console.log(imageURLs);
-  }, [imagesAsFiles]);
-
   async function onSubmit(updateFormData: EditProduct) {
     if (imagesAsFiles.length === 0) {
       setImageError("Please upload at least one product image.");
@@ -120,7 +114,6 @@ export default function ProductEditForm({ ...product }: Product) {
       formData.append("ImageFiles", file);
     });
 
-    console.log(formData.getAll("ImageFiles"));
     const res = await editProduct(formData, product.id);
 
     const validate = await apiResponseValidator({
