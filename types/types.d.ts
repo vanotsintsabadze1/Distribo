@@ -3,7 +3,7 @@ interface User {
   email: string;
   emailConfirmed: boolean;
   role: {
-    name: "Admin" | "User" | "Employee";
+    name: "Admin" | "User" | "Employee" | "RootUser";
   };
 }
 
