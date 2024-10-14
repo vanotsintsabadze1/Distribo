@@ -35,7 +35,7 @@ export default async function PageAuthenticator({
     return <>{children}</>;
   } else if (shouldAllow === "admin" && isAdmin) {
     return <>{children}</>;
-  } else if (shouldAllow === "unauthorized" && !isAdmin && isBaseUser) {
+  } else if (shouldAllow === "unauthorized" && !isAdmin && !isBaseUser) {
     return <>{children}</>;
   } else {
     return redirect(redirectTo);
