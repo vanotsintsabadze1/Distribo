@@ -5,6 +5,8 @@ import Button from "../ui/Button";
 import Spinner from "../ui/Spinner";
 import TextInput from "../ui/TextInput";
 import TextArea from "../ui/TextArea";
+import ErrorMessage from "../ui/ErrorMessage";
+import toast from "react-hot-toast";
 import { useState, useEffect, useRef } from "react";
 import { editProduct } from "@/lib/actions/admin/products/editProduct";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
@@ -14,13 +16,12 @@ import { EditProduct } from "@/types/schema-types";
 import { editProductSchema } from "@/lib/schema/schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ErrorMessage from "../ui/ErrorMessage";
 import { imageFileBuilder } from "@/lib/utils/imageFileBuilder";
-import toast from "react-hot-toast";
 
 export default function ProductEditForm({ ...product }: Product) {
   const [imagesAsFiles, setImagesAsFiles] = useState<File[]>([]);
   const [imageError, setImageError] = useState<string | null>(null);
+  const [imageURLs, setImageURLs] = useState<string[]>(() => product.images.map((image) => image.url));
   const [loading, setLoading] = useState(false);
   const injectEvent = new Event("injectEvent");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,24 +40,66 @@ export default function ProductEditForm({ ...product }: Product) {
 
   const router = useRouter();
 
+  // This function gets invoked on a custom event InjectImage, which is dispatched when the images are fetched from the server on the initial load
+  // and it's also dispatched when the user uploads a new image.
+  // This way, instead of using useEffect and running the method times the new image in the uploaded images, we can just dispatch the event and run the method once.
+  async function onImageInjectionEvent() {
+    const newFilesCollection = new DataTransfer();
+    imagesAsFiles.forEach((file) => {
+      newFilesCollection.items.add(file);
+    });
+    if (inputRef.current) {
+      inputRef.current.files = newFilesCollection.files;
+    }
+    console.log(inputRef.current?.files);
+  }
+
   async function fetchImagesOnLoad() {
     for (const image of product.images) {
       const imageName = image.url.split("/")[3];
       const file = await imageFileBuilder(imageName);
       if (file) {
         setImagesAsFiles((prev) => [...prev, file]);
-        return;
+      } else {
+        toast.error(
+          "Error occured while trying to build images, please don't update the product, otherwise some of the images will be lost",
+        );
       }
-      toast.error(
-        "Error occured while trying to build images, please don't update the product, otherwise some of the images will be lost",
-      );
     }
     window.dispatchEvent(injectEvent);
   }
 
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files?.length || !e.target.files) {
+      return;
+    }
+
+    const files = Array.from(e.target.files);
+    for (const file of files) {
+      const blobUrl = URL.createObjectURL(file);
+      setImageURLs((prev) => [...prev, blobUrl]);
+      setImagesAsFiles((prev) => [...prev, file]);
+    }
+  }
+
   useEffect(() => {
+    window.addEventListener("injectEvent", onImageInjectionEvent);
     fetchImagesOnLoad();
+
+    return () => {
+      window.removeEventListener("injectEvent", onImageInjectionEvent);
+    };
   }, []);
+
+  async function handleImageRemoval(index: number) {
+    setImageURLs((prev) => prev.filter((_, i) => i !== index));
+    setImagesAsFiles((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  useEffect(() => {
+    console.log(imagesAsFiles);
+    console.log(imageURLs);
+  }, [imagesAsFiles]);
 
   async function onSubmit(updateFormData: EditProduct) {
     if (imagesAsFiles.length === 0) {
@@ -77,8 +120,7 @@ export default function ProductEditForm({ ...product }: Product) {
       formData.append("ImageFiles", file);
     });
 
-    console.log(formData);
-
+    console.log(formData.getAll("ImageFiles"));
     const res = await editProduct(formData, product.id);
 
     const validate = await apiResponseValidator({
@@ -94,18 +136,6 @@ export default function ProductEditForm({ ...product }: Product) {
     setImageError(null);
     setLoading(false);
   }
-
-  useEffect(() => {
-    window.addEventListener("injectEvent", () => {
-      const newFilesCollection = new DataTransfer();
-      imagesAsFiles.forEach((file) => {
-        newFilesCollection.items.add(file);
-      });
-      if (inputRef.current) {
-        inputRef.current.files = newFilesCollection.files;
-      }
-    });
-  }, [imagesAsFiles]);
 
   return (
     <form
@@ -144,16 +174,16 @@ export default function ProductEditForm({ ...product }: Product) {
           name="ImageFiles"
           multiple
           className="block w-full text-sm text-gray-500 text-transparent file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white"
-          // onChange={handleImageUpload}
+          onChange={handleImageUpload}
         />
       </label>
       {imageError && <ErrorMessage error={imageError} />}
       <div className="mt-3 flex w-full flex-wrap items-center gap-x-5">
-        {product.images.map((image, index) => (
-          <div key={image.url} className="relative h-20 w-20">
-            <Image src={image.url} alt={image.url} fill />
+        {imageURLs.map((image, index) => (
+          <div key={image} className="relative h-20 w-20">
+            <Image src={image} alt={image} fill />
             <div className="absolute right-1 top-1 rounded-lg">
-              <button type="button" className="rounded-lg bg-black/60">
+              <button onClick={() => handleImageRemoval(index)} type="button" className="rounded-lg bg-black/60">
                 <X size={17} className="text-white opacity-60 duration-200 ease-in-out hover:opacity-100" />
               </button>
             </div>
