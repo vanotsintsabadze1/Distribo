@@ -32,6 +32,12 @@ export type CreateUser = {
   role: string;
 };
 
+export type CreateCompanyUser = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
 export type CreateProduct = {
   productName: string;
   description: string;
@@ -53,7 +59,7 @@ export type CreateOrder = {
 export type UpdateProductStock = {
   selectedDescription: "receive" | "writeOff" | "other";
   quantity: number;
-  description?: string
+  description?: string;
 };
 
 export type ProfileSchema = {

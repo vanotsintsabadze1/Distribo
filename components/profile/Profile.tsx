@@ -7,6 +7,7 @@ import TextInput from "../ui/TextInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileSchema } from "@/lib/schema/schema";
 import { ProfileSchema } from "@/types/schema-types";
+import { UserRole } from "@/lib/constants/constants";
 
 interface ProfileProps {
   userEmail: string;
@@ -18,6 +19,7 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
   const { register } = useForm<ProfileSchema>({
     resolver: zodResolver(profileSchema),
   });
+
   return (
     <div className="m-auto py-6">
       <form className="flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full">
@@ -45,7 +47,7 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
           register={register}
         />
         <TextInput name="lastName" label="Last Name" placeholder="e.g Doe" className="pl-4 pr-2" register={register} />
-        {userRole === "User" && company && (
+        {(userRole === UserRole.RootUser || userRole === UserRole.User) && company && (
           <div className="mx-auto">
             <h1 className="text-center text-sm font-semibold">Your Company</h1>
             <CompanyCard {...company} />
