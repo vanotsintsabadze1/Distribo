@@ -9,6 +9,7 @@ import {
   CreateOrder,
   EditProduct,
   UpdateProductStock,
+  CreateCompanyUser,
 } from "@/types/schema-types";
 
 export const loginFormSchema: ZodType<LoginData> = z.object({
@@ -70,7 +71,30 @@ export const createUserSchema: ZodType<CreateUser> = z
       }),
     confirmPassword: z.string().min(8),
 
-    role: z.enum(["RootUser","User", "Employee"]),
+    role: z.enum(["RootUser", "User", "Employee"]),
+  })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    // By doing this we can access the password and confirmPassword fields and compare them to each other.
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+      });
+    }
+  });
+
+export const createCompanyUserSchema: ZodType<CreateCompanyUser> = z
+  .object({
+    email: z.string().email({ message: "Invalid email address" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])/, {
+        message:
+          "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character",
+      }),
+    confirmPassword: z.string().min(8),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     // By doing this we can access the password and confirmPassword fields and compare them to each other.
@@ -131,7 +155,7 @@ export const updateProductStockSchema = z
         invalid_type_error: "Quantity is required",
       })
       .positive({ message: "Quantity must be greater than 0" }),
-    description: z.string().optional(), 
+    description: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     // If 'other' is selected, make 'description' required
@@ -143,7 +167,6 @@ export const updateProductStockSchema = z
       });
     }
   });
-
 
 export const profileSchema: ZodType<Partial<ProfileSchema>> = z
   .object({

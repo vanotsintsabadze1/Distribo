@@ -1,7 +1,8 @@
 "use client";
-import { BookUser, ArrowUpDown } from "lucide-react";
+import { BookUser, ArrowUpDown, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import SingleCompanyDetails from "./SingleCompanyDetails";
+import Button from "../ui/Button";
 
 interface SingleCompanyProps extends Company {
   children: React.ReactNode;
@@ -28,6 +29,15 @@ export default function SingleCompany({ children, shouldShowOrdersTab, ...compan
           <span className="text-xs font-bold">Orders</span>
         </button>
       </section>
+      <div className="flex w-full justify-end px-4 py-2">
+        <Button
+          onClick={() => router.push("/dashboard/profile/my-company/create-user")}
+          className="flex items-center justify-center gap-[5px] bg-secondary px-4 text-sm text-white"
+        >
+          <Plus size={17} color="white" />
+          Create User
+        </Button>
+      </div>
       {shouldShowOrdersTab ? children : <SingleCompanyDetails {...company} />}
     </>
   );
