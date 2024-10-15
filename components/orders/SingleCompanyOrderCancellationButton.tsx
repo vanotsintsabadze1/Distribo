@@ -19,6 +19,8 @@ export default function SingleCompanyOrderCancellationButton({
 }: SingleCompanyOrderCancellationButtonProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const orderId = table.getRow(row.id).getValue("id");
+  const orderStatus = table.getRow(row.id).getValue("status");
 
   async function onOrderCancel(id: string) {
     setLoading(true);
@@ -35,9 +37,9 @@ export default function SingleCompanyOrderCancellationButton({
   return (
     <div className="flex w-full items-center justify-center">
       <Button
-        disabled={table.getRow(row.id).getAllCells()[3].getValue() !== OrderType.Pending}
-        className={`flex h-7 w-24 items-center justify-center gap-1 bg-red-600 ${table.getRow(row.id).getAllCells()[3].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
-        onClick={() => onOrderCancel(table.getRow(row.id).getAllCells()[0].getValue() as string)}
+        disabled={orderStatus !== OrderType.Pending}
+        className={`flex h-7 w-24 items-center justify-center gap-1 bg-red-600 ${orderStatus !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
+        onClick={() => onOrderCancel(orderId as string)}
       >
         {!loading ? (
           <>

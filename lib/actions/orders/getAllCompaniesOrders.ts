@@ -8,7 +8,7 @@ export async function getAllCompaniesOrders(status: number, page: number, pageSi
   const token = await getUserToken();
   const role = await getUserRole();
 
-  if (role === UserRole.User) {
+  if (role === UserRole.User || role === UserRole.RootUser) {
     return { status: 403, message: "Forbidden", data: null };
   }
 

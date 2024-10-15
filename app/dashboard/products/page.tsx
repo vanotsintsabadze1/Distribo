@@ -10,12 +10,11 @@ export default async function ProductsPage() {
   const products = data ? data.data : null;
   const role = await getUserRole();
   const isAdmin = role === UserRole.Admin || role === UserRole.Employee;
-  const hasEditPerms = role === UserRole.Admin || role === UserRole.Employee;
 
   return (
     <PageLayoutComp title="Products" description="All the products are listed below.">
       {isAdmin && <ProductCreationNavigatorButton />}
-      <ProductsTable products={products} role={role} />
+      <ProductsTable products={products} role={role!} />
     </PageLayoutComp>
   );
 }
