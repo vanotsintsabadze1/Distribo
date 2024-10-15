@@ -1,6 +1,7 @@
 import OrdersTable from "./OrdersTable";
 import OrdersTypeSelector from "./OrdersTypeSelector";
 import OrderPageCell from "./OrderPageCell";
+import { MinusCircle } from "lucide-react";
 
 interface OrdersWrapperProps {
   orders: OrderPayload | null;
@@ -19,7 +20,8 @@ export default async function OrdersWrapper({ orders, role, page }: OrdersWrappe
           {orders.orders.length > 0 ? (
             <OrdersTable orders={orders.orders} role={role} />
           ) : (
-            <div className="flex w-full items-center justify-center font-light uppercase tracking-wider text-gray-500">
+            <div className="mt-5 flex w-full flex-col items-center justify-center gap-4 font-light uppercase tracking-wider text-gray-500">
+              <MinusCircle size={60} className="text-gray-500 opacity-50" />
               No Orders Found
             </div>
           )}

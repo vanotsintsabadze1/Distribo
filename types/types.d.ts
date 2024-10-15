@@ -56,7 +56,7 @@ interface Order {
   createdAtUtc: Date;
   deliveryDateDeadline: Date;
   status: number;
-  productImageUrl: string;
+  productImage: ImageResponsePayload;
   productName: string;
   companyName: string;
 }

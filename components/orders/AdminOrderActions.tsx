@@ -23,8 +23,8 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
   const [isRejectedLoading, setIsRejectedLoading] = useState(false);
   const [isApproveLoading, setIsApproveLoading] = useState(false);
   const router = useRouter();
-
   const orderId = table.getRow(row.id).getValue("id");
+  const orderStatus = table.getRow(row.id).getValue("status");
 
   async function onOrderReject(id: string) {
     setIsRejectedLoading(true);
@@ -69,8 +69,8 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       <Button
-        disabled={table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending}
-        className={`flex h-7 w-24 items-center justify-center gap-1 bg-green-600 ${table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
+        disabled={orderStatus !== OrderType.Pending}
+        className={`flex h-7 w-24 items-center justify-center gap-1 bg-green-600 ${orderStatus !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
         onClick={() => onOrderApprove(orderId as string)}
       >
         {isApproveLoading ? (
@@ -83,8 +83,8 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
         )}
       </Button>
       <Button
-        disabled={table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending}
-        className={`flex h-7 w-24 items-center justify-center gap-1 bg-red-600 ${table.getRow(row.id).getAllCells()[5].getValue() !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
+        disabled={orderStatus !== OrderType.Pending}
+        className={`flex h-7 w-24 items-center justify-center gap-1 bg-red-600 ${orderStatus !== OrderType.Pending && "cursor-not-allowed opacity-50"} px-2 text-xs font-medium text-white`}
         onClick={() => onOrderReject(orderId as string)}
       >
         {isRejectedLoading ? (

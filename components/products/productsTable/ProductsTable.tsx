@@ -4,10 +4,11 @@ import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "
 import AdminProductActions from "./AdminProductActions";
 import ProductThumbnail from "./ProductThumbnail";
 import EditProductStockAction from "./EditProductStockAction";
+import ProductActions from "./AdminProductActions";
 
 interface ProductsWrapperProps {
   products: Product[] | null;
-  role: string | null;
+  role: string;
 }
 
 const columnHelper = createColumnHelper<Product>();
@@ -34,9 +35,7 @@ const columns = [
   }),
   columnHelper.accessor("stock", {
     header: "Current Stock",
-    cell: (info) => (
-      <EditProductStockAction stock={info.getValue()} productId={info.row.original.id}/>
-    ),
+    cell: (info) => <EditProductStockAction stock={info.getValue()} productId={info.row.original.id} />,
   }),
 ];
 
@@ -55,7 +54,7 @@ export default function ProductsTable({ products, role }: ProductsWrapperProps) 
       <table className="w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="text-left text-gray-500 border-b">
+            <tr key={headerGroup.id} className="border-b text-left text-gray-500">
               {headerGroup.headers.map((header) => (
                 <th key={header.id} className="p-4 font-medium">
                   {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -74,7 +73,7 @@ export default function ProductsTable({ products, role }: ProductsWrapperProps) 
                 </td>
               ))}
               <td className="max-w-28 truncate px-2 py-2">
-                {role === "Admin" && <AdminProductActions table={table} row={row} />}
+                <ProductActions role={role} table={table} row={row} />
               </td>
             </tr>
           ))}

@@ -2,7 +2,7 @@
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { format, toZonedTime } from "date-fns-tz";
-import { LOCAL_TZ, OrderType } from "@/lib/constants/constants";
+import { LOCAL_TZ, OrderType, UserRole } from "@/lib/constants/constants";
 import SingleCompanyOrderCancellationButton from "./SingleCompanyOrderCancellationButton";
 import AdminOrderActions from "./AdminOrderActions";
 import OrderCellImage from "./OrderCellImage";
@@ -22,9 +22,9 @@ const columns = [
     enableHiding: true,
     meta: { isVisible: false },
   }),
-  columnHelper.accessor("productImageUrl", {
+  columnHelper.accessor("productImage", {
     header: "IMAGE",
-    cell: (info) => <OrderCellImage imageUrl={info.getValue()} />,
+    cell: (info) => <OrderCellImage productImage={info.getValue()} />,
   }),
   columnHelper.accessor("productName", {
     header: "PRODUCT",
@@ -90,7 +90,7 @@ export default function OrdersTable({ orders, role }: OrdersTableProps) {
                 </td>
               ))}
               <td className="max-w-28 truncate border border-gray-200 px-2 py-2">
-                {role === "User" ? (
+                {role === UserRole.RootUser || role === UserRole.User ? (
                   <SingleCompanyOrderCancellationButton table={table} row={row} />
                 ) : (
                   <AdminOrderActions table={table} row={row} />
