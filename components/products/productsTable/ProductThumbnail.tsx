@@ -1,5 +1,4 @@
 import Image from "next/image";
-import noImage from "../../../public/images/icons/no-image.svg";
 
 interface ProductThumbnailProps {
   images: ImageResponsePayload[];

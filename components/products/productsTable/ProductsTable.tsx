@@ -1,10 +1,9 @@
 "use client";
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import AdminProductActions from "./AdminProductActions";
 import ProductThumbnail from "./ProductThumbnail";
 import EditProductStockAction from "./EditProductStockAction";
-import ProductActions from "./AdminProductActions";
+import ProductActions from "./ProductActions";
 
 interface ProductsWrapperProps {
   products: Product[] | null;

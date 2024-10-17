@@ -1,7 +1,5 @@
 "use client";
 
-import { fetchSingleImage } from "@/lib/utils/fetchImages";
-import { useEffect, useState } from "react";
 import Button from "../../ui/Button";
 import { useRouter } from "next/navigation";
 import ProductImagesCarousel from "./ProductImagesCarousel";
@@ -37,7 +35,7 @@ export default function ProductDetails({ product, userRole }: ProductDetailsProp
             {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
           </span>
         </div>
-        {(userRole === UserRole.User || UserRole.RootUser) && (
+        {(userRole === UserRole.User || userRole === UserRole.RootUser) && (
           <Button type="button" onClick={createOrderNavigator} className="bg-secondary text-white">
             Order Now
           </Button>
