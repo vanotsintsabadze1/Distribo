@@ -65,3 +65,9 @@ interface OrderPayload {
   orders: Order[];
   totalCount: number;
 }
+
+interface ActionResult {
+  status: number;
+  message: string;
+  data: any;
+}
