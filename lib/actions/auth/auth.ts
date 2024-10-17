@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getUserToken } from "../helpers/getUserToken";
 import { revalidateTag } from "next/cache";
-import { decodeUserCredentials, encodeUserCredentials } from "../helpers/encodeUserCredentials";
+import { encodeUserCredentials } from "../helpers/encodeUserCredentials";
 
 // User login logic
 

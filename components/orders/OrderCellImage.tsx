@@ -1,8 +1,5 @@
-import { fetchSingleImage } from "@/lib/utils/fetchImages";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
 import noImage from "../../public/images/icons/no-image.svg";
-import Spinner from "../ui/Spinner";
 
 interface OrderCellImageProps {
   productImage: ImageResponsePayload;
