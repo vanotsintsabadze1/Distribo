@@ -12,12 +12,13 @@ import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import DatePickerComp from "../ui/DatePickerComp";
 import { createOrder } from "@/lib/actions/orders/createOder";
+import { DollarSign } from "lucide-react";
 
 interface OrderCreationFormProps {
-  productId: string;
+  product: Product;
 }
 
-export default function OrderCreationForm({ productId }: OrderCreationFormProps) {
+export default function OrderCreationForm({ product }: OrderCreationFormProps) {
   const [loading, setLoading] = useState(false);
 
   const {
@@ -25,10 +26,12 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
     register,
     formState: { errors },
     control,
+    watch,
   } = useForm<CreateOrder>({
     resolver: zodResolver(createOrderSchema),
   });
   const router = useRouter();
+  const orderQuantity = watch().quantity;
 
   async function onSubmit(orderData: CreateOrder) {
     setLoading(true);
@@ -38,7 +41,7 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
       deliveryDateDeadline,
       items: [
         {
-          productId,
+          productId: product.id,
           quantity,
         },
       ],
@@ -67,31 +70,48 @@ export default function OrderCreationForm({ productId }: OrderCreationFormProps)
   }
 
   return (
-    <form
-      className="m-auto flex flex-col gap-4 rounded-md p-6 text-sm shadow-lg sm:w-[24rem] md:w-[38rem] lg:w-[45rem] xs:w-full"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <Controller
-        control={control}
-        name="deliveryDateDeadline"
-        render={({ field }) => (
-          <DatePickerComp
-            setDeadlineDate={(date) => field.onChange(date?.toISOString() || "")}
-            errorMessage={errors.deliveryDateDeadline || null}
-          />
-        )}
-      />
-      <TextInput
-        label="Quantity"
-        type="number"
-        name="quantity"
-        placeholder="e.g 10"
-        register={register}
-        error={errors.quantity}
-      />
-      <div className="mt-4 flex w-full items-center justify-center">
-        <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
-          {loading ? <Spinner color="white" size={20} /> : "Create"}
+    <form className="flex w-full flex-col gap-4 text-sm" onSubmit={handleSubmit(onSubmit)}>
+      <div className="rounded-lg border p-6 shadow-sm">
+        <h2 className="mb-4 text-xl font-semibold">Order Management</h2>
+        <Controller
+          control={control}
+          name="deliveryDateDeadline"
+          render={({ field }) => (
+            <DatePickerComp
+              setDeadlineDate={(date) => field.onChange(date?.toISOString() || "")}
+              errorMessage={errors.deliveryDateDeadline || null}
+            />
+          )}
+        />
+        <TextInput
+          label="Quantity"
+          type="number"
+          name="quantity"
+          placeholder="e.g 10"
+          register={register}
+          error={errors.quantity}
+        />
+        <div className="my-4 space-y-4">
+          <div>
+            <p className="mb-1 text-sm font-medium text-gray-700">Unit Price</p>
+            <p className="text-2xl font-bold">${product.price.toFixed(2)}</p>
+          </div>
+          <div>
+            <p className="mb-1 text-sm font-medium text-gray-700">Total Price</p>
+            <p className="text-2xl font-bold">${orderQuantity > 0 ? (orderQuantity * product.price).toFixed(2) : 0}</p>
+          </div>
+        </div>
+        <Button
+          type="submit"
+          className="flex w-full items-center justify-center bg-secondary p-3 font-medium text-white"
+        >
+          {loading ? (
+            <Spinner color="white" size={20} />
+          ) : (
+            <>
+              <DollarSign className="mr-2 h-4 w-4" /> Place Order
+            </>
+          )}
         </Button>
       </div>
     </form>
