@@ -6,6 +6,7 @@ import { LOCAL_TZ, OrderType, UserRole } from "@/lib/constants/constants";
 import SingleCompanyOrderCancellationButton from "./SingleCompanyOrderCancellationButton";
 import AdminOrderActions from "./AdminOrderActions";
 import OrderCellImage from "./OrderCellImage";
+import { DollarSign } from "lucide-react";
 
 interface OrdersTableProps {
   orders: Order[];
@@ -41,6 +42,15 @@ const columns = [
   columnHelper.accessor("deliveryDateDeadline", {
     header: "Delivery Date",
     cell: (info) => format(toZonedTime(info.getValue(), LOCAL_TZ), "dd-LL-yyyy HH:mm"),
+  }),
+  columnHelper.accessor("price", {
+    header: "PRICE",
+    cell: (info) => (
+      <span className="flex items-center justify-center gap-1">
+        <DollarSign size={14} />
+        {info.getValue()}
+      </span>
+    ),
   }),
   columnHelper.accessor("status", {
     header: "Status",

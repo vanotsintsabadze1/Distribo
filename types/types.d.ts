@@ -59,6 +59,7 @@ interface Order {
   productImage: ImageResponsePayload;
   productName: string;
   companyName: string;
+  price: number;
 }
 
 interface OrderPayload {
