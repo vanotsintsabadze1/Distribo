@@ -12,17 +12,18 @@ export default function ProductImagesCarousel({ images }: ProductImagesCarouselP
   const [imageIndex, setImageIndex] = useState(0);
 
   return (
-    <div className="m-auto flex items-center p-4 md:p-0">
+    <div className="flex w-full items-center p-4 md:p-0">
       {images.length > 0 ? (
-        <Carousel.Root align="center" loop={true} slidesPerView={3} orientation="horizontal" spacing="12px">
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative">
+        <Carousel.Root align="center" loop={true} slidesPerView={3} orientation="horizontal" spacing="12px" className="w-full">
+          <div className="flex w-full flex-col items-center gap-4">
+            <div className="relative h-[300px] w-full">
               <Image
                 src={images[imageIndex].url}
                 alt={`Slide`}
-                width={420}
-                height={300}
-                className="h-[300px] w-[420px] rounded-lg shadow-lg"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
+                className="h-[300px] w-full rounded-lg shadow-lg object-contain"
               />
               <Carousel.Control className="absolute top-1/2 flex w-full justify-between px-2">
                 <Carousel.PrevTrigger>
