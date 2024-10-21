@@ -1,5 +1,7 @@
 import PageAuthenticator from "@/components/auth/PageAuthenticator";
+import Header from "@/components/dashboard/Header";
 import Sidebar from "@/components/dashboard/SideBar";
+import { getUserAuthStatus } from "@/lib/actions/auth/auth";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,12 +9,19 @@ export const metadata: Metadata = {
   description: "Basic dashboard",
 };
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const userData = await getUserAuthStatus();
+  const userMail = userData?.data?.email.slice(0, 2).toUpperCase();
+
   return (
     <PageAuthenticator redirectTo="/auth/login" shouldAllow="all">
       <div className="flex">
         <Sidebar />
-        <main className="w-full flex-1 overflow-hidden pt-10 md:px-4">{children}</main>
+        <main className="w-full flex-1 overflow-hidden pt-2 md:px-4">
+          <Header userMail={userMail} />
+          <hr />
+          {children}
+        </main>
       </div>
     </PageAuthenticator>
   );
