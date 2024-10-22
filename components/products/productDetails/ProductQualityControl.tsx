@@ -8,13 +8,13 @@ export default function ProductQualityControl() {
         <div className="flex items-center">
           <Scale className="mr-2 h-5 w-5 text-green-500" />
           <p>
-            <strong>Average Weight:</strong> 300-350g per head
+            <strong>Average Weight:</strong> X-Yg per head
           </p>
         </div>
         <div className="flex items-center">
           <Leaf className="mr-2 h-5 w-5 text-green-500" />
           <p>
-            <strong>Color:</strong> Dark green, compact florets
+            <strong>Color:</strong> X
           </p>
         </div>
         <div className="flex items-center">
