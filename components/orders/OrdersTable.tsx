@@ -45,12 +45,7 @@ const columns = [
   }),
   columnHelper.accessor("price", {
     header: "PRICE",
-    cell: (info) => (
-      <span className="flex items-center justify-center gap-1">
-        <DollarSign size={14} />
-        {info.getValue()}
-      </span>
-    ),
+    cell: (info) => <span className="flex items-center justify-center gap-1">₾ {info.getValue()}</span>,
   }),
   columnHelper.accessor("status", {
     header: "Status",

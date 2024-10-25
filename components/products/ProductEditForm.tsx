@@ -154,7 +154,7 @@ export default function ProductEditForm({ ...product }: Product) {
       <TextInput
         name="price"
         type="number"
-        label="Price"
+        label="Price (₾)"
         placeholder="Enter the price.."
         register={register}
         error={errors.price}

@@ -14,8 +14,8 @@ export default function EditProductStockAction({ stock, productId }: EditProduct
     router.push(`/dashboard/products/${productId}/update-stock`);
   }
   return (
-    <div className="flex w-32 items-center justify-between px-4">
-      <span>{stock}</span>
+    <div className="flex w-36 items-center justify-between px-4">
+      <span>kg {stock}</span>
       <button
         onClick={navigateOnProductStockUpdatePage}
         className="cursor-pointer rounded-md p-3 text-black duration-200 ease-in-out hover:bg-gray-100"

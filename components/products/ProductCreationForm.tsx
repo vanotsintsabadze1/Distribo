@@ -66,7 +66,7 @@ export default function ProductCreationForm() {
       if (success) {
         setSelectedImage([]);
         router.push("/dashboard/products");
-        router.refresh()
+        router.refresh();
       }
     } catch (error) {
       console.error("Product creation failed:", error);
@@ -97,7 +97,7 @@ export default function ProductCreationForm() {
         error={errors.description}
       />
       <TextInput
-        label="Price"
+        label="Price (₾)"
         type="number"
         name="price"
         placeholder="e.g 12.00"
@@ -105,7 +105,7 @@ export default function ProductCreationForm() {
         error={errors.price}
       />
       <TextInput
-        label="Stock"
+        label="Stock (kg)"
         type="number"
         name="stock"
         placeholder="e.g 12.00"
@@ -113,7 +113,7 @@ export default function ProductCreationForm() {
         error={errors.stock}
       />
       <ImageUpload inputRef={inputRef} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
-      {imageError && selectedImage.length === 0 && <ErrorMessage error={imageError}/>}
+      {imageError && selectedImage.length === 0 && <ErrorMessage error={imageError} />}
       <div className="mt-4 flex w-full items-center justify-center">
         <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
           {loading ? <Spinner color="white" size={20} /> : "Create"}

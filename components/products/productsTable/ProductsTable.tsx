@@ -30,7 +30,7 @@ const columns = [
   }),
   columnHelper.accessor("price", {
     header: "Price",
-    cell: (info) => info.getValue(),
+    cell: (info) => <span>₾ {info.getValue()}</span>,
   }),
   columnHelper.accessor("stock", {
     header: "Current Stock",
