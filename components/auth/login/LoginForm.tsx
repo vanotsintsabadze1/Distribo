@@ -36,7 +36,7 @@ export default function LoginForm() {
       options: { customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" } },
     });
     const role = await getUserRole();
-    success && router.push("/dashboard");
+    success && router.push("/dashboard/products");
 
     setLoading(false);
   };
