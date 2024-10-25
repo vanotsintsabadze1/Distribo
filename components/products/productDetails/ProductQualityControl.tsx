@@ -8,7 +8,7 @@ export default function ProductQualityControl() {
         <div className="flex items-center">
           <Scale className="mr-2 h-5 w-5 text-green-500" />
           <p>
-            <strong>Average Weight:</strong> X-Yg per head
+            <strong>Average Weight:</strong> X-Y kg per head
           </p>
         </div>
         <div className="flex items-center">

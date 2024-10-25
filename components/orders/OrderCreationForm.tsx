@@ -84,7 +84,7 @@ export default function OrderCreationForm({ product }: OrderCreationFormProps) {
           )}
         />
         <TextInput
-          label="Quantity"
+          label="Quantity (kg)"
           type="number"
           name="quantity"
           placeholder="e.g 10"
@@ -94,24 +94,18 @@ export default function OrderCreationForm({ product }: OrderCreationFormProps) {
         <div className="my-4 space-y-4">
           <div>
             <p className="mb-1 text-sm font-medium text-gray-700">Unit Price</p>
-            <p className="text-2xl font-bold">${product.price.toFixed(2)}</p>
+            <p className="text-2xl font-bold">₾ {product.price.toFixed(2)}</p>
           </div>
           <div>
             <p className="mb-1 text-sm font-medium text-gray-700">Total Price</p>
-            <p className="text-2xl font-bold">${orderQuantity > 0 ? (orderQuantity * product.price).toFixed(2) : 0}</p>
+            <p className="text-2xl font-bold">₾ {orderQuantity > 0 ? (orderQuantity * product.price).toFixed(2) : 0}</p>
           </div>
         </div>
         <Button
           type="submit"
           className="flex w-full items-center justify-center bg-secondary p-3 font-medium text-white"
         >
-          {loading ? (
-            <Spinner color="white" size={20} />
-          ) : (
-            <>
-              <DollarSign className="mr-2 h-4 w-4" /> Place Order
-            </>
-          )}
+          {loading ? <Spinner color="white" size={20} /> : <span>Place Order</span>}
         </Button>
       </div>
     </form>

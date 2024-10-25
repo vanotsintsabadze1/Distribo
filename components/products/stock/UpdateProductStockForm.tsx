@@ -99,7 +99,7 @@ export default function UpdateProductStockForm({ productId, stock }: UpdateProdu
         />
       )}
       <TextInput
-        label="Quantity"
+        label="Quantity (kg)"
         type="number"
         name="quantity"
         placeholder="e.g 10"

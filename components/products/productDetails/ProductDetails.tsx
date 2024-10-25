@@ -42,7 +42,7 @@ export default function ProductDetails({ product, userRole }: ProductDetailsProp
                       product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {product.stock > 0 ? `${product.stock} in stock` : "Out of stock"}
+                    {product.stock > 0 ? `${product.stock} (kg) in stock` : "Out of stock"}
                   </span>
                 </div>
               </div>
