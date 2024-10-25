@@ -6,6 +6,7 @@ import ProductInfoCard from "./ProductInfoCard";
 import OrderCreationForm from "@/components/orders/OrderCreationForm";
 import { UserRole } from "@/lib/constants/constants";
 import ProductPrice from "./ProductPrice";
+import StockCard from "./StockCard";
 
 interface ProductDetailsProps {
   product: Product;
@@ -31,23 +32,7 @@ export default function ProductDetails({ product, userRole }: ProductDetailsProp
           ) : (
             <ProductPrice price={product.price} />
           )}
-          <div className="rounded-lg border p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold">Inventory Status</h2>
-            <div className="space-y-4">
-              <div>
-                <div className="mb-1 flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-700">Current Stock</span>
-                  <span
-                    className={`ml-4 rounded-full px-4 py-2 ${
-                      product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {product.stock > 0 ? `${product.stock} (kg) in stock` : "Out of stock"}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <StockCard product={product} userRole={userRole}/>
           <ProductQualityControl />
         </div>
       </div>

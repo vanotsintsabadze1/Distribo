@@ -72,3 +72,12 @@ interface ActionResult {
   message: string;
   data: any;
 }
+
+interface StockAudits {
+  id: string;
+  createdAtUtc: Date;
+  oldValue: number;
+  newValue: number;
+  description: string;
+  userEmail: string;
+}
