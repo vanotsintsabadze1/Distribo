@@ -36,6 +36,7 @@ export default function TextInput<T extends FieldValues>({
             valueAsNumber: type === "number" ? true : false,
           })}
           disabled={disabled}
+          min={0}
         />
         {error && <ErrorMessage error={error} />}
       </div>

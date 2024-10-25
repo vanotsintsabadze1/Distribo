@@ -7,21 +7,21 @@ export default function ProductInfoCard() {
         <Leaf className="mr-3 h-6 w-6 text-green-500" />
         <div>
           <p className="text-sm text-gray-500">Freshness</p>
-          <p className="font-medium">Harvested 2 days ago</p>
+          <p className="font-medium">Harvested X days ago</p>
         </div>
       </div>
       <div className="flex items-center rounded-lg border p-4">
         <Thermometer className="mr-3 h-6 w-6 text-blue-500" />
         <div>
           <p className="text-sm text-gray-500">Storage</p>
-          <p className="font-medium">2°C - 4°C (36°F - 39°F)</p>
+          <p className="font-medium">X°C - Y°C (X°F - Y°F)</p>
         </div>
       </div>
       <div className="flex items-center rounded-lg border p-4">
         <TruckIcon className="mr-3 h-6 w-6 text-purple-500" />
         <div>
           <p className="text-sm text-gray-500">Origin</p>
-          <p className="font-medium">Local Farm, CA</p>
+          <p className="font-medium">Local Farm, Georgia</p>
         </div>
       </div>
     </div>
