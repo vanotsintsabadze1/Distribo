@@ -1,3 +1,4 @@
+import PageAuthenticator from "@/components/auth/PageAuthenticator";
 import UpdateProductStockForm from "@/components/products/stock/UpdateProductStockForm";
 import PageLayoutComp from "@/components/ui/PageLayoutComp";
 import { getProductById } from "@/lib/actions/products/getProductById";
@@ -13,8 +14,10 @@ export default async function UpdateProductStockPage({ params: { id } }: UpdateP
   const stock = product && product.data.stock;
 
   return (
-    <PageLayoutComp title="Update product stock" description="Fill in the form below to update a product stock.">
-      <UpdateProductStockForm productId={id} stock={stock} />
-    </PageLayoutComp>
+    <PageAuthenticator shouldAllow="admin" redirectTo="/dashboard/products">
+      <PageLayoutComp title="Update product stock" description="Fill in the form below to update a product stock.">
+        <UpdateProductStockForm productId={id} stock={stock} />
+      </PageLayoutComp>
+    </PageAuthenticator>
   );
 }
