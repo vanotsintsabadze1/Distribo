@@ -35,6 +35,8 @@ export default function UpdateProductStockForm({ productId, stock }: UpdateProdu
   const { selectedDescription } = watch();
 
   async function onSubmit(data: UpdateProductStock) {
+    console.log(data.selectedDescription);
+    return;
     if (data.selectedDescription === "writeOff" && data.quantity > stock) {
       setError("quantity", {
         type: "manual",
@@ -82,7 +84,6 @@ export default function UpdateProductStockForm({ productId, stock }: UpdateProdu
       <label className="flex flex-col gap-2">
         Pick an update description
         <select {...register("selectedDescription")} className="w-32 rounded-md border p-2">
-          <option value="">Default</option>
           <option value="receive">Receive</option>
           <option value="writeOff">Write-off</option>
           <option value="other">Other</option>
