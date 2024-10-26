@@ -35,8 +35,6 @@ export default function UpdateProductStockForm({ productId, stock }: UpdateProdu
   const { selectedDescription } = watch();
 
   async function onSubmit(data: UpdateProductStock) {
-    console.log(data.selectedDescription);
-    return;
     if (data.selectedDescription === "writeOff" && data.quantity > stock) {
       setError("quantity", {
         type: "manual",
