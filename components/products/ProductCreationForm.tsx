@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import { createProductSchema } from "@/lib/schema/schema";
 import { CreateProduct } from "@/types/schema-types";
 import { createProduct } from "@/lib/actions/admin/products/createProduct";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,7 +51,7 @@ export default function ProductCreationForm() {
 
     try {
       const res = await createProduct(formData);
-      const success = await apiResponseValidator({
+      const success = await apiResponseHandler({
         res,
         options: {
           customErrors: {

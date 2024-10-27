@@ -17,6 +17,7 @@ const statusMessages: Record<number, string> = {
   401: "Unauthorized",
   403: "Forbidden",
   404: "Not Found",
+  409: "Conflict",
   500: "Internal Server Error",
 };
 
@@ -31,10 +32,10 @@ function generateToastResponse(status: number, serverMessage: string, options?: 
   }
 
   const toastFunction = status === 200 ? toast.success : toast.error;
-  return toastFunction(message);
+  toastFunction(message);
 }
 
-export async function apiResponseValidator({ res, options }: ApiResponseValidator): Promise<boolean> {
+export async function apiResponseHandler({ res, options }: ApiResponseValidator): Promise<boolean> {
   const { status, message } = res;
   generateToastResponse(status, message, options);
   return status === 200;

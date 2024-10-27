@@ -4,7 +4,7 @@ import Button from "../ui/Button";
 import { Check, X } from "lucide-react";
 import Spinner from "../ui/Spinner";
 import { useState } from "react";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { rejectOrder } from "@/lib/actions/orders/rejectOrder";
 import { approveOrder } from "@/lib/actions/orders/approveOrder";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
   async function onOrderReject(id: string) {
     setIsRejectedLoading(true);
     const res = await rejectOrder(id);
-    await apiResponseValidator({
+    await apiResponseHandler({
       res,
       options: {
         customErrors: {
@@ -45,7 +45,7 @@ export default function AdminOrderActions({ table, row }: SingleCompanyOrderActi
   async function onOrderApprove(id: string) {
     setIsApproveLoading(true);
     const res = await approveOrder(id);
-    await apiResponseValidator({
+    await apiResponseHandler({
       res,
       options: {
         customErrors: {

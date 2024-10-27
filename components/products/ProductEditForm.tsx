@@ -9,7 +9,7 @@ import ErrorMessage from "../ui/ErrorMessage";
 import toast from "react-hot-toast";
 import { useState, useEffect, useRef } from "react";
 import { editProduct } from "@/lib/actions/admin/products/editProduct";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { EditProduct } from "@/types/schema-types";
@@ -116,7 +116,7 @@ export default function ProductEditForm({ ...product }: Product) {
 
     const res = await editProduct(formData, product.id);
 
-    const validate = await apiResponseValidator({
+    const validate = await apiResponseHandler({
       res,
       options: { customErrors: { 200: "Successfully edited the product", 400: "Invalid Data" } },
     });

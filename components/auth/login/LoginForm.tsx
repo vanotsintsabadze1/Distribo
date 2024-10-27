@@ -8,7 +8,7 @@ import TextInput from "../../ui/TextInput";
 import { loginUser } from "@/lib/actions/auth/auth";
 import { useRouter } from "next/navigation";
 import GoogleAuthButton from "./GoogleAuthButton";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,7 +31,7 @@ export default function LoginForm() {
 
     const { email, password } = loginFormData;
     const res = await loginUser({ email, password });
-    const success = await apiResponseValidator({
+    const success = await apiResponseHandler({
       res,
       options: { customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" } },
     });

@@ -5,7 +5,7 @@ import { createCompanyFormSchema } from "@/lib/schema/schema";
 import { CreateCompanyData } from "@/types/schema-types";
 import { createCompany } from "@/lib/actions/company/createCompany";
 import { useState } from "react";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { useRouter } from "next/navigation";
 import Spinner from "../ui/Spinner";
 import { useForm } from "react-hook-form";
@@ -33,7 +33,10 @@ export default function CompanyCreationForm() {
       email: companyEmail,
     });
 
-    const success = await apiResponseValidator({ res });
+    const success = await apiResponseHandler({
+      res,
+      options: { customErrors: { 409: "Either Name or Email is taken" } },
+    });
 
     if (success) {
       router.push("/dashboard/company");

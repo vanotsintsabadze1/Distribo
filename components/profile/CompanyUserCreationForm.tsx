@@ -7,7 +7,7 @@ import { useState } from "react";
 import { createCompanyUserSchema } from "@/lib/schema/schema";
 import { CreateCompanyUser } from "@/types/schema-types";
 import { createCompanyUser } from "@/lib/actions/admin/users/createUser";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -25,7 +25,7 @@ export default function CompanyUserCreationForm() {
   async function onSubmit(userFormData: CreateCompanyUser) {
     setLoading(true);
     const res = await createCompanyUser(userFormData);
-    const success = await apiResponseValidator({
+    const success = await apiResponseHandler({
       res,
       options: { customErrors: { 200: "Successfully created the user", 400: "Email is taken" } },
     });
