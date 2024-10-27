@@ -7,7 +7,7 @@ import { useState } from "react";
 import { createUserSchema } from "@/lib/schema/schema";
 import { CreateUser } from "@/types/schema-types";
 import { createUser } from "@/lib/actions/admin/users/createUser";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -26,7 +26,7 @@ export default function UserCreationForm() {
     setLoading(true);
 
     const res = await createUser(userFormData);
-    const success = await apiResponseValidator({
+    const success = await apiResponseHandler({
       res,
       options: { customErrors: { 200: "Successfully created the user", 400: "Email is taken" } },
     });

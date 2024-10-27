@@ -1,5 +1,5 @@
 import { deleteProduct } from "@/lib/actions/admin/products/deleteProduct";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { Edit, Trash, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,7 +32,7 @@ export default function ProductActions({ table, row, role }: AdminProductActions
 
   async function handleDelete() {
     const res = await deleteProduct(productId as string);
-    await apiResponseValidator({ res, options: { customErrors: { 200: "Successfully deleted the product" } } });
+    await apiResponseHandler({ res, options: { customErrors: { 200: "Successfully deleted the product" } } });
     setIsModalOpen(false);
   }
   return (

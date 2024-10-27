@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cancelOrder } from "@/lib/actions/orders/cancelOrder";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { type Row, type Table } from "@tanstack/react-table";
 import { OrderType } from "@/lib/constants/constants";
 import Button from "../ui/Button";
@@ -25,7 +25,7 @@ export default function SingleCompanyOrderCancellationButton({
   async function onOrderCancel(id: string) {
     setLoading(true);
     const res = await cancelOrder(id);
-    await apiResponseValidator({
+    await apiResponseHandler({
       res,
       options: { customErrors: { 200: "Successfully cancelled the order" } },
     });

@@ -7,7 +7,7 @@ import TextArea from "@/components/ui/TextArea";
 import TextInput from "@/components/ui/TextInput";
 import { updateStock } from "@/lib/actions/admin/products/updateStock";
 import { updateProductStockSchema } from "@/lib/schema/schema";
-import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
+import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import { UpdateProductStock } from "@/types/schema-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -58,7 +58,7 @@ export default function UpdateProductStockForm({ productId, stock }: UpdateProdu
     }
     setLoading(true);
     const res = await updateStock(formData, productId);
-    await apiResponseValidator({
+    await apiResponseHandler({
       res,
       options: {
         customErrors: {
