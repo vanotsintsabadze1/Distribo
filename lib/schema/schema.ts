@@ -52,11 +52,6 @@ export const createCompanyFormSchema: ZodType<CreateCompanyData> = z.object({
     .max(50, { message: "Company Address is too long" }),
   companyPhone: z.string().min(1),
   companyEmail: z.string().email({ message: "Invalid email address" }),
-  // companyDescription: z
-  //   .string()
-  //   .min(10, { message: "Description is too short" })
-  //   .max(500, { message: "Description is too long" }),
-  // companyDocuments: z.array(z.instanceof(File)).optional(),
 });
 
 export const createUserSchema: ZodType<CreateUser> = z
