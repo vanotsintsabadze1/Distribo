@@ -1,11 +1,10 @@
 "use client";
 import Button from "@/components/ui/Button";
 import TextInput from "@/components/ui/TextInput";
-import CompanyDocument from "./CompanyDocument";
 import { createCompanyFormSchema } from "@/lib/schema/schema";
 import { CreateCompanyData } from "@/types/schema-types";
 import { createCompany } from "@/lib/actions/company/createCompany";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { apiResponseValidator } from "@/lib/utils/apiResponseValidator";
 import { useRouter } from "next/navigation";
 import Spinner from "../ui/Spinner";
@@ -13,8 +12,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function CompanyCreationForm() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [documents, setDocuments] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
@@ -100,7 +97,6 @@ export default function CompanyCreationForm() {
         className="min-h-[6rem] overflow-auto pl-4 pr-2"
         error={errors.companyDescription}
       /> */}
-      <CompanyDocument inputRef={inputRef} documents={documents} setDocuments={setDocuments} />
       <div className="mt-1 flex w-full items-center justify-center">
         <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
           {loading ? <Spinner size={20} color="white" /> : "Create"}
