@@ -3,8 +3,8 @@ import CompanyUserCreationForm from "@/components/profile/CompanyUserCreationFor
 
 export default function page() {
   return (
-    <PageAuthenticator shouldNotAllowEmployee shouldNotAllowBaseUser redirectTo="/dashboard/profile" shouldAllow="all">
-      <div className="items-center flex justify-center">
+    <PageAuthenticator shouldNotAllowStaff shouldNotAllowBaseUser redirectTo="/dashboard/profile" shouldAllow="all">
+      <div className="flex items-center justify-center">
         <CompanyUserCreationForm />
       </div>
     </PageAuthenticator>

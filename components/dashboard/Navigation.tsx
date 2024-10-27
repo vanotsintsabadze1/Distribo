@@ -3,7 +3,7 @@ import Link from "next/link";
 import Button from "../ui/Button";
 import { logoutUser } from "@/lib/actions/auth/auth";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import { UserRole } from "@/lib/constants/constants";
 
@@ -29,7 +29,7 @@ export default function Navigation({ isMinimized }: NavigationProps) {
     setRole(res);
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     retrieveUserRole();
   }, []);
 
@@ -43,7 +43,7 @@ export default function Navigation({ isMinimized }: NavigationProps) {
             pathname === item.href
               ? "text-accent-foreground bg-tertiary text-black"
               : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-          } ${role != UserRole.Admin && role != UserRole.Employee && item.name === "Users" && "hidden"}`}
+          } ${role != UserRole.Admin && role != UserRole.Employee && (item.name === "Users" || item.name === "Companies") && "hidden"}`}
         >
           <item.icon className="h-5 w-5 flex-shrink-0" />
           <span
