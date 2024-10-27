@@ -7,6 +7,7 @@ interface PageAuthenticatorProps {
   shouldAllow: "admin" | "all" | "unauthorized";
   shouldNotAllowEmployee?: boolean;
   shouldNotAllowBaseUser?: boolean;
+  shouldNotAllowStaff?: boolean;
   children: React.ReactNode;
 }
 
@@ -15,13 +16,20 @@ export default async function PageAuthenticator({
   shouldAllow,
   shouldNotAllowEmployee,
   shouldNotAllowBaseUser,
+  shouldNotAllowStaff,
   children,
 }: PageAuthenticatorProps) {
   const auth = await getUserAuthStatus();
-  const isAdmin = auth.data?.role.name === UserRole.Admin || auth.data?.role.name === UserRole.Employee;
-  const isBaseUser = auth.data?.role.name === UserRole.User;
-  const isRootUser = auth.data?.role.name === UserRole.RootUser;
-  const isEmployee = auth.data?.role.name === UserRole.Employee;
+  const role = auth.data?.role.name;
+  const isAdmin = role === UserRole.Admin;
+  const isStaffMember = role === UserRole.Admin || role === UserRole.Employee;
+  const isBaseUser = role === UserRole.User;
+  const isRootUser = role === UserRole.RootUser;
+  const isEmployee = role === UserRole.Employee;
+
+  if (shouldNotAllowStaff && isStaffMember) {
+    return redirect(redirectTo);
+  }
 
   if (shouldNotAllowEmployee && isEmployee) {
     return redirect(redirectTo);
@@ -33,9 +41,9 @@ export default async function PageAuthenticator({
 
   if (shouldAllow === "all" && (isAdmin || isBaseUser || isRootUser)) {
     return <>{children}</>;
-  } else if (shouldAllow === "admin" && isAdmin) {
+  } else if (shouldAllow === "admin" && isStaffMember) {
     return <>{children}</>;
-  } else if (shouldAllow === "unauthorized" && !isAdmin && !isBaseUser) {
+  } else if (shouldAllow === "unauthorized" && !auth.data?.role.name) {
     return <>{children}</>;
   } else {
     return redirect(redirectTo);
