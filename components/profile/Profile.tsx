@@ -39,14 +39,6 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
           disabled={true}
           register={register}
         />
-        <TextInput
-          name="firstName"
-          label="First Name"
-          placeholder="e.g John"
-          className="pl-4 pr-2"
-          register={register}
-        />
-        <TextInput name="lastName" label="Last Name" placeholder="e.g Doe" className="pl-4 pr-2" register={register} />
         {(userRole === UserRole.RootUser || userRole === UserRole.User) && company && (
           <div className="mx-auto">
             <h1 className="text-center text-sm font-semibold">Your Company</h1>
