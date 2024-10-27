@@ -65,6 +65,4 @@ export type UpdateProductStock = {
 export type ProfileSchema = {
   email: string;
   role: string;
-  firstName: string;
-  lastName: string;
 };

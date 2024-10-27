@@ -172,7 +172,5 @@ export const profileSchema: ZodType<Partial<ProfileSchema>> = z
   .object({
     email: z.string(),
     role: z.string(),
-    firstName: z.string(),
-    lastName: z.string(),
   })
   .partial();
