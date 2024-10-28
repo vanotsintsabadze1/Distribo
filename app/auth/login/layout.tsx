@@ -11,9 +11,5 @@ interface AuthroizationLayoutProps {
 }
 
 export default function AuthorizationLayout({ children }: AuthroizationLayoutProps) {
-  return (
-    <PageAuthenticator redirectTo="/dashboard" shouldAllow="unauthorized">
-      {children}
-    </PageAuthenticator>
-  );
+  return <>{children}</>;
 }

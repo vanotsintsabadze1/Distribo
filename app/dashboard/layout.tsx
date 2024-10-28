@@ -14,15 +14,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const userMail = userData?.data?.email.slice(0, 2).toUpperCase();
 
   return (
-    <PageAuthenticator redirectTo="/auth/login" shouldAllow="all">
-      <div className="flex">
-        <Sidebar />
-        <main className="w-full flex-1 overflow-hidden pt-2 md:px-4">
-          <Header userMail={userMail} />
-          <hr />
-          {children}
-        </main>
-      </div>
-    </PageAuthenticator>
+    <div className="flex">
+      <Sidebar />
+      <main className="w-full flex-1 overflow-hidden pt-2 md:px-4">
+        <Header userMail={userMail} />
+        <hr />
+        {children}
+      </main>
+    </div>
   );
 }

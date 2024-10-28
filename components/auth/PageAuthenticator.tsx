@@ -39,11 +39,11 @@ export default async function PageAuthenticator({
     return redirect(redirectTo);
   }
 
-  if (shouldAllow === "all" && (isAdmin || isBaseUser || isRootUser)) {
+  if (shouldAllow === "all" && (isStaffMember || isBaseUser || isRootUser)) {
     return <>{children}</>;
   } else if (shouldAllow === "admin" && isStaffMember) {
     return <>{children}</>;
-  } else if (shouldAllow === "unauthorized" && !auth.data?.role.name) {
+  } else if (shouldAllow === "unauthorized" && !isStaffMember && !isBaseUser && !isRootUser) {
     return <>{children}</>;
   } else {
     return redirect(redirectTo);
