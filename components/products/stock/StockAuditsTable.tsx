@@ -24,7 +24,14 @@ const columns = [
   }),
   columnHelper.accessor("description", {
     header: "Description",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <div>
+        <span className="cursor-pointer transition-all delay-100 ease-in-out">{info.getValue()}</span>
+        <div className="absolute z-50 hidden whitespace-normal break-words rounded-lg bg-white px-2 py-1 text-center text-xs font-normal text-slate-500 shadow-lg group-hover:block">
+          {info.getValue()}
+        </div>
+      </div>
+    ),
   }),
   columnHelper.accessor("oldValue", {
     header: "Old Value",
@@ -50,7 +57,7 @@ export default function StockAuditsTable({ stockAudits }: StockAuditsPageProps) 
     },
   });
   return (
-    <div className="mt-6 flex w-full items-center overflow-auto rounded-lg border md:overflow-visible">
+    <div className="relative mt-6 flex w-full items-center overflow-auto rounded-lg border md:overflow-visible">
       <table className="w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -67,7 +74,7 @@ export default function StockAuditsTable({ stockAudits }: StockAuditsPageProps) 
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className="border-b hover:bg-gray-50">
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="text-rigt max-w-28 truncate p-4">
+                <td key={cell.id} className="group max-w-28 truncate p-4 text-left">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}

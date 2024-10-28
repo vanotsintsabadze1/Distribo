@@ -10,7 +10,6 @@ interface StockAuditsPageProps {
 
 export default async function StockAuditsPage({ params: { id } }: StockAuditsPageProps) {
   const stockAudits = await getStockAuditsById(id);
-  console.log("🚀 ~ StockAuditsPage ~ stockAudits:", stockAudits);
 
   return (
     <PageLayoutComp title="Stock Audits" description="All the stock audits are listed below.">
