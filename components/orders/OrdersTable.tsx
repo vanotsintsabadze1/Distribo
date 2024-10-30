@@ -6,7 +6,6 @@ import { LOCAL_TZ, OrderType, UserRole } from "@/lib/constants/constants";
 import SingleCompanyOrderCancellationButton from "./SingleCompanyOrderCancellationButton";
 import AdminOrderActions from "./AdminOrderActions";
 import OrderCellImage from "./OrderCellImage";
-import { DollarSign } from "lucide-react";
 
 interface OrdersTableProps {
   orders: Order[];

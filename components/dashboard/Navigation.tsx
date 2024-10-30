@@ -1,6 +1,6 @@
-import { LayoutDashboard, Building2, Users, Package, UserCircle, LogOut, ListOrdered } from "lucide-react";
 import Link from "next/link";
 import Button from "../ui/Button";
+import { LayoutDashboard, Building2, Users, Package, UserCircle, LogOut, ListOrdered } from "lucide-react";
 import { logoutUser } from "@/lib/actions/auth/auth";
 import { usePathname } from "next/navigation";
 import { useState, useLayoutEffect } from "react";
@@ -34,15 +34,13 @@ export default function Navigation({ isMinimized }: NavigationProps) {
   }, []);
 
   return (
-    <nav className="mt-12 flex flex-grow flex-col space-y-2 px-2 lg:mt-6">
+    <nav className="mt-14 flex flex-grow flex-col space-y-2 px-2 lg:mt-6">
       {navItems.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors lg:text-black ${
-            pathname === item.href
-              ? "text-accent-foreground bg-tertiary text-black"
-              : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+          className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:text-black ${
+            pathname === item.href ? "bg-tertiary text-black" : "text-white"
           } ${role != UserRole.Admin && role != UserRole.Employee && (item.name === "Users" || item.name === "Companies") && "hidden"}`}
         >
           <item.icon className="h-5 w-5 flex-shrink-0" />

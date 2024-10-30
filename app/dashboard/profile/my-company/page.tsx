@@ -3,6 +3,7 @@ import SingleCompanyOrders from "@/components/orders/SingleCompanyOrders";
 import { getCompany } from "@/lib/actions/company/getCompany";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 interface MyCompanyPageProps {
   searchParams: {
@@ -20,6 +21,10 @@ export default async function MyCompanyPage({ searchParams }: MyCompanyPageProps
   const type = isNaN(parseInt(searchParams.type)) ? 0 : parseInt(searchParams.type);
   const role = await getUserRole();
 
+  if (!companyData.data) {
+    return redirect("/dashboard/profile");
+  }
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className="flex w-full flex-col items-center">
@@ -33,7 +38,7 @@ export default async function MyCompanyPage({ searchParams }: MyCompanyPageProps
             />
           </div>
         </section>
-        <SingleCompany role={role}  shouldShowOrdersTab={isOrdersQueryEnabled} {...company}>
+        <SingleCompany role={role} shouldShowOrdersTab={isOrdersQueryEnabled} {...company}>
           <SingleCompanyOrders type={type} page={page} />
         </SingleCompany>
       </div>

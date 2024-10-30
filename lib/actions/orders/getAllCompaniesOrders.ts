@@ -17,9 +17,11 @@ export async function getAllCompaniesOrders(status: number, page: number, pageSi
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      cache: "no-cache",
+      next: {
+        revalidate: 0,
+      },
     });
-    const data: OrderPayload | null = await res.json();
+    const data = await res.json();
 
     return res.ok
       ? { status: 200, message: "Successfully got the companies orders", data }

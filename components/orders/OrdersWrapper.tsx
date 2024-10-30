@@ -2,6 +2,8 @@ import OrdersTable from "./OrdersTable";
 import OrdersTypeSelector from "./OrdersTypeSelector";
 import OrderPageCell from "./OrderPageCell";
 import { MinusCircle } from "lucide-react";
+import { redirect } from "next/navigation";
+import { UserRole } from "@/lib/constants/constants";
 
 interface OrdersWrapperProps {
   orders: OrderPayload | null;
@@ -11,6 +13,16 @@ interface OrdersWrapperProps {
 
 export default async function OrdersWrapper({ orders, role, page }: OrdersWrapperProps) {
   const pageCount = orders?.totalCount && Math.ceil(orders?.totalCount / 10);
+
+  if (orders) {
+    if (orders.totalCount > 0 && orders.orders.length === 0) {
+      if (role === UserRole.Admin || role === UserRole.Employee) {
+        return redirect("/dashboard");
+      } else {
+        return redirect("/dashboard/profile/my-company");
+      }
+    }
+  }
 
   return (
     <div className="m-auto mb-10 mt-8 flex w-full flex-col items-end gap-4 px-4 md:w-[59rem]">
@@ -27,11 +39,11 @@ export default async function OrdersWrapper({ orders, role, page }: OrdersWrappe
           )}
           <div className="flex w-full flex-wrap items-center justify-center gap-2 gap-y-4 px-4">
             {orders.totalCount < 10 && orders.totalCount !== 0 ? (
-              <OrderPageCell cell={1} currentPage={page} />
+              <OrderPageCell cell={1} currentPage={page} role={role} />
             ) : (
               Array(pageCount)
                 .fill(0)
-                .map((_, idx) => <OrderPageCell key={idx} cell={idx + 1} currentPage={page} />)
+                .map((_, idx) => <OrderPageCell key={idx} role={role} cell={idx + 1} currentPage={page} />)
             )}
           </div>
         </>

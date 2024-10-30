@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import Spinner from "../ui/Spinner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 
 export default function CompanyCreationForm() {
   const [loading, setLoading] = useState(false);
@@ -33,13 +34,29 @@ export default function CompanyCreationForm() {
       email: companyEmail,
     });
 
-    const success = await apiResponseHandler({
-      res,
-      options: { customErrors: { 409: "Either Name or Email is taken" } },
-    });
+    if (res?.code) {
+      let text;
+      switch (res.code) {
+        case "NameIsTaken":
+          text = "Company name is taken";
+          break;
+        case "EmailIsTaken":
+          text = "Company email is taken";
+          break;
+        default:
+          text = res.code;
+          break;
+      }
 
-    if (success) {
-      router.push("/dashboard/company");
+      toast.error(text);
+    } else {
+      const success = await apiResponseHandler({
+        res,
+      });
+
+      if (success) {
+        router.push("/dashboard/company");
+      }
     }
 
     setLoading(false);

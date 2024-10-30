@@ -3,10 +3,11 @@
 import { API_URL, UserRole } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
 import { getUserRole } from "../helpers/encodeUserCredentials";
+import { revalidatePath } from "next/cache";
 
 export async function getCompanyOrders(status: number, page: number, pageSize: number) {
   const token = await getUserToken();
-  
+
   const role = await getUserRole();
 
   if (role === UserRole.Admin || role === UserRole.Employee) {

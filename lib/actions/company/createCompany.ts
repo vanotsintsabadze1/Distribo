@@ -31,9 +31,12 @@ export async function createCompany({
       }),
     });
 
+    const data = await res.json();
+    const code = data.Code ?? null;
+
     return res.ok
-      ? { status: 200, message: "Company created successfully" }
-      : { status: res.status, message: res.statusText };
+      ? { status: 200, message: "Company created successfully", code }
+      : { status: res.status, message: res.statusText, code };
   } catch (error) {
     console.error(error);
     return { status: 500, message: "Internal Server Error" };

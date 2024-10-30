@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeft, Menu } from "lucide-react";
 import Logo from "./Logo";
 import { AnimatePresence } from "framer-motion";
 import MobileSideBar from "./MobileSideBar";
 import Navigation from "./Navigation";
+import { usePathname } from "next/navigation";
 
 export default function Sidebar() {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
-
+  const pathname = usePathname();
   function handleToggle() {
     setIsMinimized(!isMinimized);
   }
@@ -19,6 +20,12 @@ export default function Sidebar() {
     setIsBurgerMenuOpen(!isBurgerMenuOpen);
   }
 
+  useEffect(() => {
+    if (isBurgerMenuOpen) {
+      setIsBurgerMenuOpen(false);
+    }
+  }, [pathname]);
+
   return (
     <>
       {/* mobile */}
@@ -26,7 +33,7 @@ export default function Sidebar() {
         <div className="">
           <button
             onClick={burgerMenuToggle}
-            className={`absolute left-0 top-0 z-50 cursor-pointer ${isBurgerMenuOpen ? "text-white" : "text-black"}`}
+            className={`absolute left-2 top-2 z-50 cursor-pointer ${isBurgerMenuOpen ? "text-white" : "text-black"}`}
           >
             <Menu size={35} />
           </button>
@@ -37,7 +44,7 @@ export default function Sidebar() {
 
       {/* Desktop */}
       <aside
-        className={`hidden h-[100dvh] border-r-2 border-gray-100 bg-[#fdf9f7] transition-all duration-300 ease-in-out lg:block ${
+        className={`hidden min-h-[100dvh] self-stretch border-r-2 border-gray-100 bg-[#fdf9f7] transition-all duration-300 ease-in-out lg:block ${
           isMinimized ? "w-[4.5rem]" : "w-64"
         }`}
       >
