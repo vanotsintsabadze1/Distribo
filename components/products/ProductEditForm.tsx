@@ -55,8 +55,7 @@ export default function ProductEditForm({ ...product }: Product) {
 
   async function fetchImagesOnLoad() {
     for (const image of product.images) {
-      const imageName = image.url.split("/")[3];
-      const file = await imageFileBuilder(imageName);
+      const file = await imageFileBuilder(image.url);
       if (file) {
         setImagesAsFiles((prev) => [...prev, file]);
       } else {

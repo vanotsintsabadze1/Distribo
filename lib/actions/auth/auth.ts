@@ -45,6 +45,7 @@ export async function loginUser({ email, password }: LoginData) {
       ? { status: 200, message: "Successfully logged the user" }
       : { status: res.status, message: res.statusText };
   } catch (error) {
+    console.error(error);
     return { status: 500, message: "Internal Server Error" };
   }
 }

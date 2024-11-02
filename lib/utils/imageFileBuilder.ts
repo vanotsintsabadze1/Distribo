@@ -1,15 +1,12 @@
-import { CDN_URL } from "../constants/constants";
-
-export async function imageFileBuilder(imageName: string) {
-  const res = await fetch(`${CDN_URL}/Image/${imageName}`, {
+export async function imageFileBuilder(imageURL: string) {
+  const res = await fetch(imageURL, {
     cache: "no-cache",
   });
+  const imageType = imageURL.split(".").pop();
   const blob = await res.blob();
-  // remove the . from the image type
-  const type = blob.type.replace(".", "");
 
   try {
-    const file = new File([blob], imageName, { type });
+    const file = new File([blob], imageURL, { type: `image/${imageType}` });
     return file;
   } catch (error) {
     console.error("Error occured while trying to constuct a file from a given image", error);
