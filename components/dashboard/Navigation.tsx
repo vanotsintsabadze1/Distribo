@@ -36,9 +36,8 @@ export default function Navigation({ isMinimized }: NavigationProps) {
   return (
     <nav className="mt-14 flex flex-grow flex-col space-y-2 px-2 lg:mt-6">
       {navItems.map((item) => (
-        <button>
+        <button key={item.href}>
           <Link
-            key={item.href}
             href={item.href}
             className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:text-black ${
               pathname === item.href ? "bg-tertiary text-black" : "text-white"
