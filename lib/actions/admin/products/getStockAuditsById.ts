@@ -2,6 +2,7 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../../helpers/getUserToken";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function getStockAuditsById(id: string) {
   const token = await getUserToken();
@@ -17,11 +18,9 @@ export async function getStockAuditsById(id: string) {
 
     const data = await res.json();
 
-    return res.ok
-      ? { status: 200, message: "Successfully fetched the stock audits", data: data }
-      : { status: res.status, message: res.statusText, data: null };
+    return res.ok ? await Ok(data, "Successfully fetched the stock audits") : await Problem(res.status, data.message);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error", data: null };
+    return await InternalError();
   }
 }

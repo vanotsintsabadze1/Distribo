@@ -3,6 +3,7 @@
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../../helpers/getUserToken";
 import { revalidatePath } from "next/cache";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function deleteProduct(productId: string) {
   revalidatePath("/dashboard/products");
@@ -18,11 +19,9 @@ export async function deleteProduct(productId: string) {
       cache: "no-cache",
     });
 
-    return res.ok
-      ? { status: 200, message: "Product deleted successfully" }
-      : { status: 400, message: "Failed to delete product" };
+    return res.ok ? await Ok("Successfully deleted the product") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal server error" };
+    return await InternalError();
   }
 }

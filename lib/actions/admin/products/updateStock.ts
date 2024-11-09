@@ -2,6 +2,7 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../../helpers/getUserToken";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function updateStock(formData: FormData, id: string) {
   const token = await getUserToken();
@@ -16,11 +17,9 @@ export async function updateStock(formData: FormData, id: string) {
       body: formData,
     });
 
-    return res.ok
-      ? { status: 200, message: "Stock updated successfully" }
-      : { status: 400, message: "Failed to update stock" };
+    return res.ok ? await Ok("Successfully updated the stock") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal server error" };
+    return await InternalError();
   }
 }

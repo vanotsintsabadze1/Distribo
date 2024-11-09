@@ -2,6 +2,7 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function createOrder(orderItems: OrderCreationPayload) {
   const token = await getUserToken();
@@ -16,14 +17,15 @@ export async function createOrder(orderItems: OrderCreationPayload) {
       },
       body: JSON.stringify(orderItems),
     });
+
     if (!res.ok) {
       const errorResponse = await res.json();
-      return { status: res.status, message: errorResponse.Code };
+      return await Problem(res.status, errorResponse.message);
     }
 
-    return { status: res.status, message: res.statusText };
+    return await Ok("Successfully created the order");
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }

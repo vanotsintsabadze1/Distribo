@@ -2,6 +2,7 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function createCompany({
   name,
@@ -34,11 +35,9 @@ export async function createCompany({
     const data = await res.json();
     const code = data.Code ?? null;
 
-    return res.ok
-      ? { status: 200, message: "Company created successfully", code }
-      : { status: res.status, message: res.statusText, code };
+    return res.ok ? await Ok(code, "Successfully created the company") : await Problem(res.status, code);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }

@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { getUserToken } from "../helpers/getUserToken";
 import { revalidateTag } from "next/cache";
 import { encodeUserCredentials } from "../helpers/encodeUserCredentials";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 // User login logic
 
@@ -38,15 +39,13 @@ export async function loginUser({ email, password }: LoginData) {
         userInfo.data && (await encodeUserCredentials(userInfo.data));
       }
 
-      return { status: 200, message: "Logged in successfully." };
+      return await Ok("Successfully logged the user");
     }
 
-    return res.ok
-      ? { status: 200, message: "Successfully logged the user" }
-      : { status: res.status, message: res.statusText };
+    return res.ok ? await Ok("Successfully logged the user") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }
 
@@ -65,7 +64,7 @@ export async function getUserAuthStatus() {
   const token = await getUserToken();
 
   if (!token) {
-    return { status: 400, message: "User is not authenticated", data: null };
+    return await Problem(401, "Unauthorized");
   }
 
   try {
@@ -80,11 +79,10 @@ export async function getUserAuthStatus() {
 
     const data = await res.json();
 
-    return res.ok
-      ? { status: 200, message: res.statusText, data: data as User }
-      : { status: res.status, message: res.statusText };
+    return res.ok ? await Ok(data, "Successfully fetched user") : await Problem(res.status, res.statusText);
   } catch (error) {
-    return { status: 500, message: "Internal Server Error", data: null };
+    console.error(error);
+    return await InternalError();
   }
 }
 
@@ -108,11 +106,10 @@ export async function loginUserWithGoogle(code: string) {
         expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
       });
     }
-    return res.ok
-      ? { status: 200, message: "Logged in successfully." }
-      : { status: res.status, message: res.statusText };
+    return res.ok ? await Ok("Successfully logged the user") : await Problem(res.status, res.statusText);
   } catch (error) {
-    return { status: 500, message: "Internal Server Error" };
+    console.error(error);
+    return await InternalError();
   }
 }
 
@@ -128,11 +125,9 @@ export async function confirmEmailAfterRegistration(token: string) {
 
     const data = await res.json();
 
-    return res.ok
-      ? { status: 200, message: "Confirmed email successfully", data }
-      : { status: res.status, message: res.statusText, data: null };
+    return res.ok ? await Ok(data, "Successfully confirmed email") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error", data: null };
+    return await InternalError();
   }
 }

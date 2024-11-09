@@ -3,6 +3,7 @@
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../../helpers/getUserToken";
 import { CreateCompanyUser } from "@/types/schema-types";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function createUser(userInformation: UserCreationPayload) {
   const { email, password, role } = userInformation;
@@ -19,10 +20,10 @@ export async function createUser(userInformation: UserCreationPayload) {
       body: JSON.stringify({ email, password, role }),
     });
 
-    return { status: res.status, message: res.statusText };
+    return res.ok ? await Ok("Successfully created the user") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }
 
@@ -41,11 +42,9 @@ export async function createCompanyUser(userInformation: CreateCompanyUser) {
       body: JSON.stringify({ email, password }),
     });
 
-    return res.ok
-      ? { status: 200, message: "Successfully created the user" }
-      : { status: res.status, message: res.statusText };
+    return res.ok ? await Ok("Successfully created the user") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }

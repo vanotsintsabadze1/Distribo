@@ -34,9 +34,9 @@ export default function CompanyCreationForm() {
       email: companyEmail,
     });
 
-    if (res?.code) {
+    if (res.data) {
       let text;
-      switch (res.code) {
+      switch (res.data) {
         case "NameIsTaken":
           text = "Company name is taken";
           break;
@@ -44,7 +44,7 @@ export default function CompanyCreationForm() {
           text = "Company email is taken";
           break;
         default:
-          text = res.code;
+          text = res.data;
           break;
       }
 
