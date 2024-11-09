@@ -16,11 +16,7 @@ import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm<LoginData>({
+  const { handleSubmit, register } = useForm<LoginData>({
     resolver: zodResolver(loginFormSchema),
   });
   const router = useRouter();
@@ -35,7 +31,6 @@ export default function LoginForm() {
       res,
       options: { customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" } },
     });
-    const role = await getUserRole();
     success && router.push("/dashboard/products");
 
     setLoading(false);
@@ -43,20 +38,13 @@ export default function LoginForm() {
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-      <TextInput
-        label="Email Address"
-        name="email"
-        placeholder="e.g johndoe30@gmail.com"
-        register={register}
-        error={errors.email}
-      />
+      <TextInput label="Email Address" name="email" placeholder="e.g johndoe30@gmail.com" register={register} />
       <TextInput
         label="Password"
         type="password"
         name="password"
         placeholder="e.g Something123$!@"
         register={register}
-        error={errors.password}
       />
 
       <div className="mb-5 flex items-start">
