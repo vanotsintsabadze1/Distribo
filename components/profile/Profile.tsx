@@ -45,11 +45,6 @@ export default function Profile({ userEmail, userRole, company }: ProfileProps) 
             <CompanyCard {...company} />
           </div>
         )}
-        <div className="flex w-full items-center justify-center">
-          <Button type="submit" className="w-32 bg-secondary font-semibold text-white">
-            Update
-          </Button>
-        </div>
       </form>
     </div>
   );
