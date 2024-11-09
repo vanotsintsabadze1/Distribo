@@ -36,20 +36,22 @@ export default function Navigation({ isMinimized }: NavigationProps) {
   return (
     <nav className="mt-14 flex flex-grow flex-col space-y-2 px-2 lg:mt-6">
       {navItems.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:text-black ${
-            pathname === item.href ? "bg-tertiary text-black" : "text-white"
-          } ${role != UserRole.Admin && role != UserRole.Employee && (item.name === "Users" || item.name === "Companies") && "hidden"}`}
-        >
-          <item.icon className="h-5 w-5 flex-shrink-0" />
-          <span
-            className={`ml-3 transition-all duration-300 ${isMinimized ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}`}
+        <button>
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:text-black ${
+              pathname === item.href ? "bg-tertiary text-black" : "text-white"
+            } ${role != UserRole.Admin && role != UserRole.Employee && (item.name === "Users" || item.name === "Companies") && "hidden"}`}
           >
-            {item.name}
-          </span>
-        </Link>
+            <item.icon className="h-5 w-5 flex-shrink-0" />
+            <span
+              className={`ml-3 transition-all duration-300 ${isMinimized ? "w-0 overflow-hidden opacity-0" : "w-auto opacity-100"}`}
+            >
+              {item.name}
+            </span>
+          </Link>
+        </button>
       ))}
       <Button
         className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors lg:text-black"

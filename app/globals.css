@@ -12,3 +12,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+button {
+  transition: opacity 0.1s ease; /* Smooth transition */
+}
+
+button:active {
+  opacity: 0.6; /* Lower opacity on click */
+}
