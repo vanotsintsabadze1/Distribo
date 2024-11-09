@@ -31,7 +31,7 @@ export default function LoginForm() {
       res,
       options: { customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" } },
     });
-    success && router.push("/dashboard/products");
+    success && window.location.reload();
 
     setLoading(false);
   };

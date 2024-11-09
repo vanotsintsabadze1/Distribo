@@ -81,3 +81,12 @@ interface StockAudits {
   description: string;
   userEmail: string;
 }
+
+interface CookieOptions {
+  expires: Date;
+  sameSite: "strict" | "lax" | "none";
+  secure: boolean;
+  httpOnly: boolean;
+  domain: string;
+  path: string;
+}

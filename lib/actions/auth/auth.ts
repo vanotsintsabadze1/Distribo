@@ -11,6 +11,8 @@ import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 // User login logic
 
+const domain = process.env.NODE_ENV === "production" ? process.env.DOMAIN : "localhost";
+
 export async function loginUser({ email, password }: LoginData) {
   if (!email || !password) {
     return { status: 400, message: "Please fill all fields." };
@@ -28,9 +30,7 @@ export async function loginUser({ email, password }: LoginData) {
 
     if (res.ok) {
       const data = await res.json();
-      cookies().set("user", data, {
-        expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
-      });
+      await createUserCookie("user", data);
 
       const doEncodedCredentialsExist = cookies().get("e_creds")?.value != null;
 
@@ -102,9 +102,7 @@ export async function loginUserWithGoogle(code: string) {
 
     if (!data!.status) {
       // If status is not present in the response, it means that the user is authenticated
-      cookies().set("user", data, {
-        expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
-      });
+      await createUserCookie("user", data);
     }
     return res.ok ? await Ok("Successfully logged the user") : await Problem(res.status, res.statusText);
   } catch (error) {
@@ -130,4 +128,15 @@ export async function confirmEmailAfterRegistration(token: string) {
     console.error(error);
     return await InternalError();
   }
+}
+
+async function createUserCookie(name: string, value: string) {
+  cookies().set(name, value, {
+    expires: new Date(Date.now() + 9 * 60 * 60 * 24 * 1000),
+    httpOnly: true,
+    path: "/",
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    domain: domain as string,
+  });
 }
