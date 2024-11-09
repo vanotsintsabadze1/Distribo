@@ -3,7 +3,7 @@
 import { API_URL, UserRole } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
 import { getUserRole } from "../helpers/encodeUserCredentials";
-import { revalidatePath } from "next/cache";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function getCompanyOrders(status: number, page: number, pageSize: number) {
   const token = await getUserToken();
@@ -11,7 +11,7 @@ export async function getCompanyOrders(status: number, page: number, pageSize: n
   const role = await getUserRole();
 
   if (role === UserRole.Admin || role === UserRole.Employee) {
-    return { status: 403, message: "Forbidden", data: null };
+    return await Problem(403, "Forbidden");
   }
 
   try {
@@ -24,10 +24,10 @@ export async function getCompanyOrders(status: number, page: number, pageSize: n
     const data: OrderPayload | null = await res.json();
 
     return res.ok
-      ? { status: 200, message: "Successfully got the company orders", data: data }
-      : { status: res.status, message: res.statusText, data: null };
+      ? await Ok(data, "Successfully fetched all companies orders")
+      : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error", data: null };
+    return await InternalError();
   }
 }

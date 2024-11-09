@@ -2,6 +2,7 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function approveOrder(id: string) {
   const token = await getUserToken();
@@ -17,10 +18,10 @@ export async function approveOrder(id: string) {
     const errorResponse = await res.json();
 
     return res.ok
-      ? { status: 200, message: "The company order is approved" }
-      : { status: res.status, message: errorResponse.Code };
+      ? await Ok(errorResponse, "Successfully approved the order")
+      : await Problem(res.status, errorResponse.message);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }

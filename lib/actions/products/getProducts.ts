@@ -1,6 +1,7 @@
 "use server";
 
 import { API_URL } from "@/lib/constants/constants";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function getAllProducts() {
   try {
@@ -10,10 +11,9 @@ export async function getAllProducts() {
 
     const data = await res.json();
 
-    // prettier-ignore
-    return res.ok ? { status: 200, message: "Successfully fetched the products", data: data as Product[] } : { status: res.status, message: res.statusText, data: null };
+    return res.ok ? await Ok(data, "Successfully fetched all products") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error", data: null };
+    return await InternalError();
   }
 }

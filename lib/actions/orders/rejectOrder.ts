@@ -2,6 +2,7 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function rejectOrder(id: string) {
   const token = await getUserToken();
@@ -14,11 +15,9 @@ export async function rejectOrder(id: string) {
       },
     });
 
-    return res.ok
-      ? { status: 200, message: "The company order is rejected" }
-      : { status: res.status, message: res.statusText };
+    return res.ok ? await Ok("Successfully rejected the order") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }

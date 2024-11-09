@@ -1,16 +1,15 @@
 import { API_URL } from "@/lib/constants/constants";
+import { InternalError, Ok, Problem } from "@/lib/utils/genericResponses";
 
 export async function getProductById(productId: string) {
-    try {
-      const res = await fetch(`${API_URL}/v1/Product/${productId}`, { cache: "no-cache" });
-  
-      const data = await res.json();
-  
-      return res.ok
-        ? { status: 200, message: "Successfully fetched the product", data: data }
-        : { status: res.status, message: res.statusText, data: null };
-    } catch (error) {
-      console.error(error);
-      return { status: 500, message: "Internal Server Error", data: null };
-    }
+  try {
+    const res = await fetch(`${API_URL}/v1/Product/${productId}`, { cache: "no-cache" });
+
+    const data = await res.json();
+
+    return res.ok ? await Ok(data, "Successfully fetched the product") : await Problem(res.status, res.statusText);
+  } catch (error) {
+    console.error(error);
+    return await InternalError();
   }
+}

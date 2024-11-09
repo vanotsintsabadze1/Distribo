@@ -2,6 +2,7 @@
 
 import { API_URL } from "@/lib/constants/constants";
 import { getUserToken } from "../../helpers/getUserToken";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function createProduct(formData: FormData) {
   const token = await getUserToken();
@@ -15,9 +16,9 @@ export async function createProduct(formData: FormData) {
       body: formData,
     });
 
-    return { status: res.status, message: res.statusText };
+    return res.ok ? await Ok("Successfully created the product") : await Problem(res.status, res.statusText);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error" };
+    return await InternalError();
   }
 }

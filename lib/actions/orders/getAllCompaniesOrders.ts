@@ -3,6 +3,7 @@
 import { API_URL, UserRole } from "@/lib/constants/constants";
 import { getUserToken } from "../helpers/getUserToken";
 import { getUserRole } from "../helpers/encodeUserCredentials";
+import { Ok, Problem, InternalError } from "@/lib/utils/genericResponses";
 
 export async function getAllCompaniesOrders(status: number, page: number, pageSize: number) {
   const token = await getUserToken();
@@ -24,10 +25,10 @@ export async function getAllCompaniesOrders(status: number, page: number, pageSi
     const data = await res.json();
 
     return res.ok
-      ? { status: 200, message: "Successfully got the companies orders", data }
-      : { status: res.status, message: res.statusText, data: null };
+      ? await Ok(data, "Successfully fetched all companies orders")
+      : await Problem(res.status, data.message);
   } catch (error) {
     console.error(error);
-    return { status: 500, message: "Internal Server Error", data: null };
+    return await InternalError();
   }
 }
