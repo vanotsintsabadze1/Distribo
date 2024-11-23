@@ -11,14 +11,11 @@ import GoogleAuthButton from "./GoogleAuthButton";
 import { apiResponseHandler } from "@/lib/utils/apiResponseHandler";
 import Spinner from "@/components/ui/Spinner";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
+import toast from "react-hot-toast";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
-  const { handleSubmit, register } = useForm<LoginData>({
-    resolver: zodResolver(loginFormSchema),
-  });
+  const { handleSubmit, register, formState: errors } = useForm<LoginData>();
   const router = useRouter();
 
   const onSubmit = async (loginFormData: LoginData) => {
@@ -27,11 +24,13 @@ export default function LoginForm() {
 
     const { email, password } = loginFormData;
     const res = await loginUser({ email, password });
+
     const success = await apiResponseHandler({
       res,
-      options: { customErrors: { 200: "Welcome back!", 404: "Invalid Credentials" } },
+      options: { customErrors: { 200: "Welcome back!", 400: "Invalid Credentials" } },
     });
-    success && window.location.reload();
+
+    success && router.refresh();
 
     setLoading(false);
   };
