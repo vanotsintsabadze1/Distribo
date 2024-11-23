@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar userData={userData?.data}/>
       <main className="w-full flex-1 overflow-hidden pt-2 md:px-4">
         <Header userMail={userMail} />
         <hr />

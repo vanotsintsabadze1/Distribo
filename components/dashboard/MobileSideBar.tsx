@@ -6,7 +6,11 @@ const mobileSideBarAnimations = {
   visible: { x: 0 },
 };
 
-export default function MobileSideBar() {
+interface MobileSideBarProps {
+  userData: UserDataPayload;
+}
+
+export default function MobileSideBar({ userData }: MobileSideBarProps) {
   return (
     <motion.div
       variants={mobileSideBarAnimations}
@@ -16,7 +20,7 @@ export default function MobileSideBar() {
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="fixed left-0 top-0 h-[100dvh] w-[15rem] bg-secondary lg:hidden"
     >
-      <Navigation />
+      <Navigation userData={userData} />
     </motion.div>
   );
 }

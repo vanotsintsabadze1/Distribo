@@ -14,6 +14,14 @@ interface UserCreationPayload {
   role: string;
 }
 
+interface UserDataPayload {
+  id: string;
+  email: string;
+  emailConfirmed: boolean;
+  company: string | null;
+  role: { name: string };
+}
+
 interface OrderItem {
   productId: string;
   quantity: number | string;
