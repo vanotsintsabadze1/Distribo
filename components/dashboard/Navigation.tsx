@@ -52,7 +52,7 @@ export default function Navigation({ isMinimized }: NavigationProps) {
           </Link>
         </button>
       ))}
-      <Button
+      <button
         className="flex items-center rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors lg:text-black"
         onClick={() => logoutUser()}
       >
@@ -62,7 +62,7 @@ export default function Navigation({ isMinimized }: NavigationProps) {
         >
           Logout
         </span>
-      </Button>
+      </button>
     </nav>
   );
 }
