@@ -8,7 +8,11 @@ import MobileSideBar from "./MobileSideBar";
 import Navigation from "./Navigation";
 import { usePathname } from "next/navigation";
 
-export default function Sidebar() {
+interface SideBarProps {
+  userData: UserDataPayload
+}
+
+export default function Sidebar({ userData }: SideBarProps) {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -37,7 +41,7 @@ export default function Sidebar() {
           >
             <Menu size={35} />
           </button>
-          <AnimatePresence>{isBurgerMenuOpen && <MobileSideBar />}</AnimatePresence>
+          <AnimatePresence>{isBurgerMenuOpen && <MobileSideBar userData={userData}/>}</AnimatePresence>
         </div>
       </div>
       {/*  */}
@@ -58,7 +62,7 @@ export default function Sidebar() {
           >
             <ChevronLeft className={`h-4 w-4 transition-transform duration-300 ${isMinimized ? "rotate-180" : ""}`} />
           </button>
-          <Navigation isMinimized={isMinimized} />
+          <Navigation isMinimized={isMinimized} userData={userData}/>
         </div>
         {/*  */}
       </aside>
