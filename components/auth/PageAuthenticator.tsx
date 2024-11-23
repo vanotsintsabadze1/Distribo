@@ -7,6 +7,7 @@ interface PageAuthenticatorProps {
   shouldAllow: "admin" | "all" | "unauthorized";
   shouldNotAllowEmployee?: boolean;
   shouldNotAllowBaseUser?: boolean;
+  shouldNotAllowUnauthenticated?: boolean;
   shouldNotAllowStaff?: boolean;
   children: React.ReactNode;
 }
@@ -16,6 +17,7 @@ export default async function PageAuthenticator({
   shouldAllow,
   shouldNotAllowEmployee,
   shouldNotAllowBaseUser,
+  shouldNotAllowUnauthenticated,
   shouldNotAllowStaff,
   children,
 }: PageAuthenticatorProps) {
@@ -26,6 +28,10 @@ export default async function PageAuthenticator({
   const isBaseUser = role === UserRole.User;
   const isRootUser = role === UserRole.RootUser;
   const isEmployee = role === UserRole.Employee;
+
+  if (shouldNotAllowUnauthenticated && (role === null || role === undefined)) {
+    return redirect(redirectTo);
+  }
 
   if (shouldNotAllowStaff && isStaffMember) {
     return redirect(redirectTo);

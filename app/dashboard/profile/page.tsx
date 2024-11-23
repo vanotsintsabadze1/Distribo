@@ -1,3 +1,4 @@
+import PageAuthenticator from "@/components/auth/PageAuthenticator";
 import CompanyCreationNavigatorButton from "@/components/company/CompanyCreationNavigatorButton";
 import Profile from "@/components/profile/Profile";
 import PageLayoutComp from "@/components/ui/PageLayoutComp";
@@ -16,9 +17,11 @@ export default async function ProfilePage() {
   const isRootUser = userRole === UserRole.RootUser;
 
   return (
-    <PageLayoutComp title="Profile" description="Update your profile information.">
-      {!company && !isAdmin && isRootUser && <CompanyCreationNavigatorButton />}
-      {userRole && userEmail !== undefined && <Profile userEmail={userEmail} userRole={userRole} company={company} />}
-    </PageLayoutComp>
+    <PageAuthenticator shouldAllow="all" shouldNotAllowUnauthenticated redirectTo="/auth/login">
+      <PageLayoutComp title="Profile" description="Update your profile information.">
+        {!company && !isAdmin && isRootUser && <CompanyCreationNavigatorButton />}
+        {userRole && userEmail !== undefined && <Profile userEmail={userEmail} userRole={userRole} company={company} />}
+      </PageLayoutComp>
+    </PageAuthenticator>
   );
 }
