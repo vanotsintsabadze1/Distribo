@@ -38,8 +38,6 @@ export async function loginUser({ email, password }: LoginData) {
         const userInfo = await getUserAuthStatus();
         userInfo.data && (await encodeUserCredentials(userInfo.data));
       }
-
-      return await Ok("Successfully logged the user");
     }
 
     return res.ok ? await Ok("Successfully logged the user") : await Problem(res.status, res.statusText);
