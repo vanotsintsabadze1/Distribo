@@ -6,9 +6,11 @@ import { usePathname } from "next/navigation";
 import { useState, useLayoutEffect } from "react";
 import { getUserRole } from "@/lib/actions/helpers/encodeUserCredentials";
 import { UserRole } from "@/lib/constants/constants";
+import toast from "react-hot-toast";
 
 interface NavigationProps {
   isMinimized?: boolean;
+  userData: UserDataPayload;
 }
 
 const navItems = [
@@ -20,13 +22,19 @@ const navItems = [
   { name: "Profile", href: "/dashboard/profile", icon: UserCircle },
 ];
 
-export default function Navigation({ isMinimized }: NavigationProps) {
+export default function Navigation({ isMinimized, userData }: NavigationProps) {
   const pathname = usePathname();
   const [role, setRole] = useState<string | null>();
 
   async function retrieveUserRole() {
     const res = await getUserRole();
     setRole(res);
+  }
+
+  function handleCheckRootUserRole(navItemPath: string) {
+    if (role === UserRole.RootUser && navItemPath === "/dashboard/orders" && userData.company === null) {
+      toast.error("Add company to see your orders");
+    }
   }
 
   useLayoutEffect(() => {
@@ -39,6 +47,7 @@ export default function Navigation({ isMinimized }: NavigationProps) {
         <button
           key={item.href}
           className={` ${(item.name === "Users" || item.name === "Companies") && role !== UserRole.Admin && role !== UserRole.Employee && "hidden"}`}
+          onClick={() => handleCheckRootUserRole(item.href)}
         >
           <Link
             href={item.href}
