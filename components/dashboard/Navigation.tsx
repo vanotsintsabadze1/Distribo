@@ -36,12 +36,15 @@ export default function Navigation({ isMinimized }: NavigationProps) {
   return (
     <nav className="mt-14 flex flex-grow flex-col space-y-2 px-2 lg:mt-6">
       {navItems.map((item) => (
-        <button key={item.href}>
+        <button
+          key={item.href}
+          className={` ${(item.name === "Users" || item.name === "Companies") && role !== UserRole.Admin && role !== UserRole.Employee && "hidden"}`}
+        >
           <Link
             href={item.href}
             className={`flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors lg:text-black ${
               pathname === item.href ? "bg-tertiary text-black" : "text-white"
-            } ${role != UserRole.Admin && role != UserRole.Employee && (item.name === "Users" || item.name === "Companies") && "hidden"}`}
+            }`}
           >
             <item.icon className="h-5 w-5 flex-shrink-0" />
             <span
