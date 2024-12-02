@@ -22,9 +22,9 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Create .env file in the app directory
-      - name: Create .env file
-        run: |
-          echo "NEXT_PUBLIC_API_ADDRESS=${{ secrets.NEXT_PUBLIC_API_ADDRESS }}" > app/.env
+      #- name: Create .env file
+      #  run: |
+      #    echo "NEXT_PUBLIC_API_ADDRESS=${{ secrets.NEXT_PUBLIC_API_ADDRESS }}" > app/.env
       
       # Build the Docker image with the environment variable
       - name: Build Docker image
