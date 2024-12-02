@@ -20,13 +20,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Create .env file in the app directory
+      - name: Create .env file
+        run: |
+          echo "NEXT_PUBLIC_API_ADDRESS=${{ secrets.NEXT_PUBLIC_API_ADDRESS }}" > .env
       
       # Build the Docker image with the environment variable
       - name: Build Docker image
         run: |
-          docker build \
-            --build-arg NEXT_PUBLIC_API_ADDRESS=${{ secrets.NEXT_PUBLIC_API_ADDRESS }} \
-            -t dms-web-client:latest .
+          docker build -t dms-web-client:latest .
       
       # List Docker images
       - name: List Docker images
