@@ -27,7 +27,7 @@ export default function LoginForm() {
 
     const success = await apiResponseHandler({
       res,
-      options: { customErrors: { 200: "Welcome back!", 400: "Invalid Credentials" } },
+      options: { customErrors: { 200: "Welcome back!", 400: "Invalid Credentials", 404: "Invalid Credentials" } },
     });
 
     success && router.refresh();
